@@ -1,0 +1,62 @@
+
+
+# Kepler’s Laws Simulator 
+**Developers:  Samuel Barr & Josh Shields**
+                        
+
+## Project Overview
+
+Kepler’s Laws essentially defines how planets in our solar system move, and has the ability to predict exact planet locations.  The astronomy department at ASU is currently using a simulator that is horribly dated.  It’s slow, a pain to setup, and the graphics look like a potato (e.g. Mars in the program is simply displayed as a red pixelated circle with no other information).  The department needs a program that is more up-to-date and easier to use.  Below are some mock ups of how we envision our project to look like:
+![enter image description here](https://lh3.googleusercontent.com/7VPgbaO40OfT4AJaji6xMxROPSUA8QMXQk6k26SAfZG8257v7CJtWb7xjDkT3tz0x765d3ecusw "Time Set Toggle")
+![enter image description here](https://lh3.googleusercontent.com/l6nIuDtx9BiWFJvMNLsOg_z1EDfczKdsha4z6gs2dUnuPk6QpULWWa-viEWLZAZ5CMwIELxFB2U "View Menu Toggle")
+<hr>
+The first image shows the first four planets, or the 'Terrestrial' planets.  This includes their orbital paths and where they are in relation to the time shown at the bottom right.  The time is manipulated by two controls.  The first is the 'Set Date/Time' toggled by the arrow to the left of the time.  Setting the time would adjust all planet locations accordingly.  The second control is by the arrow and pause buttons on the bottom center.  The inner smaller arrows around the pause buttons would step the time up or down by one day.  The outer longer arrows would speed or slow down the run time of the simulation and the pause button would pause the simulation. <br>
+The bottom left would show the exact location information of a certain planet.  This would display the calendar date and the Julian date.  In this case, that planet is Venus (which is denoted by the blue border around the planet).
+<hr>
+The second image shows the view menu.  This menu can change the view from the first four planets to the outer four planets, or 'Jovian' planets (Pluto included).  More views will be incorporated to find other Astronomical things such as planet conjunction and elongation.  The bottom of this menu will include other view toggles such as orbital lines and labeled planet names.
+
+
+## Features
+
+ - All the same features of the current simulator with the addition of speed and ease-of-use.  
+ - Have the ability to change any simulation setting without leaving the view of the simulation itself (A problem that exists in the current program)
+ - The ability to use the mouse in the simulator for various tasks (the current program is keyboard only)
+ - Better graphics and the ability to pinpoint locations of planets at any time past/present/future.
+
+
+
+
+
+
+
+
+
+
+
+
+## Similar Existing Work
+
+As stated in the overview, there is a dated version of this simulator that this project is going to be an improvement on.  The main differences in this one will be more speed and ease-of-use.
+
+## Previous Experience
+
+I have created a simple game in Java a couple years ago that used the Graphics package, so I know my way around 2D graphics in relation to java programs.  Also my background on Astronomy and the lab usage of this program will help tailor this project into a lab-ready learning tool.
+
+## Technology
+
+The language that both of us know the most is Java as most computer science classes here are based on the language.  Within Java, we will use the 2D Graphics package and possibly work our way to 3D if we have the time.  
+Testing will involve automatically inputting random dates (and invalid ones) to the system and double checking the planetary positions and locations of them on the display.  
+Code Style will be performed by the IDE, personally Atom’s ‘Beatutify.’
+
+## Risk Areas
+
+The only package manager I’ve used is pip and I’ve only used it once.  I’ve also never implemented an auto-style checker.  
+Though I’ve had experience in GUIs, there hasn’t been much.  It’s been a few years since I’ve made one,  and I haven’t had much experience in making them stylistic and appealing.     
+
+
+End-Users
+Professors and students in the Astronomy department for the purpose of teaching and learning about Kepler’s Laws and planetary motion
+
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbLTEyMTE0NjY3OSwtMTE4OTU4ODIzOV19
+-->
