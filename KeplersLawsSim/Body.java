@@ -16,6 +16,7 @@ public class Body {
     private Color color;
     private double x;
     private double y;
+    private double angle;
     
     /**
      * Body Constructor
@@ -37,6 +38,7 @@ public class Body {
         this.setColor(color);
         this.x = x;
         this.y = y;
+        this.angle = 0;
     }
 
     /**
@@ -150,6 +152,20 @@ public class Body {
     public void setY(double y) {
        this.y = y;
     } 
+
+    /**
+     * @return angle
+     */
+    public double getAngle() {
+        return angle;
+    }
+
+    /**
+     * @param angle to set
+     */
+    public void setAngle(double angle) {
+         angle = (angle % 360);
+    }
     
     
 }

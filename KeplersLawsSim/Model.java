@@ -14,7 +14,8 @@ public class Model {
     
     public Model() {
         bodies = new ArrayList<Body>();
-        bodies.add(new Body("Earth", 30, 1, 0.167, 15, Color.BLUE, 0, 0));
+        //Given: coordinates to sit on radius of 10
+        bodies.add(new Body("Earth", 30, 1.0, 0.167, 15.0, Color.BLUE, 10, 0));
     }
     
     /**
@@ -23,29 +24,45 @@ public class Model {
      * @param radius of orbit in pixels
      */
     public void step(boolean forward, int radius) {
+        double arcLen;
         double angle;
         Body planet;
         for (int i = 0; i < bodies.size(); i++) {
             planet = bodies.get(i);
-            angle = angularDistance(radius, planet.getOrbitalPeriod(), 1);
-            planet.setX(planet.get(X) + (Math.cos(angle) * radius));
-            planet.setY(planet.get(Y) + (Math.sin(angle) * radius));
+            arcLen = arcLength(radius, planet.getOrbitalPeriod());
+            angle = arcAngle(radius, arcLen);
+            planet.setAngle(planet.getAngle() + angle);
+            if (forward) {
+                planet.setX(planet.getX() + (Math.cos(planet.getAngle())));
+                planet.setY(planet.getY() + (Math.sin(planet.getAngle())));
+            } 
+            else {
+                planet.setX(planet.getX() - (Math.cos(angle) * radius));
+                planet.setY(planet.getY() - (Math.sin(angle) * radius));
+            }
         }
     }
 
     /**
-     * Returns the angular distance in radians
+     * Returns the arc length in degrees
      * @param radius of orbit
      * @param period orbital period of planet
      * @param days of orbit
      */
-    public double angularDistance(double radius, double period, 
-                                  int days) {
+    public double arcLength(int radius, double period) {
         //Find circumference from radius
         double circumference = Math.pow((Math.PI * radius), 2);
         //Divide result by orbital period to find angle
-        double angle = (circumference / (period * EARTH_YEAR)) * days;
+        double arc = (circumference / (period * EARTH_YEAR));
    
-        return Math.toRadians(angle);      
+        return arc;      
+    }
+    
+    /**
+     * Finds the arc angle from the arc length
+     * Derived from the arc length formula
+     */
+    public double arcAngle(double radius, double arcLength) {
+        return (360 * arcLength) / (2 * Math.PI * radius);
     }
 }
