@@ -10,10 +10,12 @@ import java.awt.Color; //javafx.scene.paint.Color
 public class Body {
     private String name;
     private int size;  //In pixels
-    private float orbitalPeriod; // In Earth years
-    private float eccentricity; // e.g. 0 is perfect circle
-    private float semiMajorAxis;
+    private double orbitalPeriod; // In Earth years
+    private double eccentricity; // e.g. 0 is perfect circle
+    private double semiMajorAxis;
     private Color color;
+    private double x;
+    private double y;
     
     /**
      * Body Constructor
@@ -24,14 +26,17 @@ public class Body {
      * @param semiMajorAxis essential radius
      * @param color of object
      */
-    public Body(String name, int size, float orbitalPeriod, 
-             float eccentricity, float semiMajorAxis, Color color) {
+    public Body(String name, int size, double orbitalPeriod, 
+             double eccentricity, double semiMajorAxis, Color color,
+             double x, double y) {
         this.setName(name);
         this.setSize(size);
         this.setOrbitalPeriod(orbitalPeriod);
         this.setEccentricity(eccentricity);
         this.setSemiMajorAxis(semiMajorAxis);
         this.setColor(color);
+        this.x = x;
+        this.y = y;
     }
 
     /**
@@ -65,42 +70,42 @@ public class Body {
     /**
      * @return semiMajorAxis
      */
-    public float getSemiMajorAxis() {
+    public double getSemiMajorAxis() {
         return semiMajorAxis;
     }
 
     /**
      * @param semiMajorAxis to set
      */
-    public void setSemiMajorAxis(float semiMajorAxis) {
+    public void setSemiMajorAxis(double semiMajorAxis) {
         this.semiMajorAxis = semiMajorAxis;
     }
 
     /**
      * @return eccentricity
      */
-    public float getEccentricity() {
+    public double getEccentricity() {
         return eccentricity;
     }
     
     /**
      * @param eccentricity
      */
-    public void setEccentricity(float eccentricity) {
+    public void setEccentricity(double eccentricity) {
         this.eccentricity = eccentricity;
     }
 
     /**
      * @return the orbitalPeriod
      */
-    public float getOrbitalPeriod() {
+    public double getOrbitalPeriod() {
         return orbitalPeriod;
     }
 
     /**
      * @param orbitalPeriod the orbitalPeriod to set
      */
-    public void setOrbitalPeriod(float orbitalPeriod) {
+    public void setOrbitalPeriod(double orbitalPeriod) {
         this.orbitalPeriod = orbitalPeriod;
     }
 
@@ -117,7 +122,34 @@ public class Body {
     public void setColor(Color color) {
         this.color = color;
     }
+
+    /**
+     * @return x
+     */
+    public double getX() {
+        return x;
+    }
     
+    /**
+     * @param x to set
+     */
+    public void setX(double x) {
+       this.x = x;
+    }
+
+    /**
+     * @return y
+     */
+    public double getY() {
+        return y;
+    }
+    
+    /**
+     * @param y to set
+     */
+    public void setY(double y) {
+       this.y = y;
+    } 
     
     
 }
