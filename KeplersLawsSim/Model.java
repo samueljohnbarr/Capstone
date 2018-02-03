@@ -5,7 +5,9 @@ import java.util.Calendar;
 /**
  * Models each planet
  * (Just Earth for the time being)
- * 
+ * **12/21/2000** Earth at (radius, 0) START DATE 
+ * (JD = 2400000 + 5190)?
+ * (Mercury is at conjuction here too (-radius, 0))
  * @author barrsj
  * @version 2/2/18
  */
@@ -16,8 +18,9 @@ public class Model {
     public Calendar date;
 
     public Model() {
-        date = new Calendar();
-        //TODO: Set date to initial date
+        //Create initial date for simulation
+        date = Calendar.getInstance();
+        date.set(2000, 11, 21);
         //Today's date: Calendar.getInstance();
         bodies = new ArrayList<Body>();
         //Given: coordinates to sit on radius of 10
@@ -36,11 +39,15 @@ public class Model {
             planet = bodies.get(i);
             //Get anglular distance for one day
             angle = getAngularDistance(planet.getOrbitalPeriod());
-            //Update planet angle
-            if (forward)
+            //Update planet angle and date
+            if (forward) {
                 planet.setAngle(planet.getAngle() + angle);
-            else
+                date.roll(Calendar.DATE, true);
+            }
+            else {
                 planet.setAngle(planet.getAngle() - angle);
+                date.roll(Calendar.DATE, false);
+            }
             
             //Set the new coordinates
             planet.setX(Math.cos(planet.getAngle()) * radius);
@@ -53,7 +60,7 @@ public class Model {
      */
     public void setDate(int year, int month, int day,
                         int radius) {
-        
+       
         
     }
 
