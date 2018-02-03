@@ -1,19 +1,24 @@
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Models each planet
- * Just Earth for the time being
+ * (Just Earth for the time being)
  * 
  * @author barrsj
- * @version 1/31/18
+ * @version 2/2/18
  */
 public class Model {
     private static final double EARTH_YEAR = 365.25;
     private static final int CIRCLE_DEGREES = 360;
     public ArrayList<Body> bodies;
-    
+    public Calendar date;
+
     public Model() {
+        date = new Calendar();
+        //TODO: Set date to initial date
+        //Today's date: Calendar.getInstance();
         bodies = new ArrayList<Body>();
         //Given: coordinates to sit on radius of 10
         bodies.add(new Body("Earth", 30, 1.0, 0.167, 15.0, Color.BLUE, 10, 0));
@@ -30,7 +35,7 @@ public class Model {
         for (int i = 0; i < bodies.size(); i++) {
             planet = bodies.get(i);
             //Get anglular distance for one day
-            angle = getAngle(planet.getOrbitalPeriod());
+            angle = getAngularDistance(planet.getOrbitalPeriod());
             //Update planet angle
             if (forward)
                 planet.setAngle(planet.getAngle() + angle);
@@ -41,6 +46,15 @@ public class Model {
             planet.setX(Math.cos(planet.getAngle()) * radius);
             planet.setY(Math.sin(planet.getAngle()) * radius);
         }
+    }
+
+    /**
+     * Sets the coordinates to a specified date
+     */
+    public void setDate(int year, int month, int day,
+                        int radius) {
+        
+        
     }
 
     /**
