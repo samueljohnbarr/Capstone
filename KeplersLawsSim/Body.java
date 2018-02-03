@@ -164,7 +164,7 @@ public class Body {
      * @param angle to set
      */
     public void setAngle(double angle) {
-         angle = (angle % 360);
+         this.angle = (angle % (2 * Math.PI));
     }
     
     

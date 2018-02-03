@@ -21,10 +21,13 @@ public class Model {
         //Create initial date for simulation
         date = Calendar.getInstance();
         date.set(2000, 11, 21);
-        //Today's date: Calendar.getInstance();
+         
         bodies = new ArrayList<Body>();
         //Given: coordinates to sit on radius of 10
-        bodies.add(new Body("Earth", 30, 1.0, 0.167, 15.0, Color.BLUE, 10, 0));
+        /* Add bodies will be given its own method to allow for
+         * variable radii */
+        bodies.add(new Body("Earth", 30, 1.0, 0.167, 15.0, 
+                            Color.BLUE, 10, 0));
     }
     
     /**
