@@ -53,8 +53,11 @@ public class Model {
             }
             
             //Set the new coordinates
-            planet.setX(Math.cos(planet.getAngle()) * radius);
-            planet.setY(Math.sin(planet.getAngle()) * radius);
+            double newX = Math.cos(planet.getAngle()) * radius;
+            double newY = Math.sin(planet.getAngle()) * radius;
+            newY = Math.round(newY * 1000000000) / 1000000000;
+            planet.setX(newX);
+            planet.setY(newY);
         }
     }
 
