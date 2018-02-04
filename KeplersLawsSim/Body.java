@@ -10,9 +10,9 @@ import java.awt.Color; //javafx.scene.paint.Color
 public class Body {
     private String name;
     private int size;  //In pixels
-    private double orbitalPeriod; // In Earth years
-    private double eccentricity; // e.g. 0 is perfect circle
-    private double semiMajorAxis;
+    private double orbitalPeriod; //In Earth years
+    private double eccentricity; //e.g. 0 is perfect circle
+    private double semiMajorAxis; //radius if eccentricity is 0
     private Color color;
     private double x;
     private double y;
@@ -29,7 +29,7 @@ public class Body {
      */
     public Body(String name, int size, double orbitalPeriod, 
              double eccentricity, double semiMajorAxis, Color color,
-             double x, double y) {
+             double x, double y, double angle) {
         this.setName(name);
         this.setSize(size);
         this.setOrbitalPeriod(orbitalPeriod);
@@ -38,7 +38,7 @@ public class Body {
         this.setColor(color);
         this.x = x;
         this.y = y;
-        this.angle = 0;
+        this.angle = angle;
     }
 
     /**

@@ -10,9 +10,7 @@ public class ModelTest {
     public static void main(String[] args) {
         Model model = new Model();
         stepTest(model, 10);
-        //Calendar date = Calendar.getInstance();
-        //date.set(2000, 11, 21);
-        //System.out.println(date.get(Calendar.DAY_OF_YEAR));
+        dateTest(model, 10);
     }
     
     /**
@@ -24,10 +22,10 @@ public class ModelTest {
         int passX = radius;
         int passY = 0;
         Body earth = model.bodies.get(0);
-        
+        System.out.println("***Step Test***");
+           
         //Forward Test
-        for (int i = 0; i < days; i++) 
-            model.step(true, radius);
+        model.step(days);
 
         if (earth.getX() == radius &&
             earth.getY() == 0) 
@@ -40,8 +38,7 @@ public class ModelTest {
    
 
         //Reverse Test
-        for (int i = 0; i < days; i++)
-            model.step(false, radius);
+        model.step(-days);
 
         if (earth.getX() == radius &&
             earth.getY() == 0)
@@ -53,4 +50,37 @@ public class ModelTest {
         }
                             
     }
+
+    private static void dateTest(Model model, int radius) {
+        int passX = radius;
+        int passY = 0;
+        Body earth = model.bodies.get(0);
+        System.out.println("***Date Test***"); 
+
+        //Forward one year
+        model.setDate(2004, 11, 21);
+
+        if (earth.getX() == radius &&
+            earth.getY() == 0)
+            System.out.println("Passed: Future Date");
+        else {
+            System.out.println("Failed: Future Date--Final Coordinates:");
+            System.out.println("X: " + earth.getX());
+            System.out.println("Y: " + earth.getY());
+         }
+
+        //Reverse Test
+        model.setDate(1999, 11, 21);
+
+        if (earth.getX() == radius &&
+            earth.getY() == 0)
+            System.out.println("Passed: Past Date");
+        else {
+            System.out.println("Failed: Past Date--Final Coordinates:");
+            System.out.println("X: " + earth.getX());
+            System.out.println("Y: " + earth.getY());
+         }
+
+    }
+
 }
