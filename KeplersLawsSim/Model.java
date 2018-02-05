@@ -68,14 +68,17 @@ public class Model {
      */
     public void setDate(int year, int month, int day) {
     GregorianCalendar newDate = 
-                        new GregorianCalendar(year, month-1, day);
-    //Turn the current and new dates into days
-    int currentDays = date.get(GregorianCalendar.DAY_OF_YEAR);
-    int newDays = newDate.get(GregorianCalendar.DAY_OF_YEAR);
+                    new GregorianCalendar(year, month-1, day);
+    //Get the difference in milliseconds
+    long diffInMillis = newDate.getTimeInMillis() - 
+                            date.getTimeInMillis();
+
+    //Convert the difference into days
+    int diffInDays = 
+                (int)(diffInMillis / (1000 * 60 * 60 * 24));
     
     //Step the difference
-    int diff = newDays-currentDays;
-    step(diff);
+    step(diffInDays);
 
     }
 
@@ -92,7 +95,7 @@ public class Model {
      * @param days of distance (can be negative)
      * @return angular distance
      */
-    public double getAngularDistance(double period, int days) {
+    private double getAngularDistance(double period, int days) {
         return (Math.toRadians(
                     CIRCLE_DEGREES / (period * EARTH_YEAR))) * days;
     }
