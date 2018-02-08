@@ -58,7 +58,7 @@ public class ModelTest {
         System.out.println("***Date Test***"); 
 
         //Forward one year
-        model.setDate(2004, 11, 21);
+        model.setDate(2004, 12, 21);
 
         if (earth.getX() == radius &&
             earth.getY() == 0)
@@ -70,7 +70,7 @@ public class ModelTest {
          }
 
         //Reverse Test
-        model.setDate(1999, 11, 21);
+        model.setDate(1996, 12, 21);
 
         if (earth.getX() == radius &&
             earth.getY() == 0)

@@ -53,6 +53,7 @@ public class Model {
                                    planet.getSemiMajorAxis();
 
             //Round to eight decimal places
+            newX = Math.round(newX * 1000000000) / 1000000000;
             newY = Math.round(newY * 1000000000) / 1000000000;
 
             planet.setX(newX);
@@ -67,18 +68,37 @@ public class Model {
      * @param day to set
      */
     public void setDate(int year, int month, int day) {
-    GregorianCalendar newDate = 
+        GregorianCalendar newDate = 
                     new GregorianCalendar(year, month-1, day);
-    //Get the difference in milliseconds
-    long diffInMillis = newDate.getTimeInMillis() - 
-                            date.getTimeInMillis();
-
-    //Convert the difference into days
-    int diffInDays = 
-                (int)(diffInMillis / (1000 * 60 * 60 * 24));
-    
+        int days = 0;
+        //New date is in the future
+        if (date.before(newDate)) {
+            while (date.before(newDate)) {
+                days++;
+                newDate.add(GregorianCalendar.DAY_OF_YEAR, -1);
+            }
+        //New date is in the past
+        } else {
+            while (date.after(newDate)) {
+                days--;
+                newDate.add(GregorianCalendar.DAY_OF_YEAR, 1);
+            }
+        }
+    /*
+    GregorianCalendar clone = (GregorianCalendar) date.clone();
+    if (date.before(newDate)) {
+        int years = elapsed(clone, newDate, GregorianCalender.YEAR);
+        int months = elapsed(clone, newDate, GregorianCalendar.MONTH);
+        int days = elapsed(clone, newDate, GregorianCalendar.DATE);
+    } else {
+        //Date in past
+        int years = elapsed(newDate, clone, GregorianCalender.YEAR);
+        int months = elapsed(newDate, clone, GregorianCalendar.MONTH);
+        int days = elapsed(newDate, clone, GregorianCalendar.DATE);
+    }
+    */
     //Step the difference
-    step(diffInDays);
+    step(days);
 
     }
 
@@ -88,8 +108,29 @@ public class Model {
     public GregorianCalendar getDate() {
         return date;
     }
+    
+    /**
+     * setDate method helper
+     * Returns the amount of time elapsed between
+     * the dates in the field
+     * @param before date
+     * @param after date
+     * @param field of Calendar (year/month/day) 
+     */
+    private int elapsed(GregorianCalendar before, 
+                        GregorianCalendar after, int field) {
+        GregorianCalendar clone = (GregorianCalendar) before.clone();
+        int elapsed = -1;
+        
+        while (!clone.after(after)) {
+            clone.add(field, 1);
+            elapsed++;
+        }
+        return elapsed;
+    }
 
     /**
+     * Step method helper
      * Returns to the angular distance of a planet in one day.
      * @param period of planet in earth years
      * @param days of distance (can be negative)
