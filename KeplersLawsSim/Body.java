@@ -1,4 +1,4 @@
-import java.awt.Color; //javafx.scene.paint.Color
+import javafx.scene.paint.Color;
 
 /**
  * Class that defines a body that orbits 
@@ -44,37 +44,27 @@ public class Body {
     /**
      * @return name
      */
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
     /**
      * @param name to set
      */
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setName(String name) { this.name = name; }
 
     /**
      * @return size
      */
-    public int getSize() {
-        return size;
-    }
+    public int getSize() { return size; }
 
     /**
      * @param size to set
      */
-    public void setSize(int size) {
-        this.size = size;
-    }
+    public void setSize(int size) { this.size = size; }
 
     /**
      * @return semiMajorAxis
      */
-    public double getSemiMajorAxis() {
-        return semiMajorAxis;
-    }
+    public double getSemiMajorAxis() { return semiMajorAxis; }
 
     /**
      * @param semiMajorAxis to set
@@ -86,9 +76,7 @@ public class Body {
     /**
      * @return eccentricity
      */
-    public double getEccentricity() {
-        return eccentricity;
-    }
+    public double getEccentricity() { return eccentricity; }
     
     /**
      * @param eccentricity
@@ -166,6 +154,3 @@ public class Body {
     public void setAngle(double angle) {
          this.angle = (angle % (2 * Math.PI));
     }
-    
-    
-}

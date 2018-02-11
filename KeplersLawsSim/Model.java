@@ -1,4 +1,4 @@
-import java.awt.Color;
+import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
@@ -14,7 +14,7 @@ import java.util.GregorianCalendar;
 public class Model {
     private static final double EARTH_YEAR = 365.25;
     private static final int CIRCLE_DEGREES = 360;
-    public ArrayList<Body> bodies;
+    private ArrayList<Body> bodies;
     private GregorianCalendar date;
 
     public Model() {
@@ -25,8 +25,8 @@ public class Model {
         //Given: coordinates to sit on radius of 10
         /* Adding bodies will be given its own method to allow for
          * variable radii */
-        bodies.add(new Body("Earth", 30, 1.0, 0.167, 10.0, 
-                            Color.BLUE, 10, 0, 0));
+        bodies.add(new Body("Earth", 30, 1.0, 0.167, 250.0, 
+                            Color.BLUE, 250.0, 0.0, 0.0));
     }
     
     /**
@@ -39,7 +39,7 @@ public class Model {
         Body planet;
         for (int i = 0; i < bodies.size(); i++) {
             planet = bodies.get(i);
-            //Get anglular distance
+            //Get angular distance
             angle = getAngularDistance(planet.getOrbitalPeriod(), days);
 
             //Update planet angle and date
@@ -58,7 +58,28 @@ public class Model {
 
             planet.setX(newX);
             planet.setY(newY);
+            
+            System.out.println("X: " + planet.getX());
         }
+    }
+    
+    /**
+     * Step method helper
+     * Returns to the angular distance of a planet in one day.
+     * @param period of planet in earth years
+     * @param days of distance (can be negative)
+     * @return angular distance
+     */
+    private double getAngularDistance(double period, int days) {
+        return (Math.toRadians(
+                    CIRCLE_DEGREES / (period * EARTH_YEAR))) * days;
+    }
+    
+    /**
+     * @return date
+     */
+    public GregorianCalendar getDate() {
+        return date;
     }
 
     /**
@@ -84,61 +105,14 @@ public class Model {
                 newDate.add(GregorianCalendar.DAY_OF_YEAR, 1);
             }
         }
-    /*
-    GregorianCalendar clone = (GregorianCalendar) date.clone();
-    if (date.before(newDate)) {
-        int years = elapsed(clone, newDate, GregorianCalender.YEAR);
-        int months = elapsed(clone, newDate, GregorianCalendar.MONTH);
-        int days = elapsed(clone, newDate, GregorianCalendar.DATE);
-    } else {
-        //Date in past
-        int years = elapsed(newDate, clone, GregorianCalender.YEAR);
-        int months = elapsed(newDate, clone, GregorianCalendar.MONTH);
-        int days = elapsed(newDate, clone, GregorianCalendar.DATE);
-    }
-    */
+
     //Step the difference
     step(days);
 
     }
-
-    /**
-     * @return date
-     */
-    public GregorianCalendar getDate() {
-        return date;
-    }
     
-    /**
-     * setDate method helper
-     * Returns the amount of time elapsed between
-     * the dates in the field
-     * @param before date
-     * @param after date
-     * @param field of Calendar (year/month/day) 
-     */
-    private int elapsed(GregorianCalendar before, 
-                        GregorianCalendar after, int field) {
-        GregorianCalendar clone = (GregorianCalendar) before.clone();
-        int elapsed = -1;
-        
-        while (!clone.after(after)) {
-            clone.add(field, 1);
-            elapsed++;
-        }
-        return elapsed;
-    }
-
-    /**
-     * Step method helper
-     * Returns to the angular distance of a planet in one day.
-     * @param period of planet in earth years
-     * @param days of distance (can be negative)
-     * @return angular distance
-     */
-    private double getAngularDistance(double period, int days) {
-        return (Math.toRadians(
-                    CIRCLE_DEGREES / (period * EARTH_YEAR))) * days;
+    public ArrayList<Body> getBodies() {
+        return bodies;
     }
     
 }
