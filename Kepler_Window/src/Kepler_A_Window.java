@@ -1,5 +1,7 @@
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.ArrayList;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -22,8 +24,16 @@ import javafx.stage.Stage;
 
 public class Kepler_A_Window extends Application{
 
+
 Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-	
+
+ArrayList<planet> planets = new ArrayList<planet>();
+
+double centerX;
+double centerY;
+double sunCenter = 100;
+
+
 	public void start(Stage primary) throws Exception {
 		
 		BorderPane root = new BorderPane();
@@ -54,31 +64,38 @@ Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 	}
 
 	public void draw(GraphicsContext gc) {
+		
+		centerX = screen.getWidth()/2;
+		centerY = screen.getHeight()/2;
 		gc.setFill(Color.YELLOW);
 		gc.setLineWidth(5);
-		gc.fillOval(screen.getWidth()/2,screen.getHeight()/2, 100, 100);
+		gc.fillOval(centerX-(sunCenter/2), centerY-(sunCenter/2), sunCenter, sunCenter);
+		
+		gc.setFill(Color.DARKRED);
+		gc.setLineWidth(5);
+		gc.fillOval(centerX-200, centerY-200, 50, 50);
 	}
 	
 	public MenuBar setUpMenus() {
+		
 		MenuBar mainMenu = new MenuBar();
 		
 		Menu fileMenu = new Menu("File");
 		
 			MenuItem exitFileMenu = new MenuItem("Exit");
+		    fileMenu.getItems().add(exitFileMenu);
 		
-			fileMenu.getItems().add(exitFileMenu);
-		
+		    
 		Menu editMenu = new Menu("Edit");
+		
 			
+		
 		Menu helpMenu = new Menu("Help");
 		
 			MenuItem aboutHelpMenu = new MenuItem("About");
-			
 			MenuItem helpHelpMenu = new MenuItem("Help");
-			
 			helpMenu.getItems().addAll(aboutHelpMenu, helpHelpMenu);
-		
-		mainMenu.getMenus().addAll(fileMenu, editMenu, helpMenu);
+			mainMenu.getMenus().addAll(fileMenu, editMenu, helpMenu);
 		
 		return mainMenu;
 		
