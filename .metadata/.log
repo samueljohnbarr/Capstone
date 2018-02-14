@@ -1917,3 +1917,48 @@ user global configuration and to define the default location to store repositori
 not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
 EGit might behave differently since they see different configuration options.
 This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.egit.core 4 0 2018-02-13 23:30:17.880
+!MESSAGE An exception occurred during push on URI https://github.com/samueljohnbarr/Capstone.git: https://github.com/samueljohnbarr/Capstone.git: Error writing request body to server
+!STACK 0
+org.eclipse.jgit.api.errors.TransportException: https://github.com/samueljohnbarr/Capstone.git: Error writing request body to server
+	at org.eclipse.jgit.api.PushCommand.call(PushCommand.java:180)
+	at org.eclipse.egit.core.op.PushOperation.run(PushOperation.java:215)
+	at org.eclipse.egit.ui.internal.push.PushJob.performJob(PushJob.java:84)
+	at org.eclipse.egit.ui.internal.jobs.RepositoryJob.run(RepositoryJob.java:57)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+Caused by: org.eclipse.jgit.errors.TransportException: https://github.com/samueljohnbarr/Capstone.git: Error writing request body to server
+	at org.eclipse.jgit.transport.BasePackPushConnection.doPush(BasePackPushConnection.java:238)
+	at org.eclipse.jgit.transport.TransportHttp$SmartHttpPushConnection.doPush(TransportHttp.java:1119)
+	at org.eclipse.jgit.transport.BasePackPushConnection.push(BasePackPushConnection.java:170)
+	at org.eclipse.jgit.transport.PushProcess.execute(PushProcess.java:172)
+	at org.eclipse.jgit.transport.Transport.push(Transport.java:1310)
+	at org.eclipse.jgit.api.PushCommand.call(PushCommand.java:169)
+	... 4 more
+Caused by: java.io.IOException: Error writing request body to server
+	at sun.net.www.protocol.http.HttpURLConnection$StreamingOutputStream.checkError(Unknown Source)
+	at sun.net.www.protocol.http.HttpURLConnection$StreamingOutputStream.write(Unknown Source)
+	at org.eclipse.jgit.util.TemporaryBuffer.switchToOverflow(TemporaryBuffer.java:359)
+	at org.eclipse.jgit.util.TemporaryBuffer.reachedInCoreLimit(TemporaryBuffer.java:350)
+	at org.eclipse.jgit.util.TemporaryBuffer.write(TemporaryBuffer.java:143)
+	at org.eclipse.jgit.util.io.TimeoutOutputStream.write(TimeoutOutputStream.java:113)
+	at org.eclipse.jgit.transport.BasePackPushConnection$CheckingSideBandOutputStream.write(BasePackPushConnection.java:470)
+	at org.eclipse.jgit.internal.storage.pack.PackOutputStream.write(PackOutputStream.java:126)
+	at java.util.zip.DeflaterOutputStream.deflate(Unknown Source)
+	at java.util.zip.DeflaterOutputStream.write(Unknown Source)
+	at java.io.FilterOutputStream.write(Unknown Source)
+	at org.eclipse.jgit.lib.ObjectLoader.copyTo(ObjectLoader.java:266)
+	at org.eclipse.jgit.internal.storage.pack.PackWriter.writeWholeObjectDeflate(PackWriter.java:1624)
+	at org.eclipse.jgit.internal.storage.pack.PackWriter.writeObjectImpl(PackWriter.java:1602)
+	at org.eclipse.jgit.internal.storage.pack.PackWriter.writeObject(PackWriter.java:1545)
+	at org.eclipse.jgit.internal.storage.pack.PackOutputStream.writeObject(PackOutputStream.java:164)
+	at org.eclipse.jgit.internal.storage.file.WindowCursor.writeObjects(WindowCursor.java:217)
+	at org.eclipse.jgit.internal.storage.pack.PackWriter.writeObjects(PackWriter.java:1533)
+	at org.eclipse.jgit.internal.storage.pack.PackWriter.writeObjects(PackWriter.java:1521)
+	at org.eclipse.jgit.internal.storage.pack.PackWriter.writePack(PackWriter.java:1085)
+	at org.eclipse.jgit.transport.BasePackPushConnection.writePack(BasePackPushConnection.java:361)
+	at org.eclipse.jgit.transport.BasePackPushConnection.doPush(BasePackPushConnection.java:218)
+	... 9 more
+
+!ENTRY org.eclipse.egit.ui 4 0 2018-02-13 23:30:18.140
+!MESSAGE Can't connect to any repository: https://github.com/samueljohnbarr/Capstone.git (https://github.com/samueljohnbarr/Capstone.git: Error writing request body to server)
