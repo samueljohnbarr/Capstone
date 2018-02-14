@@ -1,10 +1,3 @@
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.util.ArrayList;
-
-import javafx.application.Application;
-import javafx.collections.ObservableList;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Menu;
@@ -24,16 +17,47 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
+import java.util.concurrent.CountDownLatch;
 
 
-
-public class Kepler_A_Window extends Application{
-
-Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-private Controller controller = new Controller();
-private ArrayList<Body> bodies;
-private Group rings;
-private Group planets;
+public class Kepler_A_Window extends Application {
+    Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+    private static final CountDownLatch latch = new CountDownLatch(1);
+    private static Kepler_A_Window keplerWindow = null;
+    private Controller controller = new Controller();
+    private ArrayList<Body> bodies;
+    private Group rings;
+    private Group planets;
+    
+    /**
+     * Waits for the window to be created
+     * @return window object
+     */
+    public static Kepler_A_Window waitForWindow() {
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return keplerWindow;
+    }
+    
+    /**
+     * Sets the window
+     * @param w window to set
+     */
+    public static void setWindow(Kepler_A_Window w) {
+        keplerWindow = w;
+        latch.countDown();
+    }
+    
+    /**
+     * Sets the window to itself
+     */
+    public Kepler_A_Window() {
+        setWindow(this);
+    }
+    
     
     public void start(Stage primary) throws Exception {
         BorderPane root = new BorderPane();
@@ -62,6 +86,7 @@ private Group planets;
         rings = initRings(rings);
         root.getChildren().add(rings);
         
+        
         //Initialize planets
         planets = new Group();
         planets = initPlanets(planets);
@@ -73,6 +98,7 @@ private Group planets;
         primary.setMaximized(true);
         primary.show();
         
+        System.out.println("End");
     }
 
     public void draw(GraphicsContext gc) {
@@ -134,13 +160,20 @@ private Group planets;
     }
     
     private void updatePlanets() {
-        bodies = controller.getBodies();
-        
-        ObservableList<Node> collection = planets.getChildren();
-        for (int i = 0; i < bodies.size(); i++) {
-            Body planet = bodies.get(i);
-            collection.get(i).relocate(planet.getX(), planet.getY());
-        }
+        //System.out.println("hello!");
+        Platform.runLater(new Runnable() {
+            public void run() {
+                bodies = controller.getBodies();
+                ObservableList<Node> collection = planets.getChildren();
+                for (int i = 0; i < bodies.size(); i++) {
+                    Body planet = bodies.get(i);
+                    collection.get(i).relocate(
+                            screen.getWidth()/2 + planet.getX() - planet.getSize()/2, 
+                            screen.getHeight()/2 + planet.getY() - planet.getSize()/2);
+                }
+            }
+        });
+        //System.out.println("goodbye");
         
     }
     
@@ -173,8 +206,8 @@ private Group planets;
         updatePlanets();
     }
     
-    public void run(String[] args) {
-        launch(args);
+    public static void main(String[] args) {
+        Application.launch(args);
     }
     
 }

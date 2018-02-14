@@ -1,18 +1,23 @@
+
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+import javafx.concurrent.Task;
+import javafx.application.Application;
 
 
 public class Controller {
     private static Model model;
     private static Kepler_A_Window window;
 
-    public static void main (String[] args) throws InterruptedException {
-        //Create the model
-        model = new Model();
-        
+    public static void main(String[] args) throws InterruptedException {     
         //Start the GUI
-        window = new Kepler_A_Window();
-        window.run(args);
+        new Thread() {
+            public void run() {
+                javafx.application.Application.launch(Kepler_A_Window.class);
+            }
+        }.start();
+        model = new Model();
+        window = Kepler_A_Window.waitForWindow();    
         
         autoRun();
     }
@@ -31,3 +36,4 @@ public class Controller {
     
     
 }
+
