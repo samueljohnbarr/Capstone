@@ -71,9 +71,15 @@ double sunCenter = 100;
 		gc.setLineWidth(5);
 		gc.fillOval(centerX-(sunCenter/2), centerY-(sunCenter/2), sunCenter, sunCenter);
 		
+		gc.setStroke(Color.RED);
+		gc.setLineWidth(3);
+		gc.strokeOval(centerX-250, centerY-250, 500, 500);
+		
 		gc.setFill(Color.DARKRED);
 		gc.setLineWidth(5);
 		gc.fillOval(centerX-200, centerY-200, 50, 50);
+		
+
 	}
 	
 	public MenuBar setUpMenus() {
