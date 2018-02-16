@@ -40,6 +40,18 @@ public class Body {
         this.y = 0;
         this.angle = angle;
     }
+    
+    public Body() {
+    	name = "";
+    	size = 0;
+    	orbitalPeriod = 0;
+    	eccentricity = 0;
+    	semiMajorAxis = 0;
+    	color = null;
+    	x = 0;
+    	y = 0;
+    	angle = 0;
+    }
 
     /**
      * @return name

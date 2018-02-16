@@ -11,6 +11,8 @@ public class Controller {
 
     public static void main(String[] args) throws InterruptedException {     
         //Start the GUI
+    	
+    	
         new Thread() {
             public void run() {
                 javafx.application.Application.launch(Kepler_A_Window.class);

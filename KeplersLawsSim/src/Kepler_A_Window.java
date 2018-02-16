@@ -113,7 +113,7 @@ public class Kepler_A_Window extends Application {
     public void draw(GraphicsContext gc) {
         double centerX = screen.getWidth()/2;
         double centerY = screen.getHeight()/2;
-        int sunSize = 100;
+        int sunSize = 75;
         //Draw Sun
         gc.setFill(Color.YELLOW);
         gc.setLineWidth(5);
@@ -168,7 +168,7 @@ public class Kepler_A_Window extends Application {
         return g;
     }
     
-    private void updatePlanets() {
+    private synchronized void updatePlanets() {
         //System.out.println("hello!");
         Platform.runLater(new Runnable() {
             public void run() {

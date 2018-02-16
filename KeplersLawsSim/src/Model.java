@@ -16,6 +16,7 @@ public class Model {
     private static final int CIRCLE_DEGREES = 360;
     private ArrayList<Body> bodies;
     private GregorianCalendar date;
+    private int scale = 15;
 
     public Model() {
         //Create initial date for simulation
@@ -25,50 +26,63 @@ public class Model {
         //Given: coordinates to sit on radius of 10
         /* Adding bodies will be given its own method to allow for
          * variable radii */
-        bodies.add(new Body("Earth", 30, 1.0, 0.167, 250.0, 
-                            Color.BLUE, 0.0));
+        //bodies.add(new Body("Earth", 30, 1.0, 0.167, 250.0, 
+                            //Color.BLUE, 0.0));
+        initInnerPlanets();
+        for (int i = 0; i < bodies.size(); i++)
+        	updatePosition(bodies.get(i));
     }
     
     /**
      * Initializes all bodies
      * (Added local variables for readability)
+     * ****Consider rewrite to null constructor and
+     * ****mutators for readability
      */
     private void initInnerPlanets() {
     	//Mercury
-    	int size = 10;
-    	double period = 0.241;
-    	double eccentricity = 0.206;
-    	double semiMajorAxis = 5.79; //TODO: This needs to change!
-    	double angle = 3.1406903184;
-    	bodies.add(new Body("Mercury", size, period, eccentricity, 
-    			semiMajorAxis, Color.GREY, angle));
+    	Body mercury = new Body();
+    	mercury.setSize(10);
+    	mercury.setOrbitalPeriod(0.241);
+    	mercury.setEccentricity(0.206);
+    	mercury.setSemiMajorAxis(5.79 * scale);
+    	mercury.setX(mercury.getSemiMajorAxis());
+    	mercury.setColor(Color.BLACK);
+    	mercury.setAngle(getAngularDistance(mercury.getOrbitalPeriod(), 44));  //3.1406903184;
+    	bodies.add(mercury);
     	
     	//Venus
-    	size = 28;
-    	period = 0.615;
-    	eccentricity = 0.0068;
-    	semiMajorAxis = 10.8; //TODO: This needs to change!
-    	angle = 5.2306557038660664;
-    	bodies.add(new Body("Venus", size, period, eccentricity,
-    			semiMajorAxis, Color.ORANGE, angle));
+    	Body venus = new Body();
+    	venus.setSize(28);
+    	venus.setOrbitalPeriod(0.615);
+    	venus.setEccentricity(0.0068);
+    	venus.setSemiMajorAxis(10.8 * scale);
+        venus.setX(venus.getSemiMajorAxis());
+    	venus.setColor(Color.ORANGE);
+    	venus.setAngle(getAngularDistance(venus.getOrbitalPeriod(), 187)); //5.2306557038660664;
+    	bodies.add(venus);
     	
     	//Earth
-    	size = 30;
-    	period = 1;
-    	eccentricity = 0.167;
-    	semiMajorAxis = 250;
-    	angle = 0;
-    	bodies.add(new Body("Earth", size, period, eccentricity, 
-    			semiMajorAxis, Color.BLUE, angle));
+    	Body earth = new Body();
+    	earth.setSize(30);
+    	earth.setOrbitalPeriod(1);
+    	earth.setEccentricity(0.167);
+    	earth.setSemiMajorAxis(15 * scale);
+    	earth.setX(earth.getSemiMajorAxis());
+    	earth.setColor(Color.BLUE);
+    	earth.setAngle(0);
+    	bodies.add(earth);
     	
     	//Mars
-    	size = 16;
-    	period = 1.88;
-    	eccentricity = 0.0934;
-    	semiMajorAxis = 22.8; //TODO: This needs to change!
-    	angle = 0;
-    	bodies.add(new Body("Mars", size, period, eccentricity, 
-    			semiMajorAxis, Color.BLUE, angle));
+    	Body mars = new Body();
+    	mars.setSize(16);
+    	mars.setOrbitalPeriod(1.88);
+    	mars.setEccentricity(0.0934);
+    	mars.setSemiMajorAxis(22.8 * scale);
+    	mars.setX(mars.getSemiMajorAxis());
+    	mars.setColor(Color.RED);
+    	mars.setAngle(getAngularDistance(mars.getOrbitalPeriod(), 170)); //193
+    	bodies.add(mars);
     	
     }
     
@@ -79,7 +93,7 @@ public class Model {
      * 
      * @param planet to set
      */
-    private void setPosition(Body planet) {
+    private void updatePosition(Body planet) {
     	//Calculate x & y position
     	double x = Math.cos(planet.getAngle()) * 
                    planet.getSemiMajorAxis();
@@ -114,7 +128,7 @@ public class Model {
             planet.setAngle(planet.getAngle() + angle);
             date.add(GregorianCalendar.DAY_OF_YEAR, days);
             
-            setPosition(planet);
+            updatePosition(planet);
         }
     }
     
@@ -126,7 +140,7 @@ public class Model {
      * @return angular distance
      */
     private double getAngularDistance(double period, int days) {
-        return (Math.toRadians(
+        return -(Math.toRadians(
                     CIRCLE_DEGREES / (period * EARTH_YEAR))) * days;
     }
     
