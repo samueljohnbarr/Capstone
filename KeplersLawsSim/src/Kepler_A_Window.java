@@ -13,11 +13,20 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
+
+import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
+
+import java.awt.Toolkit;
 
 
 public class Kepler_A_Window extends Application {
@@ -63,7 +72,7 @@ public class Kepler_A_Window extends Application {
         BorderPane root = new BorderPane();
         
         //Set background image
-        Image backgroundImage = new Image("Starry-Sky-004.png");
+        Image backgroundImage = new Image("milky.png");
         BackgroundSize bs = new BackgroundSize(screen.getWidth(),screen.getHeight(), false, false, false, false);
         root.setBackground(new Background(new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,BackgroundPosition.DEFAULT, bs)));
         

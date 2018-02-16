@@ -21,7 +21,7 @@ public class ModelTest {
         int days = 1461;
         int passX = radius;
         int passY = 0;
-        Body earth = model.bodies.get(0);
+        Body earth = model.getBodies().get(0);
         System.out.println("***Step Test***");
            
         //Forward Test
@@ -54,7 +54,7 @@ public class ModelTest {
     private static void dateTest(Model model, int radius) {
         int passX = radius;
         int passY = 0;
-        Body earth = model.bodies.get(0);
+        Body earth = model.getBodies().get(0);
         System.out.println("***Date Test***"); 
 
         //Forward one year

@@ -26,7 +26,75 @@ public class Model {
         /* Adding bodies will be given its own method to allow for
          * variable radii */
         bodies.add(new Body("Earth", 30, 1.0, 0.167, 250.0, 
-                            Color.BLUE, 250.0, 0.0, 0.0));
+                            Color.BLUE, 0.0));
+    }
+    
+    /**
+     * Initializes all bodies
+     * (Added local variables for readability)
+     */
+    private void initInnerPlanets() {
+    	//Mercury
+    	int size = 10;
+    	double period = 0.241;
+    	double eccentricity = 0.206;
+    	double semiMajorAxis = 5.79; //TODO: This needs to change!
+    	double angle = 3.1406903184;
+    	bodies.add(new Body("Mercury", size, period, eccentricity, 
+    			semiMajorAxis, Color.GREY, angle));
+    	
+    	//Venus
+    	size = 28;
+    	period = 0.615;
+    	eccentricity = 0.0068;
+    	semiMajorAxis = 10.8; //TODO: This needs to change!
+    	angle = 5.2306557038660664;
+    	bodies.add(new Body("Venus", size, period, eccentricity,
+    			semiMajorAxis, Color.ORANGE, angle));
+    	
+    	//Earth
+    	size = 30;
+    	period = 1;
+    	eccentricity = 0.167;
+    	semiMajorAxis = 250;
+    	angle = 0;
+    	bodies.add(new Body("Earth", size, period, eccentricity, 
+    			semiMajorAxis, Color.BLUE, angle));
+    	
+    	//Mars
+    	size = 16;
+    	period = 1.88;
+    	eccentricity = 0.0934;
+    	semiMajorAxis = 22.8; //TODO: This needs to change!
+    	angle = 0;
+    	bodies.add(new Body("Mars", size, period, eccentricity, 
+    			semiMajorAxis, Color.BLUE, angle));
+    	
+    }
+    
+    
+    /**
+     * Sets the planet positions according to
+     * their stored angle
+     * 
+     * @param planet to set
+     */
+    private void setPosition(Body planet) {
+    	//Calculate x & y position
+    	double x = Math.cos(planet.getAngle()) * 
+                   planet.getSemiMajorAxis();
+    	double y = Math.sin(planet.getAngle()) * 
+                   planet.getSemiMajorAxis();
+    		
+   		//Round to eight decimal place
+    	x = Math.round(x * 1000000000) / 1000000000;
+        y = Math.round(y * 1000000000) / 1000000000;
+    		
+    		
+    	//Set position
+   		planet.setX(x);
+        planet.setY(y);
+    	
     }
     
     /**
@@ -46,20 +114,7 @@ public class Model {
             planet.setAngle(planet.getAngle() + angle);
             date.add(GregorianCalendar.DAY_OF_YEAR, days);
             
-            //Calculate new coordinates
-            double newX = Math.cos(planet.getAngle()) * 
-                                   planet.getSemiMajorAxis();
-            double newY = Math.sin(planet.getAngle()) * 
-                                   planet.getSemiMajorAxis();
-
-            //Round to eight decimal places
-            newX = Math.round(newX * 1000000000) / 1000000000;
-            newY = Math.round(newY * 1000000000) / 1000000000;
-
-            planet.setX(newX);
-            planet.setY(newY);
-            
-            System.out.println("X: " + planet.getX());
+            setPosition(planet);
         }
     }
     

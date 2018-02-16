@@ -12,7 +12,7 @@ public class Body {
     private int size;  //In pixels
     private double orbitalPeriod; //In Earth years
     private double eccentricity; //e.g. 0 is perfect circle
-    private double semiMajorAxis; //radius if eccentricity is 0
+    private double semiMajorAxis; //(*10^10 m)
     private Color color;
     private double x;
     private double y;
@@ -29,15 +29,15 @@ public class Body {
      */
     public Body(String name, int size, double orbitalPeriod, 
              double eccentricity, double semiMajorAxis, Color color,
-             double x, double y, double angle) {
+             double angle) {
         this.setName(name);
         this.setSize(size);
         this.setOrbitalPeriod(orbitalPeriod);
         this.setEccentricity(eccentricity);
         this.setSemiMajorAxis(semiMajorAxis);
         this.setColor(color);
-        this.x = x;
-        this.y = y;
+        this.x = semiMajorAxis;
+        this.y = 0;
         this.angle = angle;
     }
 
@@ -154,3 +154,4 @@ public class Body {
     public void setAngle(double angle) {
          this.angle = (angle % (2 * Math.PI));
     }
+}
