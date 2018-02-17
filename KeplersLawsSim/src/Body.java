@@ -71,7 +71,10 @@ public class Body {
     /**
      * @param size to set
      */
-    public void setSize(int size) { this.size = size; }
+    public void setSize(int size) {
+    	if (size >= 10)
+    	    this.size = size; 
+    }
 
     /**
      * @return semiMajorAxis

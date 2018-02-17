@@ -1,8 +1,6 @@
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-import javafx.concurrent.Task;
-import javafx.application.Application;
 
 
 public class Controller {
@@ -10,30 +8,46 @@ public class Controller {
     private static Kepler_A_Window window;
 
     public static void main(String[] args) throws InterruptedException {     
-        //Start the GUI
-    	
-    	
+    	model = new Model();
+    	//Start the GUI
         new Thread() {
             public void run() {
                 javafx.application.Application.launch(Kepler_A_Window.class);
             }
         }.start();
-        model = new Model();
+        
         window = Kepler_A_Window.waitForWindow();    
         
         autoRun();
     }
     
+    /**
+     * Waits for model object to be created
+     * @return bodies
+     */
     public ArrayList<Body> getBodies() {
+    	while(model == null);
         return model.getBodies();
     }
     
     public static void autoRun() throws InterruptedException {
-        for (int i = 0; i < 1461; i++) {
+        for (int i = 0; i < 50; i++) {
             model.step(1);
             window.update();
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.MILLISECONDS.sleep(100);
         }
+        model.setScale(13);
+        TimeUnit.SECONDS.sleep(1);
+        window.refresh();
+        
+        model.setScale(10);
+        TimeUnit.SECONDS.sleep(1);
+        window.refresh();
+        
+        model.setScale(5);
+        TimeUnit.SECONDS.sleep(1);
+        window.refresh();
+        
     }
     
     

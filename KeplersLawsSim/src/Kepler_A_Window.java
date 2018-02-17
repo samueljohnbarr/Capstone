@@ -33,6 +33,7 @@ public class Kepler_A_Window extends Application {
     Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
     private static final CountDownLatch latch = new CountDownLatch(1);
     private static Kepler_A_Window keplerWindow = null;
+    private BorderPane root;
     private Controller controller = new Controller();
     private ArrayList<Body> bodies;
     private Group rings;
@@ -69,7 +70,7 @@ public class Kepler_A_Window extends Application {
     
     
     public void start(Stage primary) throws Exception {
-        BorderPane root = new BorderPane();
+        root = new BorderPane();
         
         //Set background image
         Image backgroundImage = new Image("milky.png");
@@ -90,6 +91,9 @@ public class Kepler_A_Window extends Application {
         draw(spaceContext);
         root.getChildren().add(space);
         
+        //Get list of bodies
+        bodies = controller.getBodies();
+        
         //Initialize rings
         rings = new Group();
         rings = initRings(rings);
@@ -106,19 +110,10 @@ public class Kepler_A_Window extends Application {
         primary.getIcons().add(new Image(Kepler_A_Window.class.getResourceAsStream("icon.png")));
         primary.setMaximized(true);
         primary.show();
-        
-        System.out.println("End");
     }
 
     public void draw(GraphicsContext gc) {
-        double centerX = screen.getWidth()/2;
-        double centerY = screen.getHeight()/2;
-        int sunSize = 75;
-        //Draw Sun
-        gc.setFill(Color.YELLOW);
-        gc.setLineWidth(5);
-        gc.fillOval(centerX - sunSize/2, centerY - sunSize/2,
-                sunSize, sunSize);
+        
     }
     
     /**
@@ -127,7 +122,6 @@ public class Kepler_A_Window extends Application {
      * @return ring group
      */
     private Group initPlanets(Group g) {
-        bodies = controller.getBodies();
         for (int i = 0; i < bodies.size(); i++) {
             Body planet = bodies.get(i);
             
@@ -139,7 +133,7 @@ public class Kepler_A_Window extends Application {
             p.setCenterY(screen.getHeight()/2 + planet.getY());
             
             //Add to group
-            g.getChildren().add(p);
+            g.getChildren().add(p);//TODO: change this
         }
         return g;
     }
@@ -150,8 +144,7 @@ public class Kepler_A_Window extends Application {
      * @return initialized ring group
      */
     private Group initRings(Group g) {
-        bodies = controller.getBodies();
-        for (int i = 0; i < bodies.size(); i++) {
+        for (int i = 1; i < bodies.size(); i++) {
             Body planet = bodies.get(i);
             
             //Create orbital ring
@@ -168,13 +161,15 @@ public class Kepler_A_Window extends Application {
         return g;
     }
     
-    private synchronized void updatePlanets() {
-        //System.out.println("hello!");
+    /**
+     * Updates planet locations from the model
+     */
+    private void updatePlanetCoordinates() {
         Platform.runLater(new Runnable() {
             public void run() {
                 bodies = controller.getBodies();
                 ObservableList<Node> collection = planets.getChildren();
-                for (int i = 0; i < bodies.size(); i++) {
+                for (int i = 1; i < bodies.size(); i++) {
                     Body planet = bodies.get(i);
                     collection.get(i).relocate(
                             screen.getWidth()/2 + planet.getX() - planet.getSize()/2, 
@@ -182,7 +177,6 @@ public class Kepler_A_Window extends Application {
                 }
             }
         });
-        //System.out.println("goodbye");
         
     }
     
@@ -211,8 +205,37 @@ public class Kepler_A_Window extends Application {
         
     }
     
+    
     public void update() {
-        updatePlanets();
+        updatePlanetCoordinates();
+    }
+    
+    /**
+     * Reinitializes all visual planet and ring objects
+     * Used for zoom controls
+     */
+    public void refresh() {
+    	Platform.runLater(new Runnable() {
+            public void run() {
+            	bodies = controller.getBodies();
+            	//Kill off current models
+            	ObservableList<Node> children = root.getChildren();
+            	children.remove(children.size()-3, children.size());
+            	
+            	//Start anew!
+            	rings = new Group();
+            	planets = new Group();
+            	
+            	initRings(rings);
+            	initPlanets(planets);
+            	root.getChildren().add(rings);
+            	root.getChildren().add(planets);
+            	
+            	root.requestLayout();
+            	
+            }
+    	});
+    	
     }
     
     public static void main(String[] args) {
