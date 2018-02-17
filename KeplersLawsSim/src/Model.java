@@ -188,10 +188,10 @@ public class Model {
     	mercury.setOrbitalPeriod(0.241);
     	mercury.setEccentricity(0.206);
     	mercury.setSemiMajorAxis(5.79 * scale);
-    	mercury.setX(getXPosition(mercury));
-    	mercury.setY(getYPosition(mercury));
     	mercury.setColor(Color.BLACK);
     	mercury.setAngle(getAngularDistance(mercury.getOrbitalPeriod(), 44));  //3.1406903184;
+    	mercury.setX(getXPosition(mercury));
+    	mercury.setY(getYPosition(mercury));
     	bodies.add(mercury);
     	
     	//Venus
@@ -200,10 +200,10 @@ public class Model {
     	venus.setOrbitalPeriod(0.615);
     	venus.setEccentricity(0.0068);
     	venus.setSemiMajorAxis(10.8 * scale);
-        venus.setX(getXPosition(venus));
-        venus.setY(getYPosition(venus));
     	venus.setColor(Color.ORANGE);
     	venus.setAngle(getAngularDistance(venus.getOrbitalPeriod(), 187)); //5.2306557038660664;
+    	venus.setX(getXPosition(venus));
+        venus.setY(getYPosition(venus));
     	bodies.add(venus);
     	
     	//Earth
@@ -223,11 +223,71 @@ public class Model {
     	mars.setOrbitalPeriod(1.88);
     	mars.setEccentricity(0.0934);
     	mars.setSemiMajorAxis(22.8 * scale);
-    	mars.setX(getXPosition(mars));
-    	mars.setY(getYPosition(mars));
     	mars.setColor(Color.RED);
     	mars.setAngle(getAngularDistance(mars.getOrbitalPeriod(), 170)); //193
+    	mars.setX(getXPosition(mars));
+    	mars.setY(getYPosition(mars));
     	bodies.add(mars);
+    	
+    	//Jupiter
+    	Body jupiter = new Body();
+    	jupiter.setSize(55);
+    	jupiter.setOrbitalPeriod(11.9);
+    	jupiter.setEccentricity(0.0485);
+    	jupiter.setSemiMajorAxis(77.8);
+    	jupiter.setColor(Color.DARKORANGE);
+    	jupiter.setAngle(getAngularDistance(jupiter.getOrbitalPeriod(), 0)); //TODO: fix this
+    	jupiter.setX(getXPosition(jupiter));
+    	jupiter.setY(getYPosition(jupiter));
+    	bodies.add(jupiter);
+    	
+    	//Saturn
+    	Body saturn = new Body();
+    	saturn.setSize(45);
+    	saturn.setOrbitalPeriod(29.5);
+    	saturn.setEccentricity(0.0556);
+    	saturn.setSemiMajorAxis(143);
+    	saturn.setColor(Color.ORANGE);
+    	saturn.setAngle(getAngularDistance(saturn.getOrbitalPeriod(), 0)); //TODO: fix this
+    	saturn.setX(getXPosition(saturn));
+    	saturn.setY(getYPosition(saturn));
+    	bodies.add(saturn);
+    	
+    	//Uranus
+    	Body uranus = new Body();
+    	uranus.setSize(40);
+    	uranus.setOrbitalPeriod(84);
+    	uranus.setEccentricity(0.0472);
+    	uranus.setSemiMajorAxis(287);
+    	uranus.setColor(Color.AQUA);
+    	uranus.setAngle(getAngularDistance(uranus.getOrbitalPeriod(), 0)); //TODO: fix this
+    	uranus.setX(getXPosition(uranus));
+    	uranus.setY(getYPosition(uranus));
+    	bodies.add(uranus);
+    	
+    	//Neptune
+    	Body neptune = new Body();
+    	neptune.setSize(40);
+    	neptune.setOrbitalPeriod(165);
+    	neptune.setEccentricity(0.0086);
+    	neptune.setSemiMajorAxis(450);
+    	neptune.setColor(Color.DARKBLUE);
+    	neptune.setAngle(getAngularDistance(neptune.getOrbitalPeriod(), 0)); //TODO: fix this
+    	neptune.setX(getXPosition(neptune));
+    	neptune.setY(getYPosition(neptune));
+    	bodies.add(neptune);
+    	
+    	//Pluto
+    	Body pluto = new Body();
+    	pluto.setSize(10);
+    	pluto.setOrbitalPeriod(248);
+    	pluto.setEccentricity(0.25);
+    	pluto.setSemiMajorAxis(590);
+    	pluto.setColor(Color.BROWN);
+    	pluto.setAngle(getAngularDistance(pluto.getOrbitalPeriod(), 0)); //TODO: fix this
+    	pluto.setX(getXPosition(pluto));
+    	pluto.setY(getYPosition(pluto));
+    	bodies.add(pluto);
     	
     }
     

@@ -72,7 +72,9 @@ public class Body {
      * @param size to set
      */
     public void setSize(int size) {
-    	if (size >= 10)
+    	if (size < 10)
+    		this.size = 10;
+    	else
     	    this.size = size; 
     }
 

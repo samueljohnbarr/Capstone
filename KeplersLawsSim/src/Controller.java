@@ -17,7 +17,7 @@ public class Controller {
         }.start();
         
         window = Kepler_A_Window.waitForWindow();    
-        
+        setScale(10);
         autoRun();
     }
     
@@ -36,18 +36,11 @@ public class Controller {
             window.update();
             TimeUnit.MILLISECONDS.sleep(100);
         }
-        model.setScale(13);
-        TimeUnit.SECONDS.sleep(1);
-        window.refresh();
-        
-        model.setScale(10);
-        TimeUnit.SECONDS.sleep(1);
-        window.refresh();
-        
-        model.setScale(5);
-        TimeUnit.SECONDS.sleep(1);
-        window.refresh();
-        
+    }
+    
+    public static void setScale(int scale) {
+    	model.setScale(scale);
+    	window.refresh();
     }
     
     
