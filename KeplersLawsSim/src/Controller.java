@@ -17,7 +17,7 @@ public class Controller {
         }.start();
         
         window = Kepler_A_Window.waitForWindow();    
-        setScale(10);
+        setScale(15);
         autoRun();
     }
     
@@ -31,7 +31,7 @@ public class Controller {
     }
     
     public static void autoRun() throws InterruptedException {
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 1451; i++) {
             model.step(1);
             window.update();
             TimeUnit.MILLISECONDS.sleep(100);

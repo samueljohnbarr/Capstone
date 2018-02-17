@@ -13,9 +13,12 @@ public class Body {
     private double orbitalPeriod; //In Earth years
     private double eccentricity; //e.g. 0 is perfect circle
     private double semiMajorAxis; //(*10^10 m)
+    private double semiMinorAxis;
     private Color color;
     private double x;
+    private double xOffset;
     private double y;
+    private double yOffset;
     private double angle;
     
     /**
@@ -72,8 +75,8 @@ public class Body {
      * @param size to set
      */
     public void setSize(int size) {
-    	if (size < 10)
-    		this.size = 10;
+    	if (size < 5)
+    		this.size = 5;
     	else
     	    this.size = size; 
     }
@@ -84,12 +87,22 @@ public class Body {
     public double getSemiMajorAxis() { return semiMajorAxis; }
 
     /**
+     * Sets semiMajorAxis, semiMinorAxis, and x & y offsets
+     * Eccentricity must be set to calculate correctly
      * @param semiMajorAxis to set
      */
     public void setSemiMajorAxis(double semiMajorAxis) {
         this.semiMajorAxis = semiMajorAxis;
+        semiMinorAxis = semiMajorAxis * Math.sqrt(1 - Math.pow(eccentricity, 2));
+        
+        
     }
 
+    /**
+     * @return semiMinorAxis
+     */
+    public double getSemiMinorAxis() { return semiMinorAxis; }
+    
     /**
      * @return eccentricity
      */

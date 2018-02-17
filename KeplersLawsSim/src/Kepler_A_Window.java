@@ -148,10 +148,11 @@ public class Kepler_A_Window extends Application {
             Body planet = bodies.get(i);
             
             //Create orbital ring
-            Circle orbit = new Circle();
+            Ellipse orbit = new Ellipse();
             orbit.setFill(null);
             orbit.setStroke(Color.GRAY);
-            orbit.setRadius(planet.getSemiMajorAxis());
+            orbit.setRadiusX(planet.getSemiMajorAxis());
+            orbit.setRadiusY(planet.getSemiMinorAxis());
             orbit.setCenterX(screen.getWidth()/2);
             orbit.setCenterY(screen.getHeight()/2);
             
