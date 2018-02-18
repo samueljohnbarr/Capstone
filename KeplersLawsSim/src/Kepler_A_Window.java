@@ -86,6 +86,11 @@ public class Kepler_A_Window extends Application {
         draw(spaceContext);
         root.getChildren().add(space);
         
+        //Create menu bar
+        MenuBar mainMenu = setUpMenus();
+        mainMenu.prefWidthProperty().bind(primary.widthProperty());
+        root.setTop(mainMenu);
+        
         //Get list of bodies
         bodies = controller.getBodies();
         
@@ -99,12 +104,6 @@ public class Kepler_A_Window extends Application {
         planets = new Group();
         planets = initPlanets(planets);
         root.getChildren().add(planets);
-        
-        
-        //Create menu bar
-        MenuBar mainMenu = setUpMenus();
-        mainMenu.prefWidthProperty().bind(primary.widthProperty());
-        root.setTop(mainMenu);
 
         primary.setScene(primeScene);
         primary.setTitle("Kepler");
@@ -231,20 +230,55 @@ public class Kepler_A_Window extends Application {
     	Platform.runLater(new Runnable() {
             public void run() {
             	bodies = controller.getBodies();
+       
+            	//Get group objects from root
+            	ObservableList<Node> children = root.getChildren();
+            	Group planets = (Group)(children.get(children.size() - 1));
+            	Group rings = (Group)(children.get(children.size() - 2));
             	
+            	//Get shape lists from groups
+            	ObservableList<Node> p = (planets.getChildren());
+            	ObservableList<Node> r = (rings.getChildren());
+            	
+            	//Update shapes
+            	for (int i = 0; i < bodies.size(); i++) {
+            		Body planet = bodies.get(i);
+            		//Planets
+            		((Circle) p).setRadius(planet.getSize()/2);
+            		((Circle) p).setCenterX(screen.getWidth()/2 + planet.getX());
+            		((Circle) p).setCenterY(screen.getHeight()/2 + planet.getY());
+            		((Circle) p).setVisible(planet.isVisible());
+            		
+            		//Rings
+            		((Ellipse) r).setRadiusX(planet.getSemiMajorAxis());
+            		((Ellipse) r).setRadiusY(planet.getSemiMinorAxis());
+            		((Ellipse) r).setCenterX(planet.getXOffset() + screen.getWidth()/2);
+            		((Ellipse) r).setCenterY(planet.getYOffset() + screen.getHeight()/2);
+            		((Ellipse) r).setVisible(planet.isVisible());
+            	}
+            	
+            	//Reset groups
+            	planets = new Group(p);
+            	rings = new Group(r);
+            	
+            	//Update root
+            	
+            	
+            	/*
             	//Kill off current models
             	ObservableList<Node> children = root.getChildren();
-            	children.remove(children.size()-4, children.size()-1);
+            	System.out.println(children.size());
+            	children.remove(children.size()-3, children.size());
             	
             	//Start anew!
             	rings = new Group();
             	planets = new Group();
             	
-            	initRings(rings);
-            	initPlanets(planets);
+            	rings = initRings(rings);
+            	planets = initPlanets(planets);
             	root.getChildren().add(rings);
             	root.getChildren().add(planets);
-            	
+            	*/
             	root.requestLayout();
             	
             }
