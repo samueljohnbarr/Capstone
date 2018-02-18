@@ -17,7 +17,7 @@ public class Controller {
         }.start();
         
         window = Kepler_A_Window.waitForWindow();    
-        setScale(20);
+        setScale(.5);
         autoRun();
     }
     

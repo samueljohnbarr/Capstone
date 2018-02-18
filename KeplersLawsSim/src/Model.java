@@ -14,6 +14,15 @@ import java.util.GregorianCalendar;
  * @version 2/2/18
  */
 public class Model {
+	public final int MERCURY = 1;
+    public final int VENUS = 2;
+    public final int EARTH = 3;
+    public final int MARS = 4;
+    public final int JUPITER = 5;
+    public final int SATURN= 6;
+    public final int URANUS = 7;
+    public final int NEPTUNE = 8;
+    public final int PLUTO = 9;
     private static final double EARTH_YEAR = 365.25;
     private static final int CIRCLE_DEGREES = 360;
     private ArrayList<Body> bodies;
@@ -158,23 +167,21 @@ public class Model {
      * @param scale to set
      */
     public void setScale(double scale) {
-    	int sizeDiff = (int)(scale - this.scale) * 2;
         for (int i = 0; i < bodies.size(); i++) {
         	Body planet = bodies.get(i);
         	double current = planet.getSemiMajorAxis();
         	planet.setSemiMajorAxis((current/this.scale) * scale);
         	planet.setX(getXPosition(planet));
         	planet.setY(getYPosition(planet));
-        	planet.setSize(planet.getSize() + sizeDiff);
+        	planet.setSize((int)((planet.getSize()/this.scale) * scale));
         	planet.setOffsets();
         	
-        	//Stop displaying inner planets if scale is too small
-        	if (scale < 10) {
-        		if (i == 1 || i == 2 || i == 3 || i ==4)
+        	//Hide inner planets if scale is too small
+        	if (scale < 0.1) {
+        		if (i == 1 || i == 2 || i == 3 || i == 4)
         			planet.setVisible(false);
         	} else 
-        		planet.setVisible(true);
-        	
+        		planet.setVisible(true);        	
         }
         this.scale = scale;
     }
@@ -187,13 +194,13 @@ public class Model {
     private void initInnerPlanets() {
     	//Sun
     	Body sun = new Body();
-    	sun.setSize(65);
+    	sun.setSize((int)(4.3 * scale));
     	sun.setColor(Color.YELLOW);
     	bodies.add(sun);
     	
     	//Mercury
     	Body mercury = new Body();
-    	mercury.setSize(10);
+    	mercury.setSize((int)(0.66 * scale));
     	mercury.setOrbitalPeriod(0.241);
     	mercury.setEccentricity(0.206);
     	mercury.setSemiMajorAxis(5.79 * scale);
@@ -206,7 +213,7 @@ public class Model {
     	
     	//Venus
     	Body venus = new Body();
-    	venus.setSize(22);
+    	venus.setSize((int)(1.46 * scale));
     	venus.setOrbitalPeriod(0.615);
     	venus.setEccentricity(0.0068);
     	venus.setSemiMajorAxis(10.8 * scale); //10.8 * scale
@@ -219,7 +226,7 @@ public class Model {
     	
     	//Earth
     	Body earth = new Body();
-    	earth.setSize(25);
+    	earth.setSize((int)(1.66 * scale));
     	earth.setOrbitalPeriod(1);
     	earth.setEccentricity(0.0167); 
     	earth.setSemiMajorAxis(15 * scale);
@@ -231,7 +238,7 @@ public class Model {
     	
     	//Mars
     	Body mars = new Body();
-    	mars.setSize(16);
+    	mars.setSize((int)(1.06 * scale));
     	mars.setOrbitalPeriod(1.88);
     	mars.setEccentricity(0.0934);
     	mars.setSemiMajorAxis(22.8 * scale);
@@ -244,7 +251,7 @@ public class Model {
     	
     	//Jupiter
     	Body jupiter = new Body();
-    	jupiter.setSize(55);
+    	jupiter.setSize((int)(27.5 * scale));
     	jupiter.setOrbitalPeriod(11.9);
     	jupiter.setEccentricity(0.0485);
     	jupiter.setSemiMajorAxis(77.8 * scale);
@@ -257,7 +264,7 @@ public class Model {
     	
     	//Saturn
     	Body saturn = new Body();
-    	saturn.setSize(45);
+    	saturn.setSize((int)(22.5 * scale));
     	saturn.setOrbitalPeriod(29.5);
     	saturn.setEccentricity(0.0556);
     	saturn.setSemiMajorAxis(143 * scale);
@@ -270,7 +277,7 @@ public class Model {
     	
     	//Uranus
     	Body uranus = new Body();
-    	uranus.setSize(40);
+    	uranus.setSize((int)(20 * scale));
     	uranus.setOrbitalPeriod(84);
     	uranus.setEccentricity(0.0472);
     	uranus.setSemiMajorAxis(287 * scale);
@@ -283,7 +290,7 @@ public class Model {
     	
     	//Neptune
     	Body neptune = new Body();
-    	neptune.setSize(40);
+    	neptune.setSize((int)(35 * scale));
     	neptune.setOrbitalPeriod(165);
     	neptune.setEccentricity(0.0086);
     	neptune.setSemiMajorAxis(450 * scale);
@@ -296,7 +303,7 @@ public class Model {
     	
     	//Pluto
     	Body pluto = new Body();
-    	pluto.setSize(10);
+    	pluto.setSize((int)(6 * scale));
     	pluto.setOrbitalPeriod(248);
     	pluto.setEccentricity(0.25);
     	pluto.setSemiMajorAxis(590 * scale);

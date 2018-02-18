@@ -112,6 +112,10 @@ public class Kepler_A_Window extends Application {
         primary.setMaximized(true);
         primary.show();
     }
+    
+    public void stop() throws Exception {
+    	System.exit(0);
+    }
 
     public void draw(GraphicsContext gc) {
         
