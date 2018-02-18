@@ -18,7 +18,7 @@ public class Model {
     private static final int CIRCLE_DEGREES = 360;
     private ArrayList<Body> bodies;
     private GregorianCalendar date;
-    private int scale = 15;
+    private double scale = 15;
 
     public Model() {
         //Create initial date for simulation
@@ -41,14 +41,14 @@ public class Model {
     
     /**
      * Gets the planet x position according to
-     * its stored angle
+     * its stored angle, semimajor axis, and offset
      * 
      * @param planet to set
      * @return x position
      */
     private double getXPosition(Body planet) {
     	//Calculate x & y position
-    	double x = Math.cos(planet.getAngle()) * 
+    	double x = planet.getXOffset() + Math.cos(planet.getAngle()) * 
                    planet.getSemiMajorAxis();
     	
     		
@@ -59,14 +59,14 @@ public class Model {
     
     /**
     * Gets the planet y position according to
-    * its stored angle
+    * its stored angle, semiminor axis, and offset
     * 
     * @param planet to set
     * @return y position
     */
     private double getYPosition(Body planet) {
     	//Calculate x & y position
-    	double y = Math.sin(planet.getAngle()) * 
+    	double y = planet.getYOffset() + Math.sin(planet.getAngle()) * 
                 planet.getSemiMinorAxis();
     	
     	//Round to eight decimal places
@@ -157,8 +157,8 @@ public class Model {
      * 
      * @param scale to set
      */
-    public void setScale(int scale) {
-    	int sizeDiff = (scale - this.scale) * 2;
+    public void setScale(double scale) {
+    	int sizeDiff = (int)(scale - this.scale) * 2;
         for (int i = 0; i < bodies.size(); i++) {
         	Body planet = bodies.get(i);
         	double current = planet.getSemiMajorAxis();
@@ -166,6 +166,14 @@ public class Model {
         	planet.setX(getXPosition(planet));
         	planet.setY(getYPosition(planet));
         	planet.setSize(planet.getSize() + sizeDiff);
+        	planet.setOffsets();
+        	
+        	//Stop displaying inner planets if scale is too small
+        	if (scale < 10) {
+        		if (i == 1 || i == 2 || i == 3 || i ==4)
+        			planet.setDisplay(false);
+        	} else 
+        		planet.setDisplay(true);
         }
         this.scale = scale;
     }
@@ -178,7 +186,7 @@ public class Model {
     private void initInnerPlanets() {
     	//Sun
     	Body sun = new Body();
-    	sun.setSize(75);
+    	sun.setSize(65);
     	sun.setColor(Color.YELLOW);
     	bodies.add(sun);
     	
@@ -192,29 +200,32 @@ public class Model {
     	mercury.setAngle(getAngularDistance(mercury.getOrbitalPeriod(), 44));  //3.1406903184;
     	mercury.setX(getXPosition(mercury));
     	mercury.setY(getYPosition(mercury));
+    	mercury.setOffsets();
     	bodies.add(mercury);
     	
     	//Venus
     	Body venus = new Body();
-    	venus.setSize(28);
+    	venus.setSize(22);
     	venus.setOrbitalPeriod(0.615);
     	venus.setEccentricity(0.0068);
-    	venus.setSemiMajorAxis(10.8 * scale);
+    	venus.setSemiMajorAxis(10.8 * scale); //10.8 * scale
     	venus.setColor(Color.ORANGE);
     	venus.setAngle(getAngularDistance(venus.getOrbitalPeriod(), 187)); //5.2306557038660664;
     	venus.setX(getXPosition(venus));
         venus.setY(getYPosition(venus));
+        venus.setOffsets();
     	bodies.add(venus);
     	
     	//Earth
     	Body earth = new Body();
-    	earth.setSize(30);
+    	earth.setSize(25);
     	earth.setOrbitalPeriod(1);
-    	earth.setEccentricity(0.167); 
+    	earth.setEccentricity(0.0167); 
     	earth.setSemiMajorAxis(15 * scale);
     	earth.setX(earth.getSemiMajorAxis());
     	earth.setColor(Color.BLUE);
     	earth.setAngle(0);
+    	earth.setOffsets();
     	bodies.add(earth);
     	
     	//Mars
@@ -227,6 +238,7 @@ public class Model {
     	mars.setAngle(getAngularDistance(mars.getOrbitalPeriod(), 170)); //193
     	mars.setX(getXPosition(mars));
     	mars.setY(getYPosition(mars));
+    	mars.setOffsets();
     	bodies.add(mars);
     	
     	//Jupiter
@@ -239,6 +251,7 @@ public class Model {
     	jupiter.setAngle(getAngularDistance(jupiter.getOrbitalPeriod(), 0)); //TODO: fix this
     	jupiter.setX(getXPosition(jupiter));
     	jupiter.setY(getYPosition(jupiter));
+    	jupiter.setOffsets();
     	bodies.add(jupiter);
     	
     	//Saturn
@@ -251,6 +264,7 @@ public class Model {
     	saturn.setAngle(getAngularDistance(saturn.getOrbitalPeriod(), 0)); //TODO: fix this
     	saturn.setX(getXPosition(saturn));
     	saturn.setY(getYPosition(saturn));
+    	saturn.setOffsets();
     	bodies.add(saturn);
     	
     	//Uranus
@@ -263,6 +277,7 @@ public class Model {
     	uranus.setAngle(getAngularDistance(uranus.getOrbitalPeriod(), 0)); //TODO: fix this
     	uranus.setX(getXPosition(uranus));
     	uranus.setY(getYPosition(uranus));
+    	uranus.setOffsets();
     	bodies.add(uranus);
     	
     	//Neptune
@@ -275,6 +290,7 @@ public class Model {
     	neptune.setAngle(getAngularDistance(neptune.getOrbitalPeriod(), 0)); //TODO: fix this
     	neptune.setX(getXPosition(neptune));
     	neptune.setY(getYPosition(neptune));
+    	neptune.setOffsets();
     	bodies.add(neptune);
     	
     	//Pluto
@@ -287,6 +303,7 @@ public class Model {
     	pluto.setAngle(getAngularDistance(pluto.getOrbitalPeriod(), 0)); //TODO: fix this
     	pluto.setX(getXPosition(pluto));
     	pluto.setY(getYPosition(pluto));
+    	pluto.setOffsets();
     	bodies.add(pluto);
     	
     	

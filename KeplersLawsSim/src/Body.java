@@ -20,6 +20,7 @@ public class Body {
     private double y;
     private double yOffset;
     private double angle;
+    private boolean display;
     
     /**
      * Body Constructor
@@ -42,6 +43,7 @@ public class Body {
         this.x = semiMajorAxis;
         this.y = 0;
         this.angle = angle;
+        this.display = true;
     }
     
     public Body() {
@@ -54,23 +56,56 @@ public class Body {
     	x = 0;
     	y = 0;
     	angle = 0;
+    	display = true;
     }
 
-    /**
-     * @return name
-     */
+    /********************* Accessors *************************/
     public String getName() { return name; }
-
-    /**
-     * @param name to set
-     */
-    public void setName(String name) { this.name = name; }
-
-    /**
-     * @return size
-     */
+    
     public int getSize() { return size; }
+    
+    public double getSemiMajorAxis() { return semiMajorAxis; }
+    
+    public double getSemiMinorAxis() { return semiMinorAxis; }
+    
+    public double getEccentricity() { return eccentricity; }
+    
+    public double getOrbitalPeriod() { return orbitalPeriod; }
+    
+    public Color getColor() { return color; }
+    
+    public double getX() { return x; }
+    
+    public double getXOffset() { return xOffset; }
+    
+    public double getY() { return y; }
+    
+    public double getYOffset() { return yOffset; }
+    
+    public double getAngle() { return angle; }
+    
+    public boolean isDisplay() { return display; }
+    
 
+    /***************** Mutators ********************/
+    public void setName(String name) { this.name = name; }
+    
+    public void setEccentricity(double eccentricity) { this.eccentricity = eccentricity; }
+
+    public void setOrbitalPeriod(double orbitalPeriod) { this.orbitalPeriod = orbitalPeriod; }
+    
+    public void setColor(Color color) { this.color = color; }
+
+    public void setX(double x) { this.x = x; }
+    
+    public void setY(double y) { this.y = y; } 
+
+    public void setDisplay(boolean d) { display = d; }
+    
+    public void setAngle(double angle) {
+         this.angle = (angle % (2 * Math.PI));
+    }
+    
     /**
      * @param size to set
      */
@@ -81,10 +116,6 @@ public class Body {
     	    this.size = size; 
     }
 
-    /**
-     * @return semiMajorAxis
-     */
-    public double getSemiMajorAxis() { return semiMajorAxis; }
 
     /**
      * Sets semiMajorAxis, semiMinorAxis, and x & y offsets
@@ -94,94 +125,14 @@ public class Body {
     public void setSemiMajorAxis(double semiMajorAxis) {
         this.semiMajorAxis = semiMajorAxis;
         semiMinorAxis = semiMajorAxis * Math.sqrt(1 - Math.pow(eccentricity, 2));
-        
-        
-    }
-
-    /**
-     * @return semiMinorAxis
-     */
-    public double getSemiMinorAxis() { return semiMinorAxis; }
-    
-    /**
-     * @return eccentricity
-     */
-    public double getEccentricity() { return eccentricity; }
-    
-    /**
-     * @param eccentricity
-     */
-    public void setEccentricity(double eccentricity) {
-        this.eccentricity = eccentricity;
-    }
-
-    /**
-     * @return the orbitalPeriod
-     */
-    public double getOrbitalPeriod() {
-        return orbitalPeriod;
-    }
-
-    /**
-     * @param orbitalPeriod the orbitalPeriod to set
-     */
-    public void setOrbitalPeriod(double orbitalPeriod) {
-        this.orbitalPeriod = orbitalPeriod;
-    }
-
-    /**
-     * @return the color
-     */
-    public Color getColor() {
-        return color;
-    }
-
-    /**
-     * @param color the color to set
-     */
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-    /**
-     * @return x
-     */
-    public double getX() {
-        return x;
     }
     
     /**
-     * @param x to set
+     * Sets x & y offsets
+     * Eccentricity and semimajor/minor axis must be set
      */
-    public void setX(double x) {
-       this.x = x;
-    }
-
-    /**
-     * @return y
-     */
-    public double getY() {
-        return y;
-    }
-    
-    /**
-     * @param y to set
-     */
-    public void setY(double y) {
-       this.y = y;
-    } 
-
-    /**
-     * @return angle
-     */
-    public double getAngle() {
-        return angle;
-    }
-
-    /**
-     * @param angle to set
-     */
-    public void setAngle(double angle) {
-         this.angle = (angle % (2 * Math.PI));
+    public void setOffsets() {
+    	xOffset = eccentricity * semiMajorAxis;
+        yOffset = -eccentricity * semiMinorAxis;
     }
 }

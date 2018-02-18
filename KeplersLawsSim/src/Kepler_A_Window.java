@@ -80,11 +80,6 @@ public class Kepler_A_Window extends Application {
         Scene primeScene = new Scene(root,screen.getWidth(),screen.getHeight());
         primeScene.setFill(Color.BLACK);
         
-        //Create menu bar
-        MenuBar mainMenu = setUpMenus();
-        mainMenu.prefWidthProperty().bind(primary.widthProperty());
-        root.setTop(mainMenu);
-        
         //Create context space to paint on
         Canvas space = new Canvas(screen.getWidth(),screen.getHeight());
         GraphicsContext spaceContext = space.getGraphicsContext2D();
@@ -104,6 +99,12 @@ public class Kepler_A_Window extends Application {
         planets = new Group();
         planets = initPlanets(planets);
         root.getChildren().add(planets);
+        
+        
+        //Create menu bar
+        MenuBar mainMenu = setUpMenus();
+        mainMenu.prefWidthProperty().bind(primary.widthProperty());
+        root.setTop(mainMenu);
 
         primary.setScene(primeScene);
         primary.setTitle("Kepler");
@@ -124,16 +125,17 @@ public class Kepler_A_Window extends Application {
     private Group initPlanets(Group g) {
         for (int i = 0; i < bodies.size(); i++) {
             Body planet = bodies.get(i);
+            if (planet.isDisplay()) {
+                //Create planet
+                Circle p = new Circle();
+                p.setFill(planet.getColor());
+                p.setRadius(planet.getSize()/2);
+                p.setCenterX(screen.getWidth()/2 + planet.getX());
+                p.setCenterY(screen.getHeight()/2 + planet.getY());
             
-            //Create planet
-            Circle p = new Circle();
-            p.setFill(planet.getColor());
-            p.setRadius(planet.getSize()/2);
-            p.setCenterX(screen.getWidth()/2 + planet.getX());
-            p.setCenterY(screen.getHeight()/2 + planet.getY());
-            
-            //Add to group
-            g.getChildren().add(p);//TODO: change this
+                //Add to group
+                g.getChildren().add(p);
+            }
         }
         return g;
     }
@@ -146,18 +148,19 @@ public class Kepler_A_Window extends Application {
     private Group initRings(Group g) {
         for (int i = 1; i < bodies.size(); i++) {
             Body planet = bodies.get(i);
+            if (planet.isDisplay()) {
+                //Create orbital ring
+                Ellipse orbit = new Ellipse();
+                orbit.setFill(null);
+                orbit.setStroke(Color.GRAY);
+                orbit.setRadiusX(planet.getSemiMajorAxis());
+                orbit.setRadiusY(planet.getSemiMinorAxis());
+                orbit.setCenterX(planet.getXOffset() + screen.getWidth()/2);
+                orbit.setCenterY(planet.getYOffset() + screen.getHeight()/2);
             
-            //Create orbital ring
-            Ellipse orbit = new Ellipse();
-            orbit.setFill(null);
-            orbit.setStroke(Color.GRAY);
-            orbit.setRadiusX(planet.getSemiMajorAxis());
-            orbit.setRadiusY(planet.getSemiMinorAxis());
-            orbit.setCenterX(screen.getWidth()/2);
-            orbit.setCenterY(screen.getHeight()/2);
-            
-            //Add to group
-            g.getChildren().add(orbit);
+                //Add to group
+                g.getChildren().add(orbit);
+            }
         }
         return g;
     }
@@ -170,11 +173,13 @@ public class Kepler_A_Window extends Application {
             public void run() {
                 bodies = controller.getBodies();
                 ObservableList<Node> collection = planets.getChildren();
-                for (int i = 1; i < bodies.size(); i++) {
+                for (int i = 0; i < bodies.size(); i++) {
                     Body planet = bodies.get(i);
+                    if (planet.isDisplay()) {
                     collection.get(i).relocate(
                             screen.getWidth()/2 + planet.getX() - planet.getSize()/2, 
                             screen.getHeight()/2 + planet.getY() - planet.getSize()/2);
+                    }
                 }
             }
         });
@@ -220,8 +225,9 @@ public class Kepler_A_Window extends Application {
             public void run() {
             	bodies = controller.getBodies();
             	//Kill off current models
+            	
             	ObservableList<Node> children = root.getChildren();
-            	children.remove(children.size()-3, children.size());
+            	children.remove(children.size()-4, children.size()-1);
             	
             	//Start anew!
             	rings = new Group();

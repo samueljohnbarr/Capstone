@@ -17,7 +17,7 @@ public class Controller {
         }.start();
         
         window = Kepler_A_Window.waitForWindow();    
-        setScale(15);
+        setScale(1);
         autoRun();
     }
     
@@ -38,7 +38,7 @@ public class Controller {
         }
     }
     
-    public static void setScale(int scale) {
+    public static void setScale(double scale) {
     	model.setScale(scale);
     	window.refresh();
     }
