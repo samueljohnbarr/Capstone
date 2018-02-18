@@ -8,7 +8,7 @@ import java.util.GregorianCalendar;
  * Start Date: 12/21/2000
  * (JD = 2400000 + 5190)?
  * 
- * TODO: Offset Orbits, scale manipulation
+ * TODO: Redo planet size scaling
  * 
  * @author barrsj
  * @version 2/2/18
@@ -171,9 +171,10 @@ public class Model {
         	//Stop displaying inner planets if scale is too small
         	if (scale < 10) {
         		if (i == 1 || i == 2 || i == 3 || i ==4)
-        			planet.setDisplay(false);
+        			planet.setVisible(false);
         	} else 
-        		planet.setDisplay(true);
+        		planet.setVisible(true);
+        	
         }
         this.scale = scale;
     }

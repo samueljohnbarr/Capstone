@@ -20,14 +20,14 @@ public class Body {
     private double y;
     private double yOffset;
     private double angle;
-    private boolean display;
+    private boolean visible;
     
     /**
      * Body Constructor
      * @param name of planetary object
      * @param size in pixels of object
      * @param orbitalPeriod in Earth years
-     * @param eccentricity how ecliptic the orbital path is
+     * @param eccentricity how elliptic the orbital path is
      * @param semiMajorAxis essential radius
      * @param color of object
      */
@@ -43,7 +43,7 @@ public class Body {
         this.x = semiMajorAxis;
         this.y = 0;
         this.angle = angle;
-        this.display = true;
+        this.visible = true;
     }
     
     public Body() {
@@ -56,7 +56,7 @@ public class Body {
     	x = 0;
     	y = 0;
     	angle = 0;
-    	display = true;
+    	visible = true;
     }
 
     /********************* Accessors *************************/
@@ -84,7 +84,7 @@ public class Body {
     
     public double getAngle() { return angle; }
     
-    public boolean isDisplay() { return display; }
+    public boolean isVisible() { return visible; }
     
 
     /***************** Mutators ********************/
@@ -100,7 +100,7 @@ public class Body {
     
     public void setY(double y) { this.y = y; } 
 
-    public void setDisplay(boolean d) { display = d; }
+    public void setVisible(boolean d) { visible = d; }
     
     public void setAngle(double angle) {
          this.angle = (angle % (2 * Math.PI));
