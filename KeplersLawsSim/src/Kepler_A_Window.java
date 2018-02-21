@@ -33,7 +33,7 @@ public class Kepler_A_Window extends Application {
     Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
     private static final CountDownLatch latch = new CountDownLatch(1);
     private static Kepler_A_Window keplerWindow = null;
-    private BorderPane root;
+    private volatile BorderPane root;
     private Controller controller = new Controller();
     private ArrayList<Body> bodies;
     private Group rings;
@@ -231,6 +231,7 @@ public class Kepler_A_Window extends Application {
             public void run() {
             	bodies = controller.getBodies();
        
+            	/*
             	//Get group objects from root
             	ObservableList<Node> children = root.getChildren();
             	Group planets = (Group)(children.get(children.size() - 1));
@@ -262,23 +263,28 @@ public class Kepler_A_Window extends Application {
             	rings = new Group(r);
             	
             	//Update root
+            	*/
             	
             	
-            	/*
             	//Kill off current models
-            	ObservableList<Node> children = root.getChildren();
-            	System.out.println(children.size());
-            	children.remove(children.size()-3, children.size());
-            	
-            	//Start anew!
+            	ObservableList<Node> children = root.getChildren();          	
+
             	rings = new Group();
             	planets = new Group();
+            	root.getChildren().set(children.size()-2, rings);
+                root.getChildren().set(children.size()-1, planets);
+                root.requestLayout();
             	
             	rings = initRings(rings);
             	planets = initPlanets(planets);
-            	root.getChildren().add(rings);
-            	root.getChildren().add(planets);
-            	*/
+            	
+                root.getChildren().set(children.size()-2, rings);
+                root.getChildren().set(children.size()-1, planets);
+                
+                //Update coordinates
+                //update();
+            	
+            	//Update root
             	root.requestLayout();
             	
             }

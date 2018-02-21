@@ -113,7 +113,7 @@ public class Body {
     	if (size < 5)
     		this.size = 5;
     	else
-    	    this.size = size; 
+    	    this.size = size;
     }
 
 

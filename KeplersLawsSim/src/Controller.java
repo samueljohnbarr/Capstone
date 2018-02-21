@@ -17,7 +17,7 @@ public class Controller {
         }.start();
         
         window = Kepler_A_Window.waitForWindow();    
-        //setScale(20);
+        setScale(14);
         autoRun();
     }
     
@@ -31,25 +31,34 @@ public class Controller {
     }
     
     public static void autoRun() throws InterruptedException {
+    	/*
+    	//Scaling
     	for (double i = 20; i > 0; i -= 0.5) {
     		setScale(i);
     		TimeUnit.SECONDS.sleep(1);
     		window.update();
     	}
-    	/*
-        for (int i = 0; i < 1451; i++) {
-    	//while (true) {
-    	    
+    	*/
+    	
+    	
+        //for (int i = 0; i < 1451; i++) {
+    	while (true) {
+    	    model.getJulian();
             model.step(1);
             window.update();
-            TimeUnit.MILLISECONDS.sleep(100);
+            TimeUnit.MILLISECONDS.sleep(1000);
         }
-        */
+        
+        
+        
+        
+        
     }
     
     public static void setScale(double scale) {
     	model.setScale(scale);
     	window.refresh();
+    	window.update();
     }
     
     

@@ -97,12 +97,12 @@ public class Model {
 
             //Update planet angle and date
             planet.setAngle(planet.getAngle() + angle);
-            date.add(GregorianCalendar.DAY_OF_YEAR, days);
             
             //Set position
             planet.setX(getXPosition(planet));
             planet.setY(getYPosition(planet));
         }
+        date.add(GregorianCalendar.DAY_OF_YEAR, days);
     }
     
     /**
@@ -154,6 +154,23 @@ public class Model {
     }
     
     /**
+     * Converts the current date object to a Julian date
+     * @return julian date
+     */
+    public double getJulian() {
+    	int day = date.get(GregorianCalendar.DAY_OF_MONTH);
+    	int month = date.get(GregorianCalendar.MONTH)+1;
+    	int year = date.get(GregorianCalendar.YEAR);
+    	double julian = (1461 * (year + 4800 + (month - 14)/12))/4 + (367 * (month - 2 - 12 * ((month - 14)/12)))/12 - (3 * ((year + 4900 + (month - 14)/12)/100))/4 + day - 32075;
+    	julian -= 0.5;
+    	System.out.println(month + "/" + day + "/" + year);
+    	System.out.println(julian + "\n");
+
+
+    	return julian;
+    }
+    
+    /**
      * @return bodies
      */
     public ArrayList<Body> getBodies() {
@@ -171,10 +188,10 @@ public class Model {
         	Body planet = bodies.get(i);
         	double current = planet.getSemiMajorAxis();
         	planet.setSemiMajorAxis((current/this.scale) * scale);
+        	planet.setOffsets();
         	planet.setX(getXPosition(planet));
         	planet.setY(getYPosition(planet));
         	planet.setSize((int)((planet.getSize()/this.scale) * scale));
-        	planet.setOffsets();
         	
         	//Hide inner planets if scale is too small
         	if (scale < 0.1) {
