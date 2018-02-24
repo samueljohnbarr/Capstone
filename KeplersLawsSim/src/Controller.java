@@ -1,11 +1,14 @@
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
 
 public class Controller {
     private static Model model;
     private static Kepler_A_Window window;
+    private static int stepDays;
+    private static boolean run;
 
     public static void main(String[] args) throws InterruptedException {     
     	model = new Model();
@@ -16,9 +19,9 @@ public class Controller {
             }
         }.start();
         
-        window = Kepler_A_Window.waitForWindow();    
+        window = Kepler_A_Window.waitForWindow();
         setScale(14);
-        autoRun();
+        //autoRun();
     }
     
     /**
@@ -30,23 +33,98 @@ public class Controller {
         return model.getBodies();
     }
     
-    public static void autoRun() throws InterruptedException {
+    /**
+     * Waits for model object to be created
+     * Steps the model to step forward stepDays
+     */
+    public void stepForward() {
+    	while (model == null);
+    	if (stepDays < 1)
+    		stepDays = 1;
+    	model.step(stepDays);
+    	window.update();
+    }
+    
+    /**
+     * Waits for model object to be created
+     * Steps the model to step forward stepDays
+     */
+    public void stepBackward() {
+    	while (model == null);
+    	if (stepDays < 1)
+    		stepDays = 1;
+    	model.step(-stepDays);
+    	window.update();
+    }
+    
+    
+    /**
+     * Sets the amount of days to step
+     * @param days
+     */
+    public void setDays(String days) {
+    	System.out.println(days);
+    	int d = 1;
     	/*
-    	//Scaling
-    	for (double i = 20; i > 0; i -= 0.5) {
-    		setScale(i);
-    		TimeUnit.SECONDS.sleep(1);
-    		window.update();
+    	//If string is incorrectly formatted, set to 1
+    	try {
+            d = Integer.parseInt(days);
+    	} catch(NumberFormatException e) {
+    		d = 1;
     	}
     	*/
+    	if (d < 1)
+    		stepDays = 1;
+    	else
+    		stepDays = d;
+    }
+    
+    public void setDate(int year, int month, int day) {
+    	while (model == null);
+    	model.setDate(year, month, day);
+    }
+    
+    
+    /**
+     * @return julian date in string
+     */
+    public String getJulianString() {
+    	while (model == null);
+    	double julian = model.getJulian();
+    	return Double.toString(julian);
+    }
+    
+    /**
+     * @return gregorian date in string
+     */
+    public String getGregorianString() {
+    	while (model == null);
+    	//Get date
+    	GregorianCalendar date = model.getDate();
+    	int day = date.get(GregorianCalendar.DAY_OF_MONTH);
+    	int month = date.get(GregorianCalendar.MONTH) + 1;
+    	int year = date.get(GregorianCalendar.YEAR);
     	
+    	//Convert to String
+    	String dateStr = month + "/" + day + "/" + year; 	
     	
-        //for (int i = 0; i < 1451; i++) {
-    	while (true) {
+    	return dateStr;
+    }
+    
+    public void pause() {
+    	run = false;
+    }
+    
+    public void autoRun(){
+    	run = true;
+    	while (run) {
     	    model.getJulian();
-            model.step(1);
-            window.update();
-            TimeUnit.MILLISECONDS.sleep(1000);
+            model.step(stepDays);
+            try {
+                TimeUnit.MILLISECONDS.sleep(1000);
+            } catch (InterruptedException e) {
+            	e.printStackTrace();
+            }
         }
         
         

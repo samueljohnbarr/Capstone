@@ -1,8 +1,6 @@
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -11,11 +9,16 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -34,10 +37,14 @@ public class Kepler_A_Window extends Application {
     private static final CountDownLatch latch = new CountDownLatch(1);
     private static Kepler_A_Window keplerWindow = null;
     private volatile BorderPane root;
+    TextField advanceByDate;
+    TextField newDate;
     private Controller controller = new Controller();
     private ArrayList<Body> bodies;
     private Group rings;
     private Group planets;
+    private StringProperty julian;
+    private StringProperty gregorian;
     
     /**
      * Waits for the window to be created
@@ -91,9 +98,32 @@ public class Kepler_A_Window extends Application {
         mainMenu.prefWidthProperty().bind(primary.widthProperty());
         root.setTop(mainMenu);
         
-        //Get list of bodies
-        bodies = controller.getBodies();
         
+        //Get controller variables
+        bodies = controller.getBodies();
+        julian = new SimpleStringProperty();
+        gregorian = new SimpleStringProperty();
+        julian.setValue(controller.getJulianString());        
+        gregorian.setValue(controller.getGregorianString());
+        
+        /******* Initialize Control Panel *******/
+        //TODO: Stack pane does not work
+        Pane contPan = new StackPane();
+        contPan.setStyle("-fx-background-color: black");
+        
+        VBox labPan = initLabels();
+        HBox buttPan = initButtons();
+        VBox inPan = initInputs(); 
+        
+        //Add all & align
+        contPan.getChildren().addAll(labPan, buttPan, inPan);
+        StackPane.setAlignment(labPan, Pos.CENTER_LEFT);
+        StackPane.setAlignment(buttPan, Pos.CENTER);
+        StackPane.setAlignment(inPan, Pos.CENTER_RIGHT);
+        root.setBottom(contPan);
+        
+        
+        /****** Initialize Sim Objects ******/
         //Initialize rings
         rings = new Group();
         rings = initRings(rings);
@@ -110,6 +140,120 @@ public class Kepler_A_Window extends Application {
         primary.getIcons().add(new Image(Kepler_A_Window.class.getResourceAsStream("icon.png")));
         primary.setMaximized(true);
         primary.show();
+    }
+    
+    public HBox initButtons() {
+    	HBox buttonLine = new HBox(10);
+    	
+    	//Make button shape
+    	Circle s = new Circle();
+    	s.setRadius(10);
+    	
+    	//Step buttons
+    	Button autoAdvance = new Button(">>");
+    	autoAdvance.setShape(s);
+    	Button advance = new Button(">");
+    	advance.setShape(s);
+    	Button pause = new Button("||");
+    	pause.setShape(s);
+    	Button reverse = new Button("<");
+    	reverse.setShape(s);
+    	Button autoReverse = new Button("<<");
+    	autoReverse.setShape(s);
+    	
+    	buttonLine.getChildren().addAll(autoReverse, reverse, pause, advance, autoAdvance);
+    	
+    	//Set margins and align
+    	HBox.setMargin(autoAdvance, new Insets(10, 0, 10, 0));
+    	HBox.setMargin(advance, new Insets(10, 0, 10, 0));
+    	HBox.setMargin(pause, new Insets(10, 0, 10, 0));
+    	HBox.setMargin(reverse, new Insets(10, 0, 10, 0));
+    	HBox.setMargin(autoReverse, new Insets(10, 0, 10, 0));
+    	buttonLine.setAlignment(Pos.CENTER);
+    	
+    	
+    	//TODO: this shit breaks shit
+    	autoAdvance.setOnAction(e -> {
+    		controller.autoRun();
+    		update();
+    	});
+    	
+    	advance.setOnAction(e -> {
+    		controller.setDays(advanceByDate.getText());
+    		controller.stepForward();
+    		update();
+    	});
+    	
+    	pause.setOnAction(e -> {
+    		controller.pause();
+    	});
+    	
+    	reverse.setOnAction(e -> {
+    		controller.setDays(advanceByDate.getText());
+    		controller.stepBackward();
+    		update();
+    	});
+    	
+    	return buttonLine;
+    }
+    
+    
+    public VBox initLabels() {
+    	VBox labels = new VBox(5);
+    	
+    	HBox julianb = new HBox(5);
+    	Label jul = new Label("Julian:");
+    	jul.setTextFill(Color.WHITE);
+    	Label julianDay = new Label("");
+    	julianDay.setTextFill(Color.WHITE);
+    	julianDay.textProperty().bind(julian);
+    	julianb.getChildren().addAll(jul, julianDay);
+    	
+    	HBox gregb = new HBox(5);
+    	Label greg = new Label("Gregorian:");
+    	greg.setTextFill(Color.WHITE);
+    	Label gregDate = new Label("");
+    	gregDate.setTextFill(Color.WHITE);
+    	gregDate.textProperty().bind(gregorian);
+    	gregb.getChildren().addAll(greg, gregDate);
+    	
+    	HBox.setMargin(julianb, new Insets(5, 5, 5, 5));
+    	HBox.setMargin(gregb, new Insets(5, 5, 5, 5));
+    	labels.getChildren().addAll(julianb, gregb);
+    	VBox.setMargin(labels, new Insets(5, 5, 5, 5));
+    	
+    	labels.setAlignment(Pos.CENTER_LEFT);
+    	
+    	return labels;
+    }
+    
+    public VBox initInputs() {
+    	//Step day input & label
+    	HBox advanceByLine = new HBox();
+    	advanceByDate = new TextField("1");
+    	advanceByDate.setPrefColumnCount(10);
+    	advanceByDate.setEditable(true);
+    	Label advanceByLabel = new Label("Days to step ");
+    	
+    	advanceByLabel.setTextFill(Color.WHITE);
+    	advanceByLine.getChildren().addAll(advanceByLabel, advanceByDate);
+    	
+   	
+    	//Gregorian date input and label
+    	HBox gregLine = new HBox();
+    	TextField newDate = new TextField();
+    	newDate.setPrefColumnCount(10);
+    	newDate.setEditable(false);
+    	Label gregLabel = new Label("New Date ");
+    	gregLabel.setTextFill(Color.WHITE);
+    	gregLine.getChildren().addAll(gregLabel, newDate);
+    	
+    	VBox inPanel = new VBox();
+    	inPanel.getChildren().addAll(advanceByLine, gregLine);
+    	
+    	inPanel.setAlignment(Pos.CENTER_RIGHT);
+    	
+    	return inPanel;
     }
     
     public void stop() throws Exception {
@@ -179,6 +323,7 @@ public class Kepler_A_Window extends Application {
         Platform.runLater(new Runnable() {
             public void run() {
                 bodies = controller.getBodies();
+                //while (planets == null);
                 ObservableList<Node> collection = planets.getChildren();
                 for (int i = 0; i < bodies.size(); i++) {
                     Body planet = bodies.get(i);
@@ -220,6 +365,8 @@ public class Kepler_A_Window extends Application {
     
     public void update() {
         updatePlanetCoordinates();
+        julian.setValue(controller.getJulianString());        
+        gregorian.setValue(controller.getGregorianString());
     }
     
     /**
@@ -230,43 +377,9 @@ public class Kepler_A_Window extends Application {
     	Platform.runLater(new Runnable() {
             public void run() {
             	bodies = controller.getBodies();
-       
-            	/*
-            	//Get group objects from root
-            	ObservableList<Node> children = root.getChildren();
-            	Group planets = (Group)(children.get(children.size() - 1));
-            	Group rings = (Group)(children.get(children.size() - 2));
-            	
-            	//Get shape lists from groups
-            	ObservableList<Node> p = (planets.getChildren());
-            	ObservableList<Node> r = (rings.getChildren());
-            	
-            	//Update shapes
-            	for (int i = 0; i < bodies.size(); i++) {
-            		Body planet = bodies.get(i);
-            		//Planets
-            		((Circle) p).setRadius(planet.getSize()/2);
-            		((Circle) p).setCenterX(screen.getWidth()/2 + planet.getX());
-            		((Circle) p).setCenterY(screen.getHeight()/2 + planet.getY());
-            		((Circle) p).setVisible(planet.isVisible());
-            		
-            		//Rings
-            		((Ellipse) r).setRadiusX(planet.getSemiMajorAxis());
-            		((Ellipse) r).setRadiusY(planet.getSemiMinorAxis());
-            		((Ellipse) r).setCenterX(planet.getXOffset() + screen.getWidth()/2);
-            		((Ellipse) r).setCenterY(planet.getYOffset() + screen.getHeight()/2);
-            		((Ellipse) r).setVisible(planet.isVisible());
-            	}
-            	
-            	//Reset groups
-            	planets = new Group(p);
-            	rings = new Group(r);
-            	
-            	//Update root
-            	*/
-            	
             	
             	//Kill off current models
+            	//while (root == null);
             	ObservableList<Node> children = root.getChildren();          	
 
             	rings = new Group();
