@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 public class Body {
     private String name;
     private int size;  //In pixels
+    private double scaleFactor;
     private double orbitalPeriod; //In Earth years
     private double eccentricity; //e.g. 0 is perfect circle
     private double semiMajorAxis; //(*10^10 m)
@@ -65,6 +66,8 @@ public class Body {
     
     public int getSize() { return size; }
     
+    public double getScaleFactor() { return scaleFactor; }
+    
     public double getSemiMajorAxis() { return semiMajorAxis; }
     
     public double getSemiMinorAxis() { return semiMinorAxis; }
@@ -90,6 +93,8 @@ public class Body {
 
     /***************** Mutators ********************/
     public void setName(String name) { this.name = name; }
+    
+    public void setScaleFactor(double scaleFactor) { this.scaleFactor = scaleFactor; }
     
     public void setEccentricity(double eccentricity) { this.eccentricity = eccentricity; }
 

@@ -223,7 +223,7 @@ public class Kepler_A_Window extends Application {
     		line.setStartY(screen.getHeight()/2);
     		line.setEndX(screen.getWidth()/2  + planet.getX());// - planet.getSize()/2);
     		line.setEndY(screen.getHeight()/2 + planet.getY());// - planet.getSize()/2);
-    		line.setStroke(Color.GRAY);
+    		line.setStroke(Color.WHITE);
     		line.setVisible(planet.getShowLine()); 
     		
     		//Add to group
@@ -352,21 +352,29 @@ public class Kepler_A_Window extends Application {
 
 
         	
-        	Menu lineOn = new Menu("Show Line");
-    			CheckMenuItem lineOnMercury = new CheckMenuItem("Mercury");
-    			CheckMenuItem lineOnVenus = new CheckMenuItem("Vernus");
-    			CheckMenuItem lineOnEarth = new CheckMenuItem("Earth");
-    			CheckMenuItem lineOnMars = new CheckMenuItem("Mars");
-    			CheckMenuItem lineOnJupiter = new CheckMenuItem("Jupiter");
-    			CheckMenuItem lineOnSatern = new CheckMenuItem("Satern");
-    			CheckMenuItem lineOnUrnis = new CheckMenuItem("Urnis");
-    			CheckMenuItem lineOnNeptune = new CheckMenuItem("Neptune");
-    			CheckMenuItem lineOnPluto = new CheckMenuItem("Pluto");
-    			CheckMenuItem lineOnHC = new CheckMenuItem("HC");
-    			CheckMenuItem lineOnComit = new CheckMenuItem("The other one");
-        		lineOn.getItems().addAll(lineOnMercury, lineOnVenus, lineOnEarth, lineOnMars, lineOnJupiter,
-				         lineOnSatern, lineOnUrnis, lineOnNeptune, lineOnPluto, lineOnHC, lineOnComit);
-        	
+		Menu lineOn = new Menu("Show Line");
+		CheckMenuItem lineOnMercury = new CheckMenuItem("Mercury");
+		lineOnMercury.setOnAction(e -> {controller.getBodies().get(1).setShowLine(!controller.getBodies().get(1).getShowLine());refresh();update();});
+		CheckMenuItem lineOnVenus = new CheckMenuItem("Vernus");
+		lineOnVenus.setOnAction(e -> {controller.getBodies().get(2).setShowLine(!controller.getBodies().get(2).getShowLine());refresh();update();});
+		CheckMenuItem lineOnEarth = new CheckMenuItem("Earth");
+		lineOnEarth.setOnAction(e -> {controller.getBodies().get(3).setShowLine(!controller.getBodies().get(3).getShowLine());refresh();update();});
+		CheckMenuItem lineOnMars = new CheckMenuItem("Mars");
+		lineOnMars.setOnAction(e -> {controller.getBodies().get(4).setShowLine(!controller.getBodies().get(4).getShowLine());refresh();update();});
+		CheckMenuItem lineOnJupiter = new CheckMenuItem("Jupiter");
+		lineOnJupiter.setOnAction(e -> {controller.getBodies().get(5).setShowLine(!controller.getBodies().get(5).getShowLine());refresh();update();});
+		CheckMenuItem lineOnSatern = new CheckMenuItem("Satern");
+		lineOnSatern.setOnAction(e -> {controller.getBodies().get(6).setShowLine(!controller.getBodies().get(6).getShowLine());refresh();update();});
+		CheckMenuItem lineOnUrnis = new CheckMenuItem("Urnis");
+		lineOnUrnis.setOnAction(e -> {controller.getBodies().get(7).setShowLine(!controller.getBodies().get(7).getShowLine());refresh();update();});
+		CheckMenuItem lineOnNeptune = new CheckMenuItem("Neptune");
+		lineOnNeptune.setOnAction(e -> {controller.getBodies().get(8).setShowLine(!controller.getBodies().get(8).getShowLine());refresh();update();});
+		CheckMenuItem lineOnPluto = new CheckMenuItem("Pluto");
+		lineOnPluto.setOnAction(e -> {controller.getBodies().get(9).setShowLine(!controller.getBodies().get(9).getShowLine());refresh();update();});
+		CheckMenuItem lineOnHC = new CheckMenuItem("HC");
+		CheckMenuItem lineOnComit = new CheckMenuItem("The other one");
+		lineOn.getItems().addAll(lineOnMercury, lineOnVenus, lineOnEarth, lineOnMars, lineOnJupiter,
+		         lineOnSatern, lineOnUrnis, lineOnNeptune, lineOnPluto, lineOnHC, lineOnComit);
         	
         	viewMenu.getItems().addAll(zoomTo, lineOn);
             
