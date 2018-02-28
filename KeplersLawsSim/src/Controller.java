@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Controller {
     private static Model model;
+    private static Model initialModel = new Model();
     private static Kepler_A_Window window;
     private static int stepDays;
     private static boolean run;
@@ -126,11 +127,7 @@ public class Controller {
             	e.printStackTrace();
             }
         }
-        
-        
-        
-        
-        
+             
     }
     
     public static void setScale(double scale) {
@@ -138,7 +135,14 @@ public class Controller {
     	window.refresh();
     	window.update();
     }
+
+	public static Model getInitialModel() {
+		return initialModel;
+	}
+
+	public static void setInitialModel(Model initialModel) {
+		Controller.initialModel = initialModel;
+	}
     
     
 }
-

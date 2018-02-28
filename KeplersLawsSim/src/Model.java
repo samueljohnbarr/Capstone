@@ -25,7 +25,7 @@ public class Model {
     public final int PLUTO = 9;
     private static final double EARTH_YEAR = 365.25;
     private static final int CIRCLE_DEGREES = 360;
-    private ArrayList<Body> bodies;
+    ArrayList<Body> bodies;
     private GregorianCalendar date;
     private double scale = 15;
 
@@ -226,6 +226,7 @@ public class Model {
     	mercury.setX(getXPosition(mercury));
     	mercury.setY(getYPosition(mercury));
     	mercury.setOffsets();
+    	mercury.setShowLine(false);
     	bodies.add(mercury);
     	
     	//Venus
@@ -239,6 +240,7 @@ public class Model {
     	venus.setX(getXPosition(venus));
         venus.setY(getYPosition(venus));
         venus.setOffsets();
+        venus.setShowLine(false);
     	bodies.add(venus);
     	
     	//Earth
@@ -251,6 +253,7 @@ public class Model {
     	earth.setColor(Color.BLUE);
     	earth.setAngle(0);
     	earth.setOffsets();
+    	earth.setShowLine(true);
     	bodies.add(earth);
     	
     	//Mars
@@ -264,6 +267,7 @@ public class Model {
     	mars.setX(getXPosition(mars));
     	mars.setY(getYPosition(mars));
     	mars.setOffsets();
+    	mars.setShowLine(false);
     	bodies.add(mars);
     	
     	//Jupiter
@@ -277,6 +281,7 @@ public class Model {
     	jupiter.setX(getXPosition(jupiter));
     	jupiter.setY(getYPosition(jupiter));
     	jupiter.setOffsets();
+    	jupiter.setShowLine(false);
     	bodies.add(jupiter);
     	
     	//Saturn
@@ -290,6 +295,7 @@ public class Model {
     	saturn.setX(getXPosition(saturn));
     	saturn.setY(getYPosition(saturn));
     	saturn.setOffsets();
+    	saturn.setShowLine(false);
     	bodies.add(saturn);
     	
     	//Uranus
@@ -303,6 +309,7 @@ public class Model {
     	uranus.setX(getXPosition(uranus));
     	uranus.setY(getYPosition(uranus));
     	uranus.setOffsets();
+    	uranus.setShowLine(false);
     	bodies.add(uranus);
     	
     	//Neptune
@@ -316,6 +323,7 @@ public class Model {
     	neptune.setX(getXPosition(neptune));
     	neptune.setY(getYPosition(neptune));
     	neptune.setOffsets();
+    	neptune.setShowLine(false);
     	bodies.add(neptune);
     	
     	//Pluto
@@ -329,7 +337,9 @@ public class Model {
     	pluto.setX(getXPosition(pluto));
     	pluto.setY(getYPosition(pluto));
     	pluto.setOffsets();
+    	pluto.setShowLine(false);
     	bodies.add(pluto);
+
     	
     	
     }

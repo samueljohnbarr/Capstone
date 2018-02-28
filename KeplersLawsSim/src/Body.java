@@ -21,6 +21,7 @@ public class Body {
     private double yOffset;
     private double angle;
     private boolean visible;
+    private boolean showLine;
     
     /**
      * Body Constructor
@@ -135,4 +136,12 @@ public class Body {
     	xOffset = eccentricity * semiMajorAxis;
         yOffset = -eccentricity * semiMinorAxis;
     }
+
+	public boolean getShowLine() {
+		return showLine;
+	}
+
+	public void setShowLine(boolean showLine) {
+		this.showLine = showLine;
+	}
 }
