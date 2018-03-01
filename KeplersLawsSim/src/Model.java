@@ -194,8 +194,8 @@ public class Model {
         	planet.setSize((int)(planet.getScaleFactor() * scale));
         	
         	//Hide inner planets if scale is too small
-        	if (scale < 0.1) {
-        		if (i == 1 || i == 2 || i == 3 || i == 4)
+        	if (scale < 2) {
+        		if (i == MERCURY || i == VENUS || i == EARTH || i == MARS)
         			planet.setVisible(false);
         	} else 
         		planet.setVisible(true);        	
@@ -257,7 +257,7 @@ public class Model {
     	earth.setColor(Color.BLUE);
     	earth.setAngle(0);
     	earth.setOffsets();
-    	earth.setShowLine(true);
+    	earth.setShowLine(false);
     	bodies.add(earth);
     	
     	//Mars

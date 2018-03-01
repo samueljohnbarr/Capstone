@@ -42,6 +42,7 @@ public class Controller {
     	while (model == null);
     	if (stepDays < 1)
     		stepDays = 1;
+    	System.out.println(stepDays);
     	model.step(stepDays);
     	window.update();
     }
@@ -64,16 +65,14 @@ public class Controller {
      * @param days
      */
     public void setDays(String days) {
-    	System.out.println(days);
     	int d = 1;
-    	/*
     	//If string is incorrectly formatted, set to 1
     	try {
             d = Integer.parseInt(days);
     	} catch(NumberFormatException e) {
     		d = 1;
     	}
-    	*/
+    	
     	if (d < 1)
     		stepDays = 1;
     	else

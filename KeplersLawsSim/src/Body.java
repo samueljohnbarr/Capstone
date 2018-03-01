@@ -116,10 +116,12 @@ public class Body {
      * @param size to set
      */
     public void setSize(int size) {
-    	if (size < 5)
-    		this.size = 5;
+    	if (size < 8)
+    		this.size = 8;
+    	else if (size > 90)
+    		this.size = 90;
     	else
-    	    this.size = size;
+    		this.size = size;
     }
 
 

@@ -16,6 +16,8 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,6 +27,9 @@ import javafx.scene.Scene;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -97,40 +102,12 @@ public class Kepler_A_Window extends Application {
         space.toBack();
         root.getChildren().add(space);
         
-        //Create menu bar
-        MenuBar mainMenu = setUpMenus();
-        mainMenu.prefWidthProperty().bind(primary.widthProperty());
-        mainMenu.toFront();
-        root.setTop(mainMenu);
-        
-        
         //Get controller variables
         bodies = controller.getBodies();
         julian = new SimpleStringProperty();
         gregorian = new SimpleStringProperty();
         julian.setValue(controller.getJulianString());        
         gregorian.setValue(controller.getGregorianString());
-        
-        /******* Initialize Control Panel *******/
-        //TODO: Stack pane does not work
-        Pane contPan = new StackPane();
-        contPan.setStyle("-fx-background-color: black");
-        
-
-        VBox labPan = initLabels();
-        labPan.setAlignment(Pos.BASELINE_LEFT);
-        HBox buttPan = initButtons();
-        buttPan.setAlignment(Pos.BASELINE_CENTER);
-        VBox inPan = initInputs(); 
-        inPan.setAlignment(Pos.BASELINE_RIGHT);
-        HBox combinedPan = new HBox();
-        combinedPan.getChildren().addAll(inPan, labPan);
-
-        
-        //Add all & align
-        contPan.getChildren().addAll(combinedPan, buttPan);
-        root.setBottom(contPan);
-        
         
         /****** Initialize Sim Objects ******/
         //Initialize rings
@@ -142,12 +119,44 @@ public class Kepler_A_Window extends Application {
         lines = new Group();
         lines = initLines(lines);
         root.getChildren().add(lines);
-        
+              
         //Initialize planets
         planets = new Group();
         planets = initPlanets(planets);
         root.getChildren().add(planets);
-                    
+        planets.toBack();
+        lines.toBack();
+        rings.toBack();
+        
+        /****** Create menu bar ******/
+        MenuBar mainMenu = setUpMenus();
+        mainMenu.prefWidthProperty().bind(primary.widthProperty());
+        mainMenu.toFront();
+        root.setTop(mainMenu);
+        
+        /******* Initialize Control Panel *******/
+        TilePane contPan = new TilePane();
+        root.setBottom(contPan);
+        contPan.setAlignment(Pos.BASELINE_CENTER);
+        contPan.setPrefColumns(3);
+        contPan.setHgap(290);
+        contPan.setStyle("-fx-background-color: black");
+        
+        HBox scalePan = initScaler();
+        scalePan.setAlignment(Pos.CENTER_LEFT);
+        HBox buttPan = initButtons();
+        buttPan.setAlignment(Pos.BASELINE_CENTER);
+        VBox inPan = initInputs(); 
+        inPan.setAlignment(Pos.BASELINE_RIGHT);
+        
+        //Add all & align
+        contPan.getChildren().addAll(scalePan, buttPan, inPan);
+        
+        /****** Initialize Date Labels *******/
+        VBox labPan = initLabels();
+        labPan.setAlignment(Pos.BASELINE_RIGHT);
+        root.setRight(labPan);
+        
 
         primary.setScene(primeScene);
         primary.setTitle("Kepler");
@@ -250,16 +259,14 @@ public class Kepler_A_Window extends Application {
                             screen.getHeight()/2 + planet.getY() - planet.getSize()/2);
                     
                     Line line = (Line) nLines.get(i);
-                    line.setEndX(screen.getWidth()/2  + planet.getX()); //- planet.getSize()/2);
-                    line.setEndY(screen.getHeight()/2 + planet.getY()); //- planet.getSize()/2);
+                    line.setEndX(screen.getWidth()/2  + planet.getX()); 
+                    line.setEndY(screen.getHeight()/2 + planet.getY());
                     nLines.set(i, line);                   
                 }
             }
         });
         
     }
-    
-
     
     
     public void update() {
@@ -277,28 +284,23 @@ public class Kepler_A_Window extends Application {
             public void run() {
             	bodies = controller.getBodies();
             	
-            	//Kill off current models
-            	//while (root == null);
-            	ObservableList<Node> children = root.getChildren();          	
-
+            	//Kill off current models       	
             	rings = new Group();
             	lines = new Group();
             	planets = new Group();
 
-            	
-            	root.getChildren().set(children.size()-3, rings);
-            	root.getChildren().set(children.size()-2, lines);
-                root.getChildren().set(children.size()-1, planets);
+            	root.getChildren().set(0, rings); 
+            	root.getChildren().set(1, lines); 
+                root.getChildren().set(2, planets);
                 root.requestLayout();
             	
             	rings = initRings(rings);
             	lines = initLines(lines);
             	planets = initPlanets(planets);
 
-            	root.getChildren().set(children.size()-3, rings);
-            	root.getChildren().set(children.size()-2, lines);
-                root.getChildren().set(children.size()-1, planets);
-                
+            	root.getChildren().set(0, rings);
+            	root.getChildren().set(1, lines);
+            	root.getChildren().set(2, planets);
             	
             	//Update root
             	root.requestLayout();
@@ -330,7 +332,7 @@ public class Kepler_A_Window extends Application {
         Menu zoomTo = new Menu("Focous On");
 		MenuItem focousOnMercury = new MenuItem("Mercury");
 		focousOnMercury.setOnAction(e -> {Controller.setScale(69);});
-		MenuItem focousOnVenus = new MenuItem("Vernus");
+		MenuItem focousOnVenus = new MenuItem("Venus");
 		focousOnVenus.setOnAction(e -> {Controller.setScale(37);});
 		MenuItem focousOnEarth = new MenuItem("Earth");
 		focousOnEarth.setOnAction(e -> {Controller.setScale(26);});
@@ -338,9 +340,9 @@ public class Kepler_A_Window extends Application {
 		focousOnMars.setOnAction(e -> {Controller.setScale(20);});
 		MenuItem focousOnJupiter = new MenuItem("Jupiter");
 		focousOnJupiter.setOnAction(e -> {Controller.setScale(5.2);});
-		MenuItem focousOnSatern = new MenuItem("Satern");
+		MenuItem focousOnSatern = new MenuItem("Saturn");
 		focousOnSatern.setOnAction(e -> {Controller.setScale(3);});
-		MenuItem focousOnUrnis = new MenuItem("Urnis");
+		MenuItem focousOnUrnis = new MenuItem("Uranus");
 		focousOnUrnis.setOnAction(e -> {Controller.setScale(1.5);});
 		MenuItem focousOnNeptune = new MenuItem("Neptune");
 		focousOnNeptune.setOnAction(e -> {Controller.setScale(.9);});
@@ -355,7 +357,7 @@ public class Kepler_A_Window extends Application {
 		Menu lineOn = new Menu("Show Line");
 		CheckMenuItem lineOnMercury = new CheckMenuItem("Mercury");
 		lineOnMercury.setOnAction(e -> {controller.getBodies().get(1).setShowLine(!controller.getBodies().get(1).getShowLine());refresh();update();});
-		CheckMenuItem lineOnVenus = new CheckMenuItem("Vernus");
+		CheckMenuItem lineOnVenus = new CheckMenuItem("Venus");
 		lineOnVenus.setOnAction(e -> {controller.getBodies().get(2).setShowLine(!controller.getBodies().get(2).getShowLine());refresh();update();});
 		CheckMenuItem lineOnEarth = new CheckMenuItem("Earth");
 		lineOnEarth.setOnAction(e -> {controller.getBodies().get(3).setShowLine(!controller.getBodies().get(3).getShowLine());refresh();update();});
@@ -363,9 +365,9 @@ public class Kepler_A_Window extends Application {
 		lineOnMars.setOnAction(e -> {controller.getBodies().get(4).setShowLine(!controller.getBodies().get(4).getShowLine());refresh();update();});
 		CheckMenuItem lineOnJupiter = new CheckMenuItem("Jupiter");
 		lineOnJupiter.setOnAction(e -> {controller.getBodies().get(5).setShowLine(!controller.getBodies().get(5).getShowLine());refresh();update();});
-		CheckMenuItem lineOnSatern = new CheckMenuItem("Satern");
+		CheckMenuItem lineOnSatern = new CheckMenuItem("Saturn");
 		lineOnSatern.setOnAction(e -> {controller.getBodies().get(6).setShowLine(!controller.getBodies().get(6).getShowLine());refresh();update();});
-		CheckMenuItem lineOnUrnis = new CheckMenuItem("Urnis");
+		CheckMenuItem lineOnUrnis = new CheckMenuItem("Uranus");
 		lineOnUrnis.setOnAction(e -> {controller.getBodies().get(7).setShowLine(!controller.getBodies().get(7).getShowLine());refresh();update();});
 		CheckMenuItem lineOnNeptune = new CheckMenuItem("Neptune");
 		lineOnNeptune.setOnAction(e -> {controller.getBodies().get(8).setShowLine(!controller.getBodies().get(8).getShowLine());refresh();update();});
@@ -454,7 +456,9 @@ public class Kepler_A_Window extends Application {
     	HBox julianb = new HBox(5);
     	Label jul = new Label("   Julian:");
     	jul.setTextFill(Color.WHITE);
+    	jul.setFont(Font.font("Arial", FontWeight.BOLD, 20));
     	Label julianDay = new Label("");
+    	julianDay.setFont(Font.font("Arial", FontPosture.ITALIC, 20));
     	julianDay.setTextFill(Color.WHITE);
     	julianDay.textProperty().bind(julian);
     	julianb.getChildren().addAll(jul, julianDay);
@@ -462,14 +466,14 @@ public class Kepler_A_Window extends Application {
     	HBox gregb = new HBox(5);
     	Label greg = new Label("   Gregorian:");
     	greg.setTextFill(Color.WHITE);
+    	greg.setFont(Font.font("Arial", FontWeight.BOLD, 20));
     	Label gregDate = new Label("");
+    	gregDate.setFont(Font.font("Arial", FontPosture.ITALIC, 20));
     	gregDate.setTextFill(Color.WHITE);
     	gregDate.textProperty().bind(gregorian);
     	gregb.getChildren().addAll(greg, gregDate);
     	
-    	HBox.setMargin(julianb, new Insets(5, 5, 5, 5));
-    	HBox.setMargin(gregb, new Insets(5, 5, 5, 5));
-    	labels.getChildren().addAll(julianb, gregb);
+    	labels.getChildren().addAll(gregb, julianb);
     	VBox.setMargin(labels, new Insets(5, 5, 5, 5));
     	
     	labels.setAlignment(Pos.CENTER_LEFT);
@@ -481,7 +485,7 @@ public class Kepler_A_Window extends Application {
     	//Step day input & label
     	HBox advanceByLine = new HBox();
     	advanceByDate = new TextField("1");
-    	advanceByDate.setPrefColumnCount(10);
+    	advanceByDate.setPrefColumnCount(2);
     	advanceByDate.setEditable(true);
     	Label advanceByLabel = new Label("  Days to step ");
     	
@@ -504,6 +508,29 @@ public class Kepler_A_Window extends Application {
     	inPanel.setAlignment(Pos.CENTER_RIGHT);
     	
     	return inPanel;
+    }
+    
+    public HBox initScaler() {
+    	HBox zoom = new HBox();
+    	Slider scaler = new Slider(0.5, 30, 15);
+    	scaler.setShowTickMarks(true);
+    	scaler.setMaxWidth(200);
+    	
+    	scaler.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                Number old_val, Number new_val) {
+                    Controller.setScale(new_val.doubleValue());
+            }
+        });
+    	
+    	Label zLabel = new Label("Scaler  ");
+    	zLabel.setTextFill(Color.WHITE);
+    	zLabel.setAlignment(Pos.CENTER);
+    	
+    	zoom.getChildren().addAll(zLabel, scaler);
+    	HBox.setMargin(zoom, new Insets(5,5,5,5));
+    	
+    	return zoom;
     }
     
     public void stop() throws Exception {
