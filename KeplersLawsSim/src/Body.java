@@ -152,8 +152,13 @@ public class Body {
      * be set before calling this method.
      */
     public void setOffsets() {
+    	/*
     	xOffset = eccentricity * semiMajorAxis;
         yOffset = eccentricity * semiMinorAxis;
+        */
+    	double distance = eccentricity * semiMajorAxis;
+    	xOffset = Math.sqrt((Math.pow(distance, 2)/2));
+    	yOffset = xOffset;
         if (negX) xOffset = -xOffset;
         if (negY) yOffset = -yOffset;
         

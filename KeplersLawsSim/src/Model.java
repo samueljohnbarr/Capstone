@@ -245,7 +245,7 @@ public class Model {
     	mercury.offsetNegation(true, false);
     	mercury.setOffsets();
     	mercury.setColor(Color.BLACK);
-    	mercury.setAngle(getAngularDistance(mercury.getOrbitalPeriod(), 44));
+    	mercury.setAngle(getAngularDistance(mercury.getOrbitalPeriod(), 40) + 0.785); //44
     	mercury.setX(getXPosition(mercury));
     	mercury.setY(getYPosition(mercury));
     	mercury.setShowLine(false);
@@ -260,7 +260,7 @@ public class Model {
     	venus.setSemiMajorAxis(10.8 * scale); 
     	venus.setOffsets();
     	venus.setColor(Color.ORANGE);
-    	venus.setAngle(getAngularDistance(venus.getOrbitalPeriod(), 187)); 
+    	venus.setAngle(getAngularDistance(venus.getOrbitalPeriod(), 216)); 
     	venus.setX(getXPosition(venus));
         venus.setY(getYPosition(venus));
         venus.setShowLine(false);
@@ -276,7 +276,7 @@ public class Model {
     	earth.setOffsets();
     	earth.setX(earth.getSemiMajorAxis());
     	earth.setColor(Color.BLUE);
-    	earth.setAngle(-0.785);
+    	earth.setAngle(-0.8);
     	earth.setShowLine(false);
     	bodies.add(earth);
     	
@@ -290,7 +290,7 @@ public class Model {
     	mars.offsetNegation(false, true);
     	mars.setOffsets();
     	mars.setColor(Color.RED);
-    	mars.setAngle(getAngularDistance(mars.getOrbitalPeriod(), 170));
+    	mars.setAngle(getAngularDistance(mars.getOrbitalPeriod(), 170) + 0.785);
     	mars.setX(getXPosition(mars));
     	mars.setY(getYPosition(mars));
     	mars.setShowLine(false);
@@ -348,6 +348,7 @@ public class Model {
     	neptune.setOrbitalPeriod(165);
     	neptune.setEccentricity(0.0086);
     	neptune.setSemiMajorAxis(450 * scale);
+    	neptune.offsetNegation(true, true);
     	neptune.setOffsets();
     	neptune.setColor(Color.DARKBLUE);
     	neptune.setAngle(getAngularDistance(neptune.getOrbitalPeriod(), 36150));
@@ -378,7 +379,7 @@ public class Model {
     	halley.setOrbitalPeriod(76);
     	halley.setEccentricity(0.967);
     	halley.setSemiMajorAxis(266 * scale);
-    	halley.offsetNegation(true, true);
+    	halley.offsetNegation(false, true);
     	//halley.setOrbitalAngle(1);  //2.35619
     	halley.setOffsets();
     	halley.setColor(Color.DARKGRAY);
