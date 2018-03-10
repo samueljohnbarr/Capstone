@@ -18,8 +18,11 @@ public class Body {
     private Color color;
     private double x;
     private double xOffset;
+    private boolean negX;
     private double y;
     private double yOffset;
+    private boolean negY;
+    private double orbitalAngle;
     private double angle;
     private boolean visible;
     private boolean showLine;
@@ -86,6 +89,8 @@ public class Body {
     
     public double getYOffset() { return yOffset; }
     
+    public double getOrbitalAngle() { return orbitalAngle; }
+    
     public double getAngle() { return angle; }
     
     public boolean isVisible() { return visible; }
@@ -112,6 +117,10 @@ public class Body {
          this.angle = (angle % (2 * Math.PI));
     }
     
+    public void setOrbitalAngle(double angle) {
+    	this.orbitalAngle = (angle % (2* Math.PI));
+    }
+    
     /**
      * @param size to set
      */
@@ -136,12 +145,31 @@ public class Body {
     }
     
     /**
-     * Sets x & y offsets
-     * Eccentricity and semimajor/minor axis must be set
+     * Sets x & y offsets based on the eccentricity and
+     * the semimajor/minor axis.
+     * 
+     * Eccentricity, semiMajorAxis, and offsetNegation must
+     * be set before calling this method.
      */
     public void setOffsets() {
     	xOffset = eccentricity * semiMajorAxis;
-        yOffset = -eccentricity * semiMinorAxis;
+        yOffset = eccentricity * semiMinorAxis;
+        if (negX) xOffset = -xOffset;
+        if (negY) yOffset = -yOffset;
+        
+        //Set angle
+        orbitalAngle = Math.atan((yOffset/xOffset));
+    }
+    
+    /**
+     * Sets control fields to negate x and/or y offsets.
+     * While offsets can be computed algorithmically, their +/- positioning cannot.
+     * @param negX negate xOffset
+     * @param negY negate yOffset
+     */
+    public void offsetNegation(boolean negX, boolean negY) {
+    	this.negX = negX;
+    	this.negY = negY;
     }
 
 	public boolean getShowLine() {

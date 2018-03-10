@@ -44,7 +44,6 @@ public class Kepler_A_Window extends Application {
     private static Kepler_A_Window keplerWindow = null;
     private volatile BorderPane root;
     TextField advanceByDate;
-    TextField newDate;
     private Controller controller = new Controller();
     private ArrayList<Body> bodies;
     private Group rings;
@@ -182,6 +181,7 @@ public class Kepler_A_Window extends Application {
             ring.setRadiusY(planet.getSemiMinorAxis());
             ring.setCenterX(planet.getXOffset() + screen.getWidth()/2);
             ring.setCenterY(planet.getYOffset() + screen.getHeight()/2);
+            ring.setRotate(Math.toDegrees(planet.getOrbitalAngle()));
             ring.toBack();
             
             //Set visibility
@@ -495,12 +495,19 @@ public class Kepler_A_Window extends Application {
    	
     	//Gregorian date input and label
     	HBox gregLine = new HBox();
-    	TextField newDate = new TextField();
-    	newDate.setPrefColumnCount(10);
-    	newDate.setEditable(false);
-    	Label gregLabel = new Label("  New Date     ");
+    	TextField month = new TextField();
+    	TextField day = new TextField();
+    	TextField year = new TextField();
+    	month.setPrefColumnCount(2);
+    	day.setPrefColumnCount(2);
+    	year.setPrefColumnCount(2);
+    	
+    	Label slash = new Label(" / ");
+    	Label slash1 = new Label(" / ");
+    	
+    	Label gregLabel = new Label("  Set Date ");
     	gregLabel.setTextFill(Color.WHITE);
-    	gregLine.getChildren().addAll(gregLabel, newDate);
+    	gregLine.getChildren().addAll(gregLabel, month, slash, day, slash1, year);
     	
     	VBox inPanel = new VBox();
     	inPanel.getChildren().addAll(advanceByLine, gregLine);

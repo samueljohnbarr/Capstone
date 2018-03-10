@@ -50,36 +50,55 @@ public class Model {
     
     /**
      * Gets the planet x position according to
-     * its stored angle, semimajor axis, and offset
+     * its stored angles, semimajor/minor axis, and offset
+     * 
+     * **Math source http://quickcalcbasic.com/ellipse%20line%20intersection.pdf
      * 
      * @param planet to set
      * @return x position
      */
     private double getXPosition(Body planet) {
-    	//Calculate x & y position
+    	//Calculate x position on non angled plane
     	double x = planet.getXOffset() + Math.cos(planet.getAngle()) * 
                    planet.getSemiMajorAxis();
+    	double y = planet.getYOffset() + Math.sin(planet.getAngle()) * 
+                planet.getSemiMinorAxis();
+    	
+    	//Adjust for orbital angle
+    	x = (x - planet.getXOffset()) * Math.cos(planet.getOrbitalAngle()) - 
+    	    (y - planet.getYOffset()) * Math.sin(planet.getOrbitalAngle()) + planet.getXOffset();
     	
     		
-   		//Round to eight decimal place
-    	return Math.round(x * 1000000000) / 1000000000;
+   		//Round to eight decimal places
+    	x =  Math.round(x * 1000000000) / 1000000000;
     	
+    	return x;
     }
     
     /**
     * Gets the planet y position according to
-    * its stored angle, semiminor axis, and offset
+    * its stored angles, semimajor/minor axis, offset
+    * 
+    * **Math source http://quickcalcbasic.com/ellipse%20line%20intersection.pdf
     * 
     * @param planet to set
     * @return y position
     */
     private double getYPosition(Body planet) {
-    	//Calculate x & y position
+    	//Calculate y position
     	double y = planet.getYOffset() + Math.sin(planet.getAngle()) * 
                 planet.getSemiMinorAxis();
+    	double x = planet.getXOffset() + Math.cos(planet.getAngle()) * 
+                planet.getSemiMajorAxis();
     	
+    	//adjust for orbital angle
+    	y = (y - planet.getYOffset()) * Math.cos(planet.getOrbitalAngle()) + 
+    	    (x - planet.getXOffset()) * Math.sin(planet.getOrbitalAngle()) + planet.getYOffset();
+               
     	//Round to eight decimal places
-    	return Math.round(y * 1000000000) / 1000000000;
+    	y = Math.round(y * 1000000000) / 1000000000;
+    	
+    	return y;
     }
     
     /**
@@ -223,11 +242,12 @@ public class Model {
     	mercury.setOrbitalPeriod(0.241);
     	mercury.setEccentricity(0.206);
     	mercury.setSemiMajorAxis(5.79 * scale);
+    	mercury.offsetNegation(true, false);
+    	mercury.setOffsets();
     	mercury.setColor(Color.BLACK);
-    	mercury.setAngle(getAngularDistance(mercury.getOrbitalPeriod(), 44));  //3.1406903184;
+    	mercury.setAngle(getAngularDistance(mercury.getOrbitalPeriod(), 44));
     	mercury.setX(getXPosition(mercury));
     	mercury.setY(getYPosition(mercury));
-    	mercury.setOffsets();
     	mercury.setShowLine(false);
     	bodies.add(mercury);
     	
@@ -237,12 +257,12 @@ public class Model {
     	venus.setSize((int)(venus.getScaleFactor() * scale));
     	venus.setOrbitalPeriod(0.615);
     	venus.setEccentricity(0.0068);
-    	venus.setSemiMajorAxis(10.8 * scale); //10.8 * scale
+    	venus.setSemiMajorAxis(10.8 * scale); 
+    	venus.setOffsets();
     	venus.setColor(Color.ORANGE);
-    	venus.setAngle(getAngularDistance(venus.getOrbitalPeriod(), 187)); //5.2306557038660664;
+    	venus.setAngle(getAngularDistance(venus.getOrbitalPeriod(), 187)); 
     	venus.setX(getXPosition(venus));
         venus.setY(getYPosition(venus));
-        venus.setOffsets();
         venus.setShowLine(false);
     	bodies.add(venus);
     	
@@ -253,10 +273,10 @@ public class Model {
     	earth.setOrbitalPeriod(1);
     	earth.setEccentricity(0.0167); 
     	earth.setSemiMajorAxis(15 * scale);
+    	earth.setOffsets();
     	earth.setX(earth.getSemiMajorAxis());
     	earth.setColor(Color.BLUE);
-    	earth.setAngle(0);
-    	earth.setOffsets();
+    	earth.setAngle(-0.785);
     	earth.setShowLine(false);
     	bodies.add(earth);
     	
@@ -267,11 +287,12 @@ public class Model {
     	mars.setOrbitalPeriod(1.88);
     	mars.setEccentricity(0.0934);
     	mars.setSemiMajorAxis(22.8 * scale);
+    	mars.offsetNegation(false, true);
+    	mars.setOffsets();
     	mars.setColor(Color.RED);
-    	mars.setAngle(getAngularDistance(mars.getOrbitalPeriod(), 170)); //193
+    	mars.setAngle(getAngularDistance(mars.getOrbitalPeriod(), 170));
     	mars.setX(getXPosition(mars));
     	mars.setY(getYPosition(mars));
-    	mars.setOffsets();
     	mars.setShowLine(false);
     	bodies.add(mars);
     	
@@ -282,11 +303,11 @@ public class Model {
     	jupiter.setOrbitalPeriod(11.9);
     	jupiter.setEccentricity(0.0485);
     	jupiter.setSemiMajorAxis(77.8 * scale);
+    	jupiter.setOffsets();
     	jupiter.setColor(Color.DARKORANGE);
-    	jupiter.setAngle(getAngularDistance(jupiter.getOrbitalPeriod(), 0)); //TODO: fix this
+    	jupiter.setAngle(getAngularDistance(jupiter.getOrbitalPeriod(), 4035));
     	jupiter.setX(getXPosition(jupiter));
     	jupiter.setY(getYPosition(jupiter));
-    	jupiter.setOffsets();
     	jupiter.setShowLine(false);
     	bodies.add(jupiter);
     	
@@ -297,11 +318,11 @@ public class Model {
     	saturn.setOrbitalPeriod(29.5);
     	saturn.setEccentricity(0.0556);
     	saturn.setSemiMajorAxis(143 * scale);
+    	saturn.setOffsets();
     	saturn.setColor(Color.ORANGE);
-    	saturn.setAngle(getAngularDistance(saturn.getOrbitalPeriod(), 0)); //TODO: fix this
+    	saturn.setAngle(getAngularDistance(saturn.getOrbitalPeriod(), 9885));
     	saturn.setX(getXPosition(saturn));
     	saturn.setY(getYPosition(saturn));
-    	saturn.setOffsets();
     	saturn.setShowLine(false);
     	bodies.add(saturn);
     	
@@ -312,11 +333,11 @@ public class Model {
     	uranus.setOrbitalPeriod(84);
     	uranus.setEccentricity(0.0472);
     	uranus.setSemiMajorAxis(287 * scale);
+    	uranus.setOffsets();
     	uranus.setColor(Color.AQUA);
-    	uranus.setAngle(getAngularDistance(uranus.getOrbitalPeriod(), 0)); //TODO: fix this
+    	uranus.setAngle(getAngularDistance(uranus.getOrbitalPeriod(), 18870));
     	uranus.setX(getXPosition(uranus));
     	uranus.setY(getYPosition(uranus));
-    	uranus.setOffsets();
     	uranus.setShowLine(false);
     	bodies.add(uranus);
     	
@@ -327,11 +348,11 @@ public class Model {
     	neptune.setOrbitalPeriod(165);
     	neptune.setEccentricity(0.0086);
     	neptune.setSemiMajorAxis(450 * scale);
+    	neptune.setOffsets();
     	neptune.setColor(Color.DARKBLUE);
-    	neptune.setAngle(getAngularDistance(neptune.getOrbitalPeriod(), 0)); //TODO: fix this
+    	neptune.setAngle(getAngularDistance(neptune.getOrbitalPeriod(), 36150));
     	neptune.setX(getXPosition(neptune));
     	neptune.setY(getYPosition(neptune));
-    	neptune.setOffsets();
     	neptune.setShowLine(false);
     	bodies.add(neptune);
     	
@@ -342,13 +363,30 @@ public class Model {
     	pluto.setOrbitalPeriod(248);
     	pluto.setEccentricity(0.25);
     	pluto.setSemiMajorAxis(590 * scale);
+    	pluto.setOffsets();
     	pluto.setColor(Color.BROWN);
-    	pluto.setAngle(getAngularDistance(pluto.getOrbitalPeriod(), 0)); //TODO: fix this
+    	pluto.setAngle(getAngularDistance(pluto.getOrbitalPeriod(), 39000));
     	pluto.setX(getXPosition(pluto));
     	pluto.setY(getYPosition(pluto));
-    	pluto.setOffsets();
     	pluto.setShowLine(false);
     	bodies.add(pluto);
+    	
+    	//Halley's Comet
+    	Body halley = new Body();
+    	halley.setScaleFactor(0);
+    	halley.setSize((int)(halley.getScaleFactor() * scale));
+    	halley.setOrbitalPeriod(76);
+    	halley.setEccentricity(0.967);
+    	halley.setSemiMajorAxis(266 * scale);
+    	halley.offsetNegation(true, true);
+    	//halley.setOrbitalAngle(1);  //2.35619
+    	halley.setOffsets();
+    	halley.setColor(Color.DARKGRAY);
+        halley.setAngle(getAngularDistance(halley.getOrbitalPeriod(), 0));  //TODO: fix this
+        halley.setX(getXPosition(halley));
+        halley.setY(getYPosition(halley));
+        halley.setShowLine(false);
+        bodies.add(halley);
 
     	
     	

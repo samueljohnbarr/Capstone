@@ -111,6 +111,21 @@ public class Controller {
     	return dateStr;
     }
     
+    public String getMonth() {
+    	GregorianCalendar date = model.getDate();
+    	return (date.get(GregorianCalendar.MONTH) + 1) + "";
+    }
+    
+    public String getDay() {
+    	GregorianCalendar date = model.getDate();
+    	return (date.get(GregorianCalendar.DAY_OF_MONTH)) + "";
+    }
+    
+    public String getYear() {
+    	GregorianCalendar date = model.getDate();
+    	return (date.get(GregorianCalendar.YEAR)) + "";
+    }
+    
     public void pause() {
     	run = false;
     }
