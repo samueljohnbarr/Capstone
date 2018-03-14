@@ -62,7 +62,7 @@ public class Model {
     	double x = planet.getXOffset() + Math.cos(planet.getAngle()) * 
                    planet.getSemiMajorAxis();
     	double y = planet.getYOffset() + Math.sin(planet.getAngle()) * 
-                planet.getSemiMinorAxis();
+                   planet.getSemiMinorAxis();
     	
     	//Adjust for orbital angle
     	x = (x - planet.getXOffset()) * Math.cos(planet.getOrbitalAngle()) - 
