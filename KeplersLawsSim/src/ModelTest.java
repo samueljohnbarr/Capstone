@@ -22,8 +22,9 @@ public class ModelTest {
     			(body.getOrbitalPeriod() * 365.25));
     	//Retrieve a baseline angle
     	double angle = model.getAngularDistance(body.getOrbitalPeriod(), 1);
+    	
     	//Round to 3 decimal places
-    	//angle = Math.round(angle * 100000) / 100000;
+    	//angle = Math.round(angle * 1000000) / 1000000;
     	
     	//Calc base area
     	double baseArea = calculateArea(angle, body);
