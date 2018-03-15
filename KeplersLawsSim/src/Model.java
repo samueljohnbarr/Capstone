@@ -23,6 +23,7 @@ public class Model {
     public static final int URANUS = 7;
     public static final int NEPTUNE = 8;
     public static final int PLUTO = 9;
+    public static final int HALLEY = 10;
     private static final double EARTH_YEAR = 365.25;
     private static final int CIRCLE_DEGREES = 360;
     ArrayList<Body> bodies;
@@ -131,7 +132,7 @@ public class Model {
      * @param days of distance (can be negative)
      * @return angular distance
      */
-    private double getAngularDistance(double period, int days) {
+    public double getAngularDistance(double period, int days) {
         return -(Math.toRadians(
                     CIRCLE_DEGREES / (period * EARTH_YEAR))) * days;
     }

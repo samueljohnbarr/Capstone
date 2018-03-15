@@ -9,8 +9,58 @@ public class ModelTest {
      */
     public static void main(String[] args) {
         Model model = new Model();
-        stepTest(model, 10);
-        dateTest(model, 10);
+        //stepTest(model, 10);
+        //dateTest(model, 10);
+        model.setScale(5);
+        getAngularDistance(model);
+    }
+    
+    private static void getAngularDistance(Model model) {
+    	Body body = model.getBodies().get(Model.PLUTO);
+    	//Get required area (Must be stacked like angle is)
+    	double areaRequirement = -Math.round((Math.PI * body.getSemiMajorAxis() * body.getSemiMinorAxis()) /
+    			(body.getOrbitalPeriod() * 365.25));
+    	//Retrieve a baseline angle
+    	double angle = model.getAngularDistance(body.getOrbitalPeriod(), 1);
+    	//Round to 3 decimal places
+    	//angle = Math.round(angle * 100000) / 100000;
+    	
+    	//Calc base area
+    	double baseArea = calculateArea(angle, body);
+    	
+    	System.out.println("Required: " + areaRequirement);
+    	System.out.println("Projected: " + baseArea);
+    	System.out.println("Angle: " + angle + "pi");
+    	
+    	//Do a loop to alter the angle to the correct area requirement step by 0.001
+    	if (areaRequirement < baseArea)
+    		while(areaRequirement != baseArea) { 
+    			angle -= 0.0001;
+    			baseArea = calculateArea(angle, body);
+    		}
+    	else if (areaRequirement > baseArea) {
+    		while(areaRequirement != baseArea) { 
+    			angle += 0.0001;
+    			baseArea = calculateArea(angle, body);
+    		}
+    	}
+    			
+    	System.out.println("\nDone - Results:");
+    	System.out.println("Required: " + areaRequirement);
+    	System.out.println("Projected: " + baseArea);
+    	System.out.println("Angle: " + angle + "pi");
+    	
+    }
+    
+    private static double calculateArea(double angle, Body body) {
+    	double e = body.getEccentricity();
+    	double a = body.getSemiMajorAxis();
+    	double b = body.getSemiMinorAxis();
+    	
+    	double eAnomoly = 2*Math.atan(Math.sqrt((1-e)/(1+e)) * Math.tan(angle/2));
+    
+    	return Math.round(0.5*a*b*(eAnomoly - e*Math.sin(eAnomoly)));
+    			
     }
     
     /**
