@@ -55,7 +55,7 @@ public class Model {
      * 
      * **Math source http://quickcalcbasic.com/ellipse%20line%20intersection.pdf
      * 
-     * @param planet to set
+     * @param planet for x calculation
      * @return x position
      */
     private double getXPosition(Body planet) {
@@ -82,7 +82,7 @@ public class Model {
     * 
     * **Math source http://quickcalcbasic.com/ellipse%20line%20intersection.pdf
     * 
-    * @param planet to set
+    * @param planet for y calculation
     * @return y position
     */
     private double getYPosition(Body planet) {
@@ -115,20 +115,21 @@ public class Model {
             //Get angular distance
             angle = getAngularDistance(planet.getOrbitalPeriod(), days);
 
-            //Update planet angle and date
+            //Update planet angle
             planet.setAngle(planet.getAngle() + angle);
             
             //Set position
             planet.setX(getXPosition(planet));
             planet.setY(getYPosition(planet));
         }
+        //Update date
         date.add(GregorianCalendar.DAY_OF_YEAR, days);
     }
     
     /**
      * Step method helper
-     * Returns to the angular distance of a planet in one day.
-     * @param period of planet in earth years
+     * Returns to the angular distance of a planet in one Earth day.
+     * @param period of planet in Earth years
      * @param days of distance (can be negative)
      * @return angular distance
      */
@@ -167,9 +168,8 @@ public class Model {
                 newDate.add(GregorianCalendar.DAY_OF_YEAR, 1);
             }
         }
-
-    //Step the difference
-    step(days);
+        //Step the difference
+        step(days);
 
     }
     
@@ -183,9 +183,6 @@ public class Model {
     	int year = date.get(GregorianCalendar.YEAR);
     	double julian = (1461 * (year + 4800 + (month - 14)/12))/4 + (367 * (month - 2 - 12 * ((month - 14)/12)))/12 - (3 * ((year + 4900 + (month - 14)/12)/100))/4 + day - 32075;
     	julian -= 0.5;
-    	System.out.println(month + "/" + day + "/" + year);
-    	System.out.println(julian + "\n");
-
 
     	return julian;
     }

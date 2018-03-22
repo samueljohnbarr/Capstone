@@ -12,6 +12,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -19,6 +22,8 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -34,6 +39,7 @@ import javafx.scene.text.FontWeight;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import java.awt.Toolkit;
 
@@ -51,6 +57,10 @@ public class Kepler_A_Window extends Application {
     private Group planets;
     private StringProperty julian;
     private StringProperty gregorian;
+    
+    private boolean isPause;
+    private Timeline forwardRun;
+    private Timeline reverseRun;
 
     
     /**
@@ -157,6 +167,8 @@ public class Kepler_A_Window extends Application {
         root.setRight(labPan);
         
 
+        isPause = false;
+        
         primary.setScene(primeScene);
         primary.setTitle("Kepler");
         primary.getIcons().add(new Image(Kepler_A_Window.class.getResourceAsStream("icon.png")));
@@ -421,32 +433,41 @@ public class Kepler_A_Window extends Application {
     	HBox.setMargin(reverse, new Insets(10, 0, 10, 0));
     	HBox.setMargin(autoReverse, new Insets(10, 0, 10, 0));
     	buttonLine.setAlignment(Pos.CENTER);
+    	buttonLine.toFront();
     	
+    	//Create auto-runs
+    	forwardRun = new Timeline(new KeyFrame(Duration.millis(500), e -> {
+		    controller.stepForward();
+		    update();
+	    }));
+    	forwardRun.setCycleCount(Timeline.INDEFINITE);
+	
+	    reverseRun = new Timeline(new KeyFrame(Duration.millis(500), e -> {
+		    controller.stepBackward();
+		    update();
+	    }));
+	    reverseRun.setCycleCount(Timeline.INDEFINITE);
     	
-    	//TODO: this shit breaks shit
-    	autoAdvance.setOnAction(e -> {
-    		controller.autoRun();
-    		update();
-    	});
+    	//Set event handlers
+    	autoAdvance.setOnAction(e -> { forwardRun.play(); });
+    	pause.setOnAction(e -> { forwardRun.pause(); reverseRun.pause(); });
+    	autoReverse.setOnAction(e -> { reverseRun.play(); });
     	
     	advance.setOnAction(e -> {
-    		controller.setDays(advanceByDate.getText());
     		controller.stepForward();
     		update();
     	});
     	
-    	pause.setOnAction(e -> {
-    		controller.pause();
-    	});
-    	
     	reverse.setOnAction(e -> {
-    		controller.setDays(advanceByDate.getText());
     		controller.stepBackward();
     		update();
     	});
-    	buttonLine.toFront();
     	
     	return buttonLine;
+    }
+    
+    public boolean checkPause() {
+    	return isPause;
     }
     
     
@@ -500,7 +521,7 @@ public class Kepler_A_Window extends Application {
     	TextField year = new TextField();
     	month.setPrefColumnCount(2);
     	day.setPrefColumnCount(2);
-    	year.setPrefColumnCount(2);
+    	year.setPrefColumnCount(3);
     	
     	Label slash = new Label(" / ");
     	Label slash1 = new Label(" / ");
@@ -511,8 +532,17 @@ public class Kepler_A_Window extends Application {
     	
     	VBox inPanel = new VBox();
     	inPanel.getChildren().addAll(advanceByLine, gregLine);
-    	
     	inPanel.setAlignment(Pos.CENTER_RIGHT);
+    	
+    	//Set events
+    	advanceByDate.setOnAction(e -> {controller.setDays(advanceByDate.getText());});
+    	year.setOnAction(e -> {controller.setDate(year.getText(), month.getText(), day.getText());
+    		update();});
+    	month.setOnAction(e -> {controller.setDate(year.getText(), month.getText(), day.getText());
+    		update();});
+    	day.setOnAction(e -> {controller.setDate(year.getText(), month.getText(), day.getText());
+    		update();});
+    	
     	
     	return inPanel;
     }

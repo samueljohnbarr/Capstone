@@ -62,14 +62,14 @@ public class Controller {
     
     /**
      * Sets the amount of days to step
+     * If parameter is incorrectly formatted, stepDays
+     * will default to 1
      * @param days
      */
     public void setDays(String days) {
     	int d = 1;
-    	//If string is incorrectly formatted, set to 1
-    	try {
-            d = Integer.parseInt(days);
-    	} catch(NumberFormatException e) {
+    	//Attempt to change days
+    	try { d = Integer.parseInt(days); } catch(NumberFormatException e) {
     		d = 1;
     	}
     	
@@ -79,9 +79,32 @@ public class Controller {
     		stepDays = d;
     }
     
-    public void setDate(int year, int month, int day) {
+    /**
+     * Sets the model's date for the simulation
+     * If any part of the date is incorrectly formatted,
+     * setDate will use the current year/month/day instead
+     * @param year
+     * @param month
+     * @param day
+     */
+    public void setDate(String year, String month, String day) {
     	while (model == null);
-    	model.setDate(year, month, day);
+    	//Collect current date information
+    	GregorianCalendar date = model.getDate();
+    	int d = date.get(GregorianCalendar.DAY_OF_MONTH);
+    	int m = date.get(GregorianCalendar.MONTH) + 1;
+    	int y = date.get(GregorianCalendar.YEAR);
+    	
+    	//Attempt to set variables to new values
+    	try { y = Integer.parseInt(year); } catch(NumberFormatException e) {
+    		y = date.get(GregorianCalendar.YEAR); }
+    	try { m = Integer.parseInt(month); } catch(NumberFormatException e) {
+    		m = date.get(GregorianCalendar.MONTH) + 1;}
+    	try { d = Integer.parseInt(day); } catch(NumberFormatException e) {
+    		d = date.get(GregorianCalendar.DAY_OF_MONTH);
+    	}   	
+    	
+    	model.setDate(y, m, d);
     }
     
     
@@ -124,24 +147,6 @@ public class Controller {
     public String getYear() {
     	GregorianCalendar date = model.getDate();
     	return (date.get(GregorianCalendar.YEAR)) + "";
-    }
-    
-    public void pause() {
-    	run = false;
-    }
-    
-    public void autoRun(){
-    	run = true;
-    	while (run) {
-    	    model.getJulian();
-            model.step(stepDays);
-            try {
-                TimeUnit.MILLISECONDS.sleep(1000);
-            } catch (InterruptedException e) {
-            	e.printStackTrace();
-            }
-        }
-             
     }
     
     public static void setScale(double scale) {
