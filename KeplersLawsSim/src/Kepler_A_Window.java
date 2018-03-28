@@ -216,7 +216,7 @@ public class Kepler_A_Window extends Application {
             
             //Create planet
             Circle p = new Circle();
-            p.setFill(planet.getColor());
+            p.setFill(planet.getPattern());
             p.setRadius(planet.getSize()/2);
             p.setCenterX(screen.getWidth()/2 + planet.getX());
             p.setCenterY(screen.getHeight()/2 + planet.getY());
@@ -436,13 +436,13 @@ public class Kepler_A_Window extends Application {
     	buttonLine.toFront();
     	
     	//Create auto-runs
-    	forwardRun = new Timeline(new KeyFrame(Duration.millis(500), e -> {
+    	forwardRun = new Timeline(new KeyFrame(Duration.millis(50), e -> {
 		    controller.stepForward();
 		    update();
 	    }));
     	forwardRun.setCycleCount(Timeline.INDEFINITE);
 	
-	    reverseRun = new Timeline(new KeyFrame(Duration.millis(500), e -> {
+	    reverseRun = new Timeline(new KeyFrame(Duration.millis(50), e -> {
 		    controller.stepBackward();
 		    update();
 	    }));
