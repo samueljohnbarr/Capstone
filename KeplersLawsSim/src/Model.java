@@ -221,14 +221,17 @@ public class Model {
     	double trueRadius = a * ((1-Math.pow(e, 2))/
     						(1 + e * Math.cos(trueAnomaly)));
     	//Get angle from other side of point
-    	double inverseAnomaly = Math.PI - trueAnomaly;
+    	double inverseAnomaly = trueAnomaly;//Math.PI - trueAnomaly;
     	
     	//Use Law of Cosines to find length from center to point
     	double r = Math.sqrt(Math.pow((e*a), 2) + Math.pow(trueRadius, 2) - (2*(e*a)*
     			trueRadius * Math.cos(inverseAnomaly)));
     	
     	//Use Law of Sines to find angle from center to point
-    	return -Math.asin((Math.sin(inverseAnomaly)/r)*trueRadius);
+    	double result = -Math.asin((Math.sin(inverseAnomaly)/r)*trueRadius);
+    	
+    	//Use Law of Sines to find angle from center to point
+    	return result;
     }
     
     /**
