@@ -26,10 +26,10 @@ public class Body {
     private boolean negY;
     private double orbitalAngle;
     private double angle;
-    private double perihelion; //Delete this
-    private double lastMeanAnom;
     private boolean visible;
     private boolean showLine;
+    private boolean isStartOfLine;
+    private boolean isEndOfLine;
 
     /**
      * Body Constructor
@@ -98,10 +98,6 @@ public class Body {
     public double getOrbitalAngle() { return orbitalAngle; }
 
     public double getAngle() { return angle; }
-    
-    public double getPerihelion() { return perihelion; }; //Delete this
-    
-    public double getLastMeanAnomaly() { return lastMeanAnom; }
 
     public boolean isVisible() { return visible; }
 
@@ -134,10 +130,6 @@ public class Body {
     public void setAngle(double angle) { this.angle = (angle % (2 * Math.PI)); }
 
     public void setOrbitalAngle(double angle) { this.orbitalAngle = (angle % (2* Math.PI)); }
-    
-    public void setPerihelion(int days) { perihelion = days; } //Delete this
-    
-    public void setLastMeanAnomaly(double meanAnomaly) { this.lastMeanAnom = meanAnomaly % (2*Math.PI); }
 
     /**
      * @param size to set
@@ -193,4 +185,20 @@ public class Body {
     	this.negX = negX;
     	this.negY = negY;
     }
+
+	public boolean isStartOfLine() {
+		return isStartOfLine;
+	}
+
+	public void setStartOfLine(boolean isStartOfLine) {
+		this.isStartOfLine = isStartOfLine;
+	}
+
+	public boolean isEndOfLine() {
+		return isEndOfLine;
+	}
+
+	public void setEndOfLine(boolean isEndOfLine) {
+		this.isEndOfLine = isEndOfLine;
+	}
 }

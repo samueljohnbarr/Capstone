@@ -42,6 +42,7 @@ public class Controller {
     	while (model == null);
     	if (stepDays < 1)
     		stepDays = 1;
+    	System.out.println(stepDays);
     	model.step(stepDays);
     	window.update();
     }
