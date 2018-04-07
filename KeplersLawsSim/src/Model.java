@@ -131,7 +131,7 @@ public class Model {
             angle = getAngle(planet.getSemiMajorAxis(), planet.getEccentricity(), trueAnomaly);
 
             //Debug
-            if (i == EARTH) {
+            if (i == MERCURY) {
             	System.out.println("Mean: " + meanAnomaly);
             	System.out.println("Eccentric: " + eccentricAnomaly);
             	System.out.println("True: " + trueAnomaly);
@@ -209,8 +209,7 @@ public class Model {
     }
     
     /**
-     * Calculates the angle from the center of the ellipse that the planet should move
-     * Uses some right angle trig-foo to calculate angle from focus to center
+     * Calculates the angle from the center of the ellipse that the planet should move.
      * @param a semiMajorAxis
      * @param e eccentricity
      * @param trueAnomaly
@@ -220,8 +219,10 @@ public class Model {
     	//Find radius from focus to point
     	double trueRadius = a * ((1-Math.pow(e, 2))/
     						(1 + e * Math.cos(trueAnomaly)));
-    	//Get angle from other side of point
-    	double inverseAnomaly = trueAnomaly;//Math.PI - trueAnomaly;
+    	//Get angle from other side of focus
+    	double inverseAnomaly = Math.PI - trueAnomaly;
+    	if (trueAnomaly > Math.PI)
+    		inverseAnomaly = -inverseAnomaly;
     	
     	//Use Law of Cosines to find length from center to point
     	double r = Math.sqrt(Math.pow((e*a), 2) + Math.pow(trueRadius, 2) - (2*(e*a)*
@@ -231,6 +232,8 @@ public class Model {
     	double result = -Math.asin((Math.sin(inverseAnomaly)/r)*trueRadius);
     	
     	//Use Law of Sines to find angle from center to point
+    	//if (trueAnomaly >= (Math.PI))
+    		//return result + Math.PI;
     	return result;
     }
     
