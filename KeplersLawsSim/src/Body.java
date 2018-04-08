@@ -159,8 +159,15 @@ public class Body {
      */
     public void setSemiMajorAxis(double semiMajorAxis) {
         semiMinorAxis = semiMajorAxis * Math.sqrt(1 - Math.pow(eccentricity, 2));
+        double incAdj = 100000;
+        
+        //Calculate inclination adjustment 
         if (inclination != 0)
-            this.semiMajorAxis = semiMajorAxis/(Math.cos(inclination));
+        	incAdj = semiMajorAxis/(Math.cos(inclination));
+        
+        //Set adjustment only if it's less than current
+        if (incAdj < semiMajorAxis)
+        	this.semiMajorAxis = incAdj;
         else 
         	this.semiMajorAxis = semiMajorAxis;
     }

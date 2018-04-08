@@ -495,7 +495,7 @@ public class Model {
     	halley.setSize((int)(halley.getScaleFactor() * scale));
     	halley.setOrbitalPeriod(76);
     	halley.setEccentricity(0.967);
-    	halley.setInclination(162.24);
+    	halley.setInclination(17.76);
     	halley.setSemiMajorAxis(266 * scale);
     	halley.offsetNegation(false, true);
     	halley.setOffsets();
@@ -514,14 +514,14 @@ public class Model {
         toutatis.setOrbitalPeriod(3.98);
         toutatis.setEccentricity(0.6294);
         toutatis.setInclination(0.45);
-        toutatis.setSemiMajorAxis(16.9387);
+        toutatis.setSemiMajorAxis(16.9387 * scale);
         toutatis.offsetNegation(false, false);
         toutatis.setColor(Color.DARKGRAY);
         toutatis.setPattern(new ImagePattern(new Image("mercury.png")));
         toutatis.setX(getXPosition(toutatis));
         toutatis.setY(getYPosition(toutatis));
         toutatis.setShowLine(false);
-        //bodies.add(toutatis);
+        bodies.add(toutatis);
     }
 
 }
