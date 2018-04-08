@@ -135,7 +135,7 @@ public class Body {
 
     public void setOrbitalAngle(double angle) { this.orbitalAngle = (angle % (2* Math.PI)); }
     
-    public void setInclination(double angle) { inclination = angle; } 
+    public void setInclination(double angle) { inclination = Math.toRadians(angle); } 
     
     public void setLastMeanAnomaly(double meanAnomaly) { this.lastMeanAnom = meanAnomaly % (2*Math.PI); }
 
@@ -152,13 +152,17 @@ public class Body {
     }
 
     /**
-     * Sets semiMajorAxis, semiMinorAxis, and x & y offsets
+     * Sets semiMajorAxis and semiMinorAxis
+     * Adjusts semiMajor for orbital inclination
      * Eccentricity must be set to calculate correctly
      * @param semiMajorAxis to set
      */
     public void setSemiMajorAxis(double semiMajorAxis) {
-        this.semiMajorAxis = semiMajorAxis;
         semiMinorAxis = semiMajorAxis * Math.sqrt(1 - Math.pow(eccentricity, 2));
+        if (inclination != 0)
+            this.semiMajorAxis = semiMajorAxis/(Math.cos(inclination));
+        else 
+        	this.semiMajorAxis = semiMajorAxis;
     }
 
     /**

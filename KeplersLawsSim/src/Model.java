@@ -521,7 +521,7 @@ public class Model {
         toutatis.setX(getXPosition(toutatis));
         toutatis.setY(getYPosition(toutatis));
         toutatis.setShowLine(false);
-        bodies.add(toutatis);
+        //bodies.add(toutatis);
     }
 
 }
