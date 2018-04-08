@@ -340,6 +340,7 @@ public class Model {
     	mercury.setSize((int)(mercury.getScaleFactor() * scale));
     	mercury.setOrbitalPeriod(0.241);
     	mercury.setEccentricity(0.206);
+    	mercury.setInclination(7);
     	mercury.setSemiMajorAxis(5.79 * scale);
     	mercury.offsetNegation(true, false);
     	mercury.setOffsets();
@@ -357,6 +358,7 @@ public class Model {
     	venus.setSize((int)(venus.getScaleFactor() * scale));
     	venus.setOrbitalPeriod(0.615);
     	venus.setEccentricity(0.0068);
+    	venus.setInclination(3);
     	venus.setSemiMajorAxis(10.8 * scale);
     	venus.setOffsets();
     	venus.setColor(Color.ORANGE);
@@ -373,6 +375,7 @@ public class Model {
     	earth.setSize((int)(earth.getScaleFactor() * scale));
     	earth.setOrbitalPeriod(1);
     	earth.setEccentricity(0.0167);
+    	earth.setInclination(0);
     	earth.setSemiMajorAxis(15 * scale);
     	earth.setOffsets();
     	earth.setX(earth.getSemiMajorAxis());
@@ -388,6 +391,7 @@ public class Model {
     	mars.setSize((int)(mercury.getScaleFactor() * scale));
     	mars.setOrbitalPeriod(1.88);
     	mars.setEccentricity(0.0934);
+    	mars.setInclination(1.85);
     	mars.setSemiMajorAxis(22.8 * scale);
     	mars.offsetNegation(false, true);
     	mars.setOffsets();
@@ -405,6 +409,7 @@ public class Model {
     	jupiter.setSize((int)(jupiter.getScaleFactor() * scale));
     	jupiter.setOrbitalPeriod(11.9);
     	jupiter.setEccentricity(0.0485);
+    	jupiter.setInclination(1.3);
     	jupiter.setSemiMajorAxis(77.8 * scale);
     	jupiter.setOffsets();
     	jupiter.setColor(Color.DARKORANGE);
@@ -421,6 +426,7 @@ public class Model {
     	saturn.setSize((int)(saturn.getScaleFactor() * scale));
     	saturn.setOrbitalPeriod(29.5);
     	saturn.setEccentricity(0.0556);
+    	saturn.setInclination(2.49);
     	saturn.setSemiMajorAxis(143 * scale);
     	saturn.setOffsets();
     	saturn.setColor(Color.ORANGE);
@@ -437,6 +443,7 @@ public class Model {
     	uranus.setSize((int)(uranus.getScaleFactor() * scale));
     	uranus.setOrbitalPeriod(84);
     	uranus.setEccentricity(0.0472);
+    	uranus.setInclination(0.77);
     	uranus.setSemiMajorAxis(287 * scale);
     	uranus.setOffsets();
     	uranus.setColor(Color.AQUA);
@@ -453,6 +460,7 @@ public class Model {
     	neptune.setSize((int)(neptune.getScaleFactor() * scale));
     	neptune.setOrbitalPeriod(165);
     	neptune.setEccentricity(0.0086);
+    	neptune.setInclination(1.77);
     	neptune.setSemiMajorAxis(450 * scale);
     	neptune.offsetNegation(true, true);
     	neptune.setOffsets();
@@ -470,6 +478,7 @@ public class Model {
     	pluto.setSize((int)(pluto.getScaleFactor() * scale));
     	pluto.setOrbitalPeriod(248);
     	pluto.setEccentricity(0.25);
+    	pluto.setInclination(17.2);
     	pluto.setSemiMajorAxis(590 * scale);
     	pluto.setOffsets();
     	pluto.setColor(Color.BROWN);
@@ -486,6 +495,7 @@ public class Model {
     	halley.setSize((int)(halley.getScaleFactor() * scale));
     	halley.setOrbitalPeriod(76);
     	halley.setEccentricity(0.967);
+    	halley.setInclination(162.24);
     	halley.setSemiMajorAxis(266 * scale);
     	halley.offsetNegation(false, true);
     	halley.setOffsets();
@@ -496,9 +506,22 @@ public class Model {
         halley.setY(getYPosition(halley));
         halley.setShowLine(false);
         bodies.add(halley);
-
-
-
+        
+        //Toutatis
+        Body toutatis = new Body();
+        toutatis.setScaleFactor(0);
+        toutatis.setSize((int)(toutatis.getScaleFactor() * scale));
+        toutatis.setOrbitalPeriod(3.98);
+        toutatis.setEccentricity(0.6294);
+        toutatis.setInclination(0.45);
+        toutatis.setSemiMajorAxis(16.9387);
+        toutatis.offsetNegation(false, false);
+        toutatis.setColor(Color.DARKGRAY);
+        toutatis.setPattern(new ImagePattern(new Image("mercury.png")));
+        toutatis.setX(getXPosition(toutatis));
+        toutatis.setY(getYPosition(toutatis));
+        toutatis.setShowLine(false);
+        bodies.add(toutatis);
     }
 
 }
