@@ -135,7 +135,17 @@ public class Body {
 
     public void setOrbitalAngle(double angle) { this.orbitalAngle = (angle % (2* Math.PI)); }
     
-    public void setInclination(double angle) { inclination = Math.toRadians(angle); } 
+    public void setInclination(double angle) { 
+    	this.inclination = Math.toRadians(angle); 
+        
+        //Calculate inclination adjustment 
+        if (inclination != 0)
+        	semiMajorAxis = semiMajorAxis*(Math.cos(inclination));
+        
+        //Adjust semiMajorAxis
+        //if (incAdj != 0)
+        	//semiMajorAxis = incAdj;
+    } 
     
     public void setLastMeanAnomaly(double meanAnomaly) { this.lastMeanAnom = meanAnomaly % (2*Math.PI); }
 
@@ -159,17 +169,7 @@ public class Body {
      */
     public void setSemiMajorAxis(double semiMajorAxis) {
         semiMinorAxis = semiMajorAxis * Math.sqrt(1 - Math.pow(eccentricity, 2));
-        double incAdj = 100000;
-        
-        //Calculate inclination adjustment 
-        if (inclination != 0)
-        	incAdj = semiMajorAxis/(Math.cos(inclination));
-        
-        //Set adjustment only if it's less than current
-        if (incAdj < semiMajorAxis)
-        	this.semiMajorAxis = incAdj;
-        else 
-        	this.semiMajorAxis = semiMajorAxis;
+        this.semiMajorAxis = semiMajorAxis;
     }
 
     /**
