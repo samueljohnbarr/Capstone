@@ -186,7 +186,7 @@ public class Model {
     	int month = date.get(GregorianCalendar.MONTH)+1;
     	int year = date.get(GregorianCalendar.YEAR);
     	double julian = (1461 * (year + 4800 + (month - 14)/12))/4 + (367 * (month - 2 - 12 * ((month - 14)/12)))/12 - (3 * ((year + 4900 + (month - 14)/12)/100))/4 + day - 32075;
-    	julian -= 0.5;
+    	Math.floor(julian);
     	System.out.println(month + "/" + day + "/" + year);
     	System.out.println(julian + "\n");
 

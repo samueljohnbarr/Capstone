@@ -1,5 +1,7 @@
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
+//---------------//
+//   Imports     //
+//---------------//
+
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,6 +14,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.animation.KeyFrame;
@@ -34,13 +37,21 @@ import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.awt.Toolkit;
 
 
+
 public class Kepler_A_Window extends Application {
+
+//--------------------//
+//  Local Variables   //
+//--------------------//
+
     Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
     private static final CountDownLatch latch = new CountDownLatch(1);
     private static Kepler_A_Window keplerWindow = null;
@@ -48,8 +59,9 @@ public class Kepler_A_Window extends Application {
     TextField advanceByDate;
     private Controller controller = new Controller();
     private ArrayList<Body> bodies;
-    private ArrayList<Boolean> toFlags = new ArrayList<Boolean>();
-    private ArrayList<Boolean> fromFlags = new ArrayList<Boolean>();;
+    private Boolean showPlanetTextures = true;
+    private Boolean showConnectingLines = false;
+    private Boolean showHighlights = false;
     private Group rings;
     private Group lines;
     private Group planets;
@@ -93,20 +105,15 @@ public class Kepler_A_Window extends Application {
     }
 
     public void start(Stage primary) throws Exception {
-        root = new BorderPane();
+
+    	//Creates BorderPane to store all of the elements
+    	root = new BorderPane();
 
         //Set background image
         root.setBackground(starField);
 
         Scene primeScene = new Scene(root,screen.getWidth(),screen.getHeight());
         primeScene.setFill(Color.BLACK);
-
-        //Create context space to paint on
-        Canvas space = new Canvas(screen.getWidth(),screen.getHeight());
-        GraphicsContext spaceContext = space.getGraphicsContext2D();
-        draw(spaceContext);
-        space.toBack();
-        root.getChildren().add(space);
 
         //Get controller variables
         bodies = controller.getBodies();
@@ -165,7 +172,6 @@ public class Kepler_A_Window extends Application {
         labPan.setAlignment(Pos.BASELINE_RIGHT);
         root.setRight(labPan);
 
-
         isPause = false;
 
         primary.setScene(primeScene);
@@ -183,6 +189,7 @@ public class Kepler_A_Window extends Application {
     private Group initRings(Group g) {
         for (int i = 1; i < bodies.size(); i++) {
             Body planet = bodies.get(i);
+
             //Create orbital ring
             Ellipse ring = new Ellipse();
             ring.setFill(null);
@@ -215,11 +222,22 @@ public class Kepler_A_Window extends Application {
 
             //Create planet
             Circle p = new Circle();
+
+            //Choose fill
+            if(showPlanetTextures) {
             p.setFill(planet.getPattern());
-//          p.setStroke(Color.WHITE);
+           }
+
+           else{
+        	   p.setFill(planet.getColor());
+        	}
             p.setRadius(planet.getSize()/2);
             p.setCenterX(screen.getWidth()/2 + planet.getX());
             p.setCenterY(screen.getHeight()/2 + planet.getY());
+
+            if(showHighlights) {
+            	p.setStroke(Color.WHITE);
+            }
 
             //Set visibility
             p.setVisible(planet.isVisible());
@@ -237,9 +255,7 @@ public class Kepler_A_Window extends Application {
      */
     private Group initLines(Group g) {
     	for (int i = 0; i < bodies.size(); i++) {
-    		//Body planet = bodies.get(i);
-    		toFlags.add(i, false);
-    		fromFlags.add(i, false);
+
     		//create line
     		for(int n = 0; n < bodies.size(); n++) {
     			Line line = new Line();
@@ -261,35 +277,6 @@ public class Kepler_A_Window extends Application {
     			}
     			g.getChildren().add(line);
     		}
-
-//    		Line line = new Line();
-//    		line.setStartX(screen.getWidth()/2);
-//    		line.setStartY(screen.getHeight()/2);
-//    		line.setEndX(screen.getWidth()/2  + planet.getX());
-//    		line.setEndY(screen.getHeight()/2 + planet.getY());
-//    		line.setStroke(Color.WHITE);
-//    		line.setVisible(planet.getShowLine());
-//    		g.getChildren().add(line);
-//    		for(int a = 0; a < bodies.size(); a++) {
-//    			Body oPlanet = bodies.get(a);
-//				Line oLine = new Line();
-//    			if((i == 0) || (a == 0) || (i == a)) {
-//    				oLine.setVisible(false);
-//    			}
-//    			else {
-//    				oLine.setStartX(screen.getWidth()/2  + planet.getX());
-//    				oLine.setStartY(screen.getHeight()/2 + planet.getY());
-//    	    		oLine.setEndX(screen.getWidth()/2  + oPlanet.getX());
-//    	    		oLine.setEndY(screen.getHeight()/2 + oPlanet.getY());
-//    	    		oLine.setStroke(Color.RED);
-//    	    		//oLine.setVisible(true);
-//    	    		oLine.setVisible((planet.isStartOfLine() && oPlanet.isEndOfLine())||(planet.isEndOfLine() && oPlanet.isStartOfLine()));
-//    			}
-//    			g.getChildren().add(oLine);
-//    		}
-
-    		//Add to group
-    		//g.getChildren().add(line);
     	}
     	return g;
     }
@@ -311,26 +298,9 @@ public class Kepler_A_Window extends Application {
                             screen.getWidth()/2  + planet.getX() - planet.getSize()/2,
                             screen.getHeight()/2 + planet.getY() - planet.getSize()/2);
                 }
-//                    Line line = (Line) nLines.get(i);
-//                    line.setEndX(screen.getWidth()/2  + planet.getX());
-//                    line.setEndY(screen.getHeight()/2 + planet.getY());
-//                    nLines.set(i, line);
-//                    for(int a = 0; a < bodies.size(); a ++){
-//        				Body oPlanet = bodies.get(a);
-//                    	Line oLine = (Line) nLines.get(i+a);
-//            			if((i == 0) || (a == 0) || (i == a)) {
-//            				oLine.setVisible(false);
-//            			}
-//            			else {
-//            				oLine.setEndX(screen.getWidth()/2  + planet.getX());
-//            				oLine.setEndY(screen.getHeight()/2 + planet.getY());
-//            				oLine.setStartX(screen.getWidth()/2  + oPlanet.getX());
-//            				oLine.setStartY(screen.getHeight()/2 + oPlanet.getY());
-//            				nLines.set(i+a, oLine);
-//            			}
+
                 	int x = 0;
                 	for (int i = 0; i < bodies.size(); i++) {
-                		//Body planet = bodies.get(i);
                 		//create line
                 		for(int n = 0; n < bodies.size(); n++) {
                 			Line line = new Line();
@@ -348,10 +318,8 @@ public class Kepler_A_Window extends Application {
                 			}
                 			else {
                 				line.setStroke(Color.RED);
-                				//line.setVisible(true);
-                				line.setVisible(bodies.get(i).getShowLine()&&bodies.get(n).getShowLine());
-                				//line.setVisible((toFlags.get(i)&&fromFlags.get(n))||(fromFlags.get(i)&&toFlags.get(n)));
-                			}
+                				line.setVisible((bodies.get(i).getShowLine()&&bodies.get(n).getShowLine())&&showConnectingLines);
+                   			}
                 			x++;
                 			nLines.set(x-1,line);
                     }
@@ -410,128 +378,92 @@ public class Kepler_A_Window extends Application {
         Menu fileMenu = new Menu("File");
 
             MenuItem resetFileMenu = new MenuItem("Reset");
-            resetFileMenu.setOnAction(e -> {});
+            resetFileMenu.setOnAction(e -> {resetSim();});
         	MenuItem exitFileMenu = new MenuItem("Exit");
         	exitFileMenu.setOnAction(e -> {System.exit(1);});
 
             fileMenu.getItems().addAll(resetFileMenu, exitFileMenu);
 
         Menu viewMenu = new Menu("View");
-        CheckMenuItem setBackgroundOnOff = new CheckMenuItem("Background On");
-        setBackgroundOnOff.setSelected(true);
-        setBackgroundOnOff.setOnAction(e -> {if(!setBackgroundOnOff.isSelected()){root.setBackground(blankField);}else root.setBackground(starField);});
-        viewMenu.getItems().addAll(setBackgroundOnOff);
+
+        	CheckMenuItem setBackgroundOnOff = new CheckMenuItem("Background On");
+        	setBackgroundOnOff.setSelected(true);
+        	setBackgroundOnOff.setOnAction(e -> {if(!setBackgroundOnOff.isSelected()){root.setBackground(blankField);}else root.setBackground(starField);});
+        	CheckMenuItem setPlanetTexturesOnOff = new CheckMenuItem("Planet Textures");
+        	setPlanetTexturesOnOff.setSelected(true);
+        	setPlanetTexturesOnOff.setOnAction(e -> {showPlanetTextures =! showPlanetTextures;refresh();update();});
+        	CheckMenuItem setHighlightsOnOff = new CheckMenuItem("Planet Highlights");
+        	setHighlightsOnOff.setSelected(false);
+        	setHighlightsOnOff.setOnAction(e -> {showHighlights =! showHighlights;refresh();update();});
+
+
+        	viewMenu.getItems().addAll(setBackgroundOnOff,setPlanetTexturesOnOff,setHighlightsOnOff);
 
         Menu zoomTo = new Menu("Focous");
-        MenuItem focousOnMercury = new MenuItem("Mercury");
-		focousOnMercury.setOnAction(e -> {Controller.setScale((screen.getHeight()*screen.getWidth())/38000);});
-		MenuItem focousOnVenus = new MenuItem("Venus");
-		focousOnVenus.setOnAction(e -> {Controller.setScale((screen.getHeight()*screen.getWidth())/60000);});
-		MenuItem focousOnEarth = new MenuItem("Earth");
-		focousOnEarth.setOnAction(e -> {Controller.setScale((screen.getHeight()*screen.getWidth())/82000);});
-		MenuItem focousOnMars = new MenuItem("Mars");
-		focousOnMars.setOnAction(e -> {Controller.setScale((screen.getHeight()*screen.getWidth())/115000);});
-		MenuItem focousOnJupiter = new MenuItem("Jupiter");
-		focousOnJupiter.setOnAction(e -> {Controller.setScale((screen.getHeight()*screen.getWidth())/470000);});
-		MenuItem focousOnSatern = new MenuItem("Saturn");
-		focousOnSatern.setOnAction(e -> {Controller.setScale((screen.getHeight()*screen.getWidth())/850000);});
-		MenuItem focousOnUrnis = new MenuItem("Uranus");
-		focousOnUrnis.setOnAction(e -> {Controller.setScale((screen.getHeight()*screen.getWidth())/1600000);});
-		MenuItem focousOnNeptune = new MenuItem("Neptune");
-		focousOnNeptune.setOnAction(e -> {Controller.setScale((screen.getHeight()*screen.getWidth())/2500000);});
-		MenuItem focousOnPluto = new MenuItem("Pluto");
-		focousOnPluto.setOnAction(e -> {Controller.setScale((screen.getHeight()*screen.getWidth())/3800000);});
-		MenuItem focousOnHC = new MenuItem("Halley's Comit");
-		MenuItem focousOnComit = new MenuItem("The other one");
-		zoomTo.getItems().addAll(focousOnMercury, focousOnVenus, focousOnEarth, focousOnMars, focousOnJupiter, focousOnSatern, focousOnUrnis, focousOnNeptune, focousOnPluto, focousOnHC, focousOnComit);
 
-		Menu connectingLine = new Menu("Connections");
-		Menu toSubmenu = new Menu("To");
-		RadioMenuItem toMercuryRMI = new RadioMenuItem("Mercury");
-		toMercuryRMI.setOnAction(e -> {setToFlag(1);refresh();update();});
-		RadioMenuItem toVenusRMI = new RadioMenuItem("Venus");
-		toVenusRMI.setOnAction(e -> {setToFlag(2);refresh();update();});
-		RadioMenuItem toEarthRMI = new RadioMenuItem("Earth");
-		toEarthRMI.setOnAction(e -> {setToFlag(3);refresh();update();});
-		RadioMenuItem toMarsRMI = new RadioMenuItem("Mars");
-		toMarsRMI.setOnAction(e -> {setToFlag(4);refresh();update();});
-		RadioMenuItem toJupiterRMI = new RadioMenuItem("Jupiter");
-		toJupiterRMI.setOnAction(e -> {setToFlag(5);refresh();update();});
-		RadioMenuItem toSaturnRMI = new RadioMenuItem("Saturn");
-		toSaturnRMI.setOnAction(e -> {setToFlag(6);refresh();update();});
-		RadioMenuItem toUranusRMI = new RadioMenuItem("Uranus");
-		toUranusRMI.setOnAction(e -> {setToFlag(7);refresh();update();});
-		RadioMenuItem toNeptuneRMI = new RadioMenuItem("Neptune");
-		toNeptuneRMI.setOnAction(e -> {setToFlag(8);refresh();update();});
-		RadioMenuItem toPlutoRMI = new RadioMenuItem("Pluto");
-		toPlutoRMI.setOnAction(e -> {setToFlag(9);refresh();update();});
-		RadioMenuItem toHCRMI = new RadioMenuItem("Hallys Comit");
-		toHCRMI.setOnAction(e -> {setToFlag(10);refresh();update();});
-		toSubmenu.getItems().addAll(toMercuryRMI, toVenusRMI, toEarthRMI, toMarsRMI, toJupiterRMI,
-									toSaturnRMI, toUranusRMI, toNeptuneRMI, toPlutoRMI, toHCRMI);
+        	MenuItem focousOnMercury = new MenuItem("Mercury");
+        	focousOnMercury.setOnAction(e -> {Controller.setScale((screen.getHeight()*screen.getWidth())/38000);});
+        	MenuItem focousOnVenus = new MenuItem("Venus");
+        	focousOnVenus.setOnAction(e -> {Controller.setScale((screen.getHeight()*screen.getWidth())/60000);});
+        	MenuItem focousOnEarth = new MenuItem("Earth");
+        	focousOnEarth.setOnAction(e -> {Controller.setScale((screen.getHeight()*screen.getWidth())/82000);});
+        	MenuItem focousOnMars = new MenuItem("Mars");
+        	focousOnMars.setOnAction(e -> {Controller.setScale((screen.getHeight()*screen.getWidth())/115000);});
+        	MenuItem focousOnJupiter = new MenuItem("Jupiter");
+        	focousOnJupiter.setOnAction(e -> {Controller.setScale((screen.getHeight()*screen.getWidth())/470000);});
+        	MenuItem focousOnSatern = new MenuItem("Saturn");
+        	focousOnSatern.setOnAction(e -> {Controller.setScale((screen.getHeight()*screen.getWidth())/850000);});
+        	MenuItem focousOnUrnis = new MenuItem("Uranus");
+        	focousOnUrnis.setOnAction(e -> {Controller.setScale((screen.getHeight()*screen.getWidth())/1600000);});
+        	MenuItem focousOnNeptune = new MenuItem("Neptune");
+        	focousOnNeptune.setOnAction(e -> {Controller.setScale((screen.getHeight()*screen.getWidth())/2500000);});
+        	MenuItem focousOnPluto = new MenuItem("Pluto");
+        	focousOnPluto.setOnAction(e -> {Controller.setScale((screen.getHeight()*screen.getWidth())/3800000);});
+        	MenuItem focousOnHC = new MenuItem("Halley's Comit");
+        	MenuItem focousOnComit = new MenuItem("Tataus");
 
-		Menu fromSubmenu = new Menu("From");
-		RadioMenuItem fromMercuryRMI = new RadioMenuItem("Mercury");
-		fromMercuryRMI.setOnAction(e -> {setFromFlag(1);refresh();update();});
-		RadioMenuItem fromVenusRMI = new RadioMenuItem("Venus");
-		fromVenusRMI.setOnAction(e -> {setFromFlag(2);refresh();update();});
-		RadioMenuItem fromEarthRMI = new RadioMenuItem("Earth");
-		fromEarthRMI.setOnAction(e -> {setFromFlag(3);refresh();update();});
-		RadioMenuItem fromMarsRMI = new RadioMenuItem("Mars");
-		fromMarsRMI.setOnAction(e -> {setFromFlag(4);refresh();update();});
-		RadioMenuItem fromJupiterRMI = new RadioMenuItem("Jupiter");
-		fromJupiterRMI.setOnAction(e -> {setFromFlag(5);refresh();update();});
-		RadioMenuItem fromSaturnRMI = new RadioMenuItem("Saturn");
-		fromSaturnRMI.setOnAction(e -> {setFromFlag(6);refresh();update();});
-		RadioMenuItem fromUranusRMI = new RadioMenuItem("Uranus");
-		fromUranusRMI.setOnAction(e -> {setFromFlag(7);refresh();update();});
-		RadioMenuItem fromNeptuneRMI = new RadioMenuItem("Neptune");
-		fromNeptuneRMI.setOnAction(e -> {setFromFlag(8);refresh();update();});
-		RadioMenuItem fromPlutoRMI = new RadioMenuItem("Pluto");
-		fromPlutoRMI.setOnAction(e -> {setFromFlag(9);refresh();update();});
-		RadioMenuItem fromHCRMI = new RadioMenuItem("Hallys Comit");
-		fromHCRMI.setOnAction(e -> {setFromFlag(10);refresh();update();});
-		fromSubmenu.getItems().addAll(fromMercuryRMI, fromVenusRMI, fromEarthRMI, fromMarsRMI, fromJupiterRMI,
-									  fromSaturnRMI, fromUranusRMI, fromNeptuneRMI, fromPlutoRMI, fromHCRMI);
-
-		connectingLine.getItems().addAll(toSubmenu, fromSubmenu);
+        	zoomTo.getItems().addAll(focousOnMercury, focousOnVenus, focousOnEarth, focousOnMars, focousOnJupiter, focousOnSatern, focousOnUrnis, focousOnNeptune, focousOnPluto, focousOnHC, focousOnComit);
 
 		Menu lineOn = new Menu("Line");
-		CheckMenuItem lineOnMercury = new CheckMenuItem("Mercury");
-		lineOnMercury.setOnAction(e -> {controller.getBodies().get(1).setShowLine(!controller.getBodies().get(1).getShowLine());refresh();update();});
-		CheckMenuItem lineOnVenus = new CheckMenuItem("Venus");
-		lineOnVenus.setOnAction(e -> {controller.getBodies().get(2).setShowLine(!controller.getBodies().get(2).getShowLine());refresh();update();});
-		CheckMenuItem lineOnEarth = new CheckMenuItem("Earth");
-		lineOnEarth.setOnAction(e -> {controller.getBodies().get(3).setShowLine(!controller.getBodies().get(3).getShowLine());refresh();update();});
-		CheckMenuItem lineOnMars = new CheckMenuItem("Mars");
-		lineOnMars.setOnAction(e -> {controller.getBodies().get(4).setShowLine(!controller.getBodies().get(4).getShowLine());refresh();update();});
-		CheckMenuItem lineOnJupiter = new CheckMenuItem("Jupiter");
-		lineOnJupiter.setOnAction(e -> {controller.getBodies().get(5).setShowLine(!controller.getBodies().get(5).getShowLine());refresh();update();});
-		CheckMenuItem lineOnSatern = new CheckMenuItem("Saturn");
-		lineOnSatern.setOnAction(e -> {controller.getBodies().get(6).setShowLine(!controller.getBodies().get(6).getShowLine());refresh();update();});
-		CheckMenuItem lineOnUrnis = new CheckMenuItem("Uranus");
-		lineOnUrnis.setOnAction(e -> {controller.getBodies().get(7).setShowLine(!controller.getBodies().get(7).getShowLine());refresh();update();});
-		CheckMenuItem lineOnNeptune = new CheckMenuItem("Neptune");
-		lineOnNeptune.setOnAction(e -> {controller.getBodies().get(8).setShowLine(!controller.getBodies().get(8).getShowLine());refresh();update();});
-		CheckMenuItem lineOnPluto = new CheckMenuItem("Pluto");
-		lineOnPluto.setOnAction(e -> {controller.getBodies().get(9).setShowLine(!controller.getBodies().get(9).getShowLine());refresh();update();});
-		CheckMenuItem lineOnHC = new CheckMenuItem("Halley's Comet");
-		CheckMenuItem lineOnComit = new CheckMenuItem("The other one");
-		lineOn.getItems().addAll(lineOnMercury, lineOnVenus, lineOnEarth, lineOnMars, lineOnJupiter,
-		         lineOnSatern, lineOnUrnis, lineOnNeptune, lineOnPluto, lineOnHC, lineOnComit);
 
-        	//viewMenu.getItems().addAll(zoomTo, lineOn);
+			CheckMenuItem lineOnMercury = new CheckMenuItem("Mercury");
+			lineOnMercury.setOnAction(e -> {controller.getBodies().get(1).setShowLine(!controller.getBodies().get(1).getShowLine());refresh();update();});
+			CheckMenuItem lineOnVenus = new CheckMenuItem("Venus");
+			lineOnVenus.setOnAction(e -> {controller.getBodies().get(2).setShowLine(!controller.getBodies().get(2).getShowLine());refresh();update();});
+			CheckMenuItem lineOnEarth = new CheckMenuItem("Earth");
+			lineOnEarth.setOnAction(e -> {controller.getBodies().get(3).setShowLine(!controller.getBodies().get(3).getShowLine());refresh();update();});
+			CheckMenuItem lineOnMars = new CheckMenuItem("Mars");
+			lineOnMars.setOnAction(e -> {controller.getBodies().get(4).setShowLine(!controller.getBodies().get(4).getShowLine());refresh();update();});
+			CheckMenuItem lineOnJupiter = new CheckMenuItem("Jupiter");
+			lineOnJupiter.setOnAction(e -> {controller.getBodies().get(5).setShowLine(!controller.getBodies().get(5).getShowLine());refresh();update();});
+			CheckMenuItem lineOnSatern = new CheckMenuItem("Saturn");
+			lineOnSatern.setOnAction(e -> {controller.getBodies().get(6).setShowLine(!controller.getBodies().get(6).getShowLine());refresh();update();});
+			CheckMenuItem lineOnUrnis = new CheckMenuItem("Uranus");
+			lineOnUrnis.setOnAction(e -> {controller.getBodies().get(7).setShowLine(!controller.getBodies().get(7).getShowLine());refresh();update();});
+			CheckMenuItem lineOnNeptune = new CheckMenuItem("Neptune");
+			lineOnNeptune.setOnAction(e -> {controller.getBodies().get(8).setShowLine(!controller.getBodies().get(8).getShowLine());refresh();update();});
+			CheckMenuItem lineOnPluto = new CheckMenuItem("Pluto");
+			lineOnPluto.setOnAction(e -> {controller.getBodies().get(9).setShowLine(!controller.getBodies().get(9).getShowLine());refresh();update();});
+			CheckMenuItem lineOnHC = new CheckMenuItem("Halley's Comet");
+			CheckMenuItem lineOnComit = new CheckMenuItem("Tautous");
+			CheckMenuItem showPlanetConnectionsCMI = new CheckMenuItem("Show Planet Connections");
+			showPlanetConnectionsCMI.setOnAction(e -> {showConnectingLines =! showConnectingLines;refresh();update();});
+
+			lineOn.getItems().addAll(lineOnMercury, lineOnVenus, lineOnEarth, lineOnMars, lineOnJupiter,
+			         lineOnSatern, lineOnUrnis, lineOnNeptune, lineOnPluto, lineOnHC, lineOnComit,showPlanetConnectionsCMI);
 
         Menu helpMenu = new Menu("Help");
 
             MenuItem aboutHelpMenu = new MenuItem("About");
+            aboutHelpMenu.setOnAction(ev-> {aboutPage();});
             MenuItem helpHelpMenu = new MenuItem("Help");
+
             helpMenu.getItems().addAll(aboutHelpMenu, helpHelpMenu);
 
-        mainMenu.getMenus().addAll(fileMenu, viewMenu, zoomTo, lineOn, connectingLine, helpMenu);
+        mainMenu.getMenus().addAll(fileMenu, viewMenu, zoomTo, lineOn, helpMenu);
         mainMenu.toFront();
 
-        return mainMenu;
+    return mainMenu;
 
     }
 
@@ -549,22 +481,44 @@ public class Kepler_A_Window extends Application {
     	autoAdvance.setGraphic(new ImageView(new Image ("Run_Forward_Button.png")));
     	autoAdvance.setShape(s);
     	autoAdvance.setBackground(buttonBackground);
+    	autoAdvance.setOnAction(e -> {reverseRun.pause(); forwardRun.play(); });
+
     	Button advance = new Button();
     	advance.setGraphic(new ImageView(new Image ("Step_Forward_Button.png")));
     	advance.setShape(s);
     	advance.setBackground(buttonBackground);
+    	advance.setOnAction(e -> {
+		    if(!isPause) {
+		    	forwardRun.pause(); reverseRun.pause();
+		    }
+    		controller.stepForward();
+    		update();
+    	});
+
     	Button pause = new Button();
     	pause.setGraphic(new ImageView(new Image ("Pause_Button.png")));
     	pause.setShape(s);
     	pause.setBackground(buttonBackground);
+    	pause.setOnAction(e -> { forwardRun.pause(); reverseRun.pause(); });
+
     	Button reverse = new Button();
     	reverse.setGraphic(new ImageView(new Image ("Step_Backward_Button.png")));
     	reverse.setShape(s);
     	reverse.setBackground(buttonBackground);
+    	reverse.setOnAction(e -> {
+		    if(!isPause) {
+		    	forwardRun.pause(); reverseRun.pause();
+		    }
+    		controller.stepBackward();
+    		update();
+    	});
+
+
     	Button autoReverse = new Button();
     	autoReverse.setGraphic(new ImageView(new Image ("Run_Backward_Button.png")));
     	autoReverse.setShape(s);
     	autoReverse.setBackground(buttonBackground);
+    	autoReverse.setOnAction(e -> {forwardRun.pause(); reverseRun.play(); });
 
     	buttonLine.getChildren().addAll(reverse, autoReverse, pause, autoAdvance, advance);
 
@@ -590,28 +544,7 @@ public class Kepler_A_Window extends Application {
 	    }));
 	    reverseRun.setCycleCount(Timeline.INDEFINITE);
 
-    	//Set event handlers
-    	autoAdvance.setOnAction(e -> { forwardRun.play(); });
-    	pause.setOnAction(e -> { forwardRun.pause(); reverseRun.pause(); });
-    	autoReverse.setOnAction(e -> { reverseRun.play(); });
-
-    	advance.setOnAction(e -> {
-		    if(!isPause) {
-		    	forwardRun.pause(); reverseRun.pause();
-		    }
-    		controller.stepForward();
-    		update();
-    	});
-
-    	reverse.setOnAction(e -> {
-		    if(!isPause) {
-		    	forwardRun.pause(); reverseRun.pause();
-		    }
-    		controller.stepBackward();
-    		update();
-    	});
-
-    	return buttonLine;
+    return buttonLine;
     }
 
     public boolean checkPause() {
@@ -660,7 +593,6 @@ public class Kepler_A_Window extends Application {
     	advanceByLabel.setTextFill(Color.WHITE);
     	advanceByLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
     	advanceByLine.getChildren().addAll(advanceByLabel, advanceByDate);
-
 
     	//Gregorian date input and label
     	HBox gregLine = new HBox();
@@ -724,34 +656,40 @@ public class Kepler_A_Window extends Application {
     	return zoom;
     }
 
-    public void setToFlag(int n) {
-		for(int i = 1; i < controller.getBodies().size();i++) {
-			if(i == n) {
-				toFlags.set(i, true);
-				}
-			else {
-				toFlags.set(i, false);
-			}
-		}
+    //needs to reset Zoom, and clear text boxes.
+
+    public void resetSim() {
+    	controller.setDate("2000", "12", "21");
+    	controller.setDays("1");
+        showPlanetTextures = true;
+        showConnectingLines = false;
+        showHighlights = false;
+        root.setBackground(starField);
+        for(int i=0;i<bodies.size();i++) {
+        	controller.getBodies().get(i).setShowLine(false);
+        }
+        root.setTop(setUpMenus());
+        refresh();
+        update();
     }
 
-    public void setFromFlag(int n) {
-		for(int i = 1; i < controller.getBodies().size();i++) {
-			if(i == 1) {
-				fromFlags.set(i, true);
-				}
-			else {
-				fromFlags.set(i, false);
-			}
-		}
+    public void aboutPage() {
+        final Stage dialog = new Stage();
+        dialog.setTitle("About");
+        dialog.getIcons().add(new Image(Kepler_A_Window.class.getResourceAsStream("icon.png")));
+        dialog.initModality(Modality.APPLICATION_MODAL);
+ //       dialog.initOwner(dialog);
+        VBox dialogVbox = new VBox(20);
+        dialogVbox.getChildren().add(new Text("The Keplers Laws Simulator was created for the Appalachin State University Astronomy Department,"+"\n"+
+        										"by Samual Barr, and Joshua Shields as their capstone project. This is the 1.0.0 release of the"+"\n"+
+        										"program. It was designed to be used for the Keplers Three Laws lab activity. "));
+        Scene dialogScene = new Scene(dialogVbox, 600, 400);
+        dialog.setScene(dialogScene);
+        dialog.show();
     }
 
     public void stop() throws Exception {
     	System.exit(0);
-    }
-
-    public void draw(GraphicsContext gc) {
-
     }
 
     public static void main(String[] args) {
@@ -759,5 +697,3 @@ public class Kepler_A_Window extends Application {
     }
 
 }
-
-
