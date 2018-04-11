@@ -13,9 +13,9 @@ public class ModelTest {
         //dateTest(model, 10);
         model.setScale(1);
         Body earth = model.getBodies().get(Model.MARS);
-        
+    
         //Get mean anomaly
-        double meanAnomaly = getMeanAnomaly(0, earth.getOrbitalPeriod(), 5);
+        double meanAnomaly = getMeanAnomaly(0, earth.getOrbitalPeriod(), 30);
         
         //Get eccentric anomaly
         double eccentricAnomaly = getEccentricAnomaly(meanAnomaly, earth.getEccentricity());
@@ -26,10 +26,11 @@ public class ModelTest {
         //Find the angle :)
         double angle = getAngle(earth.getSemiMajorAxis(), earth.getEccentricity(), trueAnomaly);
 
+        System.out.println("Eccentricity: " + earth.getEccentricity());
         System.out.println("Mean Anomaly: " + meanAnomaly);      
         System.out.println("Eccentric Anomaly: " + eccentricAnomaly);
         System.out.println("True Anomaly: " + trueAnomaly);
-        System.out.println("Angle: " + angle);
+        //System.out.println("Angle: " + angle);
     }
     
     /**

@@ -205,7 +205,7 @@ public class Model {
     	double y = Math.sqrt(1 + eccentricity) * Math.sin(eccentricAnomaly/2);
     	
     	//atan2 is a polar argument vector
-    	return 2*Math.atan2(y, x);
+    	return 2*Math.atan2(y, x) % 4;
     }
     
     /**
@@ -220,20 +220,32 @@ public class Model {
     	double trueRadius = a * ((1-Math.pow(e, 2))/
     						(1 + e * Math.cos(trueAnomaly)));
     	//Get angle from other side of focus
-    	double inverseAnomaly = Math.PI - trueAnomaly;
-    	if (trueAnomaly > Math.PI)
-    		inverseAnomaly = -inverseAnomaly;
+    	double inverseAnomaly;
+    	if (trueAnomaly < 1)
+    	    inverseAnomaly = Math.PI - trueAnomaly;
+    	else
+    	    inverseAnomaly = trueAnomaly - Math.PI;
+    
     	
     	//Use Law of Cosines to find length from center to point
     	double r = Math.sqrt(Math.pow((e*a), 2) + Math.pow(trueRadius, 2) - (2*(e*a)*
     			trueRadius * Math.cos(inverseAnomaly)));
     	
     	//Use Law of Sines to find angle from center to point
-    	double result = -Math.asin((Math.sin(inverseAnomaly)/r)*trueRadius);
+    	double result = Math.asin((Math.sin(inverseAnomaly)/r)*trueRadius) - 1;
+    	
+    	if (e == 0.206)
+    	    System.out.println("**Result: " + result);
     	
     	//Use Law of Sines to find angle from center to point
-    	//if (trueAnomaly >= (Math.PI))
-    		//return result + Math.PI;
+    	if (Math.abs(trueAnomaly) >= Math.PI/2) {
+    		if (e == 0.206)
+    		    System.out.println("**Alt Result**");
+    		if (result > 0)
+    		    return -(1+result)-1;//(-result);
+    		else 
+    			return -((1+result)+1);
+    	}
     	return result;
     }
     
