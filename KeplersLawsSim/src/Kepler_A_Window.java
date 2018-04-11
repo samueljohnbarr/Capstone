@@ -5,15 +5,9 @@
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -37,13 +31,10 @@ import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.awt.Toolkit;
-
 
 
 public class Kepler_A_Window extends Application {
@@ -70,6 +61,7 @@ public class Kepler_A_Window extends Application {
     private boolean isPause;
     private Timeline forwardRun;
     private Timeline reverseRun;
+    private TilePane contPan = new TilePane();
     private Image backgroundImage = new Image("milky3.png");
     BackgroundSize bs = new BackgroundSize(screen.getWidth(),screen.getHeight(), false, false, false, false);
     private Background starField = new Background(new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,BackgroundPosition.DEFAULT, bs));
@@ -150,7 +142,6 @@ public class Kepler_A_Window extends Application {
         root.setTop(mainMenu);
 
         /******* Initialize Control Panel *******/
-        TilePane contPan = new TilePane();
         root.setBottom(contPan);
         contPan.setAlignment(Pos.BASELINE_CENTER);
         contPan.setPrefColumns(3);
@@ -457,6 +448,7 @@ public class Kepler_A_Window extends Application {
             MenuItem aboutHelpMenu = new MenuItem("About");
             aboutHelpMenu.setOnAction(ev-> {aboutPage();});
             MenuItem helpHelpMenu = new MenuItem("Help");
+            helpHelpMenu.setOnAction(ev -> {helpPage();});
 
             helpMenu.getItems().addAll(aboutHelpMenu, helpHelpMenu);
 
@@ -669,22 +661,46 @@ public class Kepler_A_Window extends Application {
         	controller.getBodies().get(i).setShowLine(false);
         }
         root.setTop(setUpMenus());
+        Controller.setScale(15);
+        HBox scalePan = initScaler();
+        scalePan.setAlignment(Pos.CENTER_LEFT);
+        contPan.getChildren().remove(0);
+        contPan.getChildren().remove(1);
+        HBox inPan = initInputs();
+        inPan.setAlignment(Pos.BASELINE_RIGHT);
+        contPan.getChildren().add(0,scalePan);
+        contPan.getChildren().add(2, inPan);
+        forwardRun.pause();
+        reverseRun.pause();
         refresh();
         update();
     }
 
     public void aboutPage() {
-        final Stage dialog = new Stage();
+
+        Image keplerAboutImage = new Image(Kepler_A_Window.class.getResourceAsStream("kepler_about.png"));
+        Stage dialog = new Stage();
+        VBox placeHolder = new VBox();
+        placeHolder.setVisible(false);
+        Scene dialogScene = new Scene(placeHolder, 640, 420, new ImagePattern(keplerAboutImage));
         dialog.setTitle("About");
         dialog.getIcons().add(new Image(Kepler_A_Window.class.getResourceAsStream("icon.png")));
         dialog.initModality(Modality.APPLICATION_MODAL);
- //       dialog.initOwner(dialog);
-        VBox dialogVbox = new VBox(20);
-        dialogVbox.getChildren().add(new Text("The Keplers Laws Simulator was created for the Appalachin State University Astronomy Department,"+"\n"+
-        										"by Samual Barr, and Joshua Shields as their capstone project. This is the 1.0.0 release of the"+"\n"+
-        										"program. It was designed to be used for the Keplers Three Laws lab activity. "));
-        Scene dialogScene = new Scene(dialogVbox, 600, 400);
         dialog.setScene(dialogScene);
+        dialog.setResizable(false);
+        dialog.show();
+    }
+
+    public void helpPage() {
+
+        Stage dialog = new Stage();
+        VBox placeHolder = new VBox();
+        Scene dialogScene = new Scene(placeHolder, 640, 840);
+        dialog.setTitle("Help");
+        dialog.getIcons().add(new Image(Kepler_A_Window.class.getResourceAsStream("icon.png")));
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.setScene(dialogScene);
+        dialog.setResizable(false);
         dialog.show();
     }
 

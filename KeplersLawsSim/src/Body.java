@@ -28,8 +28,6 @@ public class Body {
     private double angle;
     private boolean visible;
     private boolean showLine;
-    private boolean isStartOfLine;
-    private boolean isEndOfLine;
 
     /**
      * Body Constructor
@@ -186,19 +184,5 @@ public class Body {
     	this.negY = negY;
     }
 
-	public boolean isStartOfLine() {
-		return isStartOfLine;
-	}
 
-	public void setStartOfLine(boolean isStartOfLine) {
-		this.isStartOfLine = isStartOfLine;
-	}
-
-	public boolean isEndOfLine() {
-		return isEndOfLine;
-	}
-
-	public void setEndOfLine(boolean isEndOfLine) {
-		this.isEndOfLine = isEndOfLine;
-	}
 }
