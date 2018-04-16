@@ -24,6 +24,7 @@ public class Body {
     private double y;
     private double yOffset;
     private boolean negY;
+    private double initOrbitalAngle; //Used to manipulate planet start positions
     private double orbitalAngle; //Angle at which the ellipse is rotated
     private double inclination;
     private double angle;
@@ -133,7 +134,7 @@ public class Body {
 
     public void setAngle(double angle) { this.angle = (angle % (2 * Math.PI)); }
 
-    public void setOrbitalAngle(double angle) { this.orbitalAngle = (angle % (2* Math.PI)); }
+    public void setInitOrbitalAngle(double angle) { this.initOrbitalAngle = (angle % (2* Math.PI)); }
     
     public void setInclination(double angle) { 
     	this.inclination = Math.toRadians(angle); 
@@ -141,10 +142,6 @@ public class Body {
         //Calculate inclination adjustment 
         if (inclination != 0)
         	semiMajorAxis = semiMajorAxis*(Math.cos(inclination));
-        
-        //Adjust semiMajorAxis
-        //if (incAdj != 0)
-        	//semiMajorAxis = incAdj;
     } 
     
     public void setLastMeanAnomaly(double meanAnomaly) { this.lastMeanAnom = meanAnomaly % (2*Math.PI); }
@@ -191,7 +188,7 @@ public class Body {
         if (negY) yOffset = -yOffset;
 
         //Set angle
-        orbitalAngle = Math.atan((yOffset/xOffset));
+        orbitalAngle = Math.atan((yOffset/xOffset)) + initOrbitalAngle;
     }
 
     /**

@@ -252,8 +252,11 @@ public class Model {
     */
     
     /**
-     * Calculates the angle from the center of the ellipse that the planet should move.
+     * Derives the angle from the center of the ellipse that the planet should move.
      * Uses a lot of math I do not understand :)
+     * Math Source: 
+     * https://math.stackexchange.com/questions/2539604/relation-between-ellipse-true-anomaly-and-center-angle
+     * 
      * @param a semiMajorAxis
      * @param b semiMinorAxis
      * @param e eccentricity
@@ -557,6 +560,7 @@ public class Model {
     	halley.setInclination(17.76);
     	halley.offsetNegation(false, true);
     	halley.setOffsets();
+    	halley.setInitOrbitalAngle(Math.PI);
     	halley.setColor(Color.DARKGRAY);
     	halley.setPattern(new ImagePattern(new Image("mercury.png")));
         halley.setAngle(Math.PI);  //TODO: fix this
@@ -574,6 +578,8 @@ public class Model {
         toutatis.setSemiMajorAxis(16.9387 * scale);
         toutatis.setInclination(0.45);
         toutatis.offsetNegation(false, false);
+        toutatis.setOffsets();
+        toutatis.setInitOrbitalAngle(Math.PI);
         toutatis.setColor(Color.DARKGRAY);
         toutatis.setPattern(new ImagePattern(new Image("mercury.png")));
         toutatis.setX(getXPosition(toutatis));
