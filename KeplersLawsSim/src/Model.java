@@ -128,7 +128,8 @@ public class Model {
             trueAnomaly = getTrueAnomaly(planet.getEccentricity(), eccentricAnomaly);
             
             //Find the angle
-            angle = getAngle(planet.getSemiMajorAxis(), planet.getEccentricity(), trueAnomaly);
+            angle = getAngle(planet.getSemiMajorAxis(), planet.getSemiMinorAxis(), 
+            		planet.getEccentricity(), trueAnomaly);
 
             //Debug
             if (i == MERCURY) {
@@ -205,7 +206,7 @@ public class Model {
     	double y = Math.sqrt(1 + eccentricity) * Math.sin(eccentricAnomaly/2);
     	
     	//atan2 is a polar argument vector
-    	return 2*Math.atan2(y, x) % 4;
+    	return Math.abs(2*Math.atan2(y, x) % (2*Math.PI));
     }
     
     /**
@@ -214,7 +215,7 @@ public class Model {
      * @param e eccentricity
      * @param trueAnomaly
      * @return angle of movement
-     */
+     *
     private double getAngle(double a, double e, double trueAnomaly) {
     	//Find radius from focus to point
     	double trueRadius = a * ((1-Math.pow(e, 2))/
@@ -248,7 +249,51 @@ public class Model {
     	}
     	return result;
     }
+    */
     
+    /**
+     * Calculates the angle from the center of the ellipse that the planet should move.
+     * Uses a lot of math I do not understand :)
+     * @param a semiMajorAxis
+     * @param b semiMinorAxis
+     * @param e eccentricity
+     * @param trueAnomaly
+     * @return angle of movement
+     */
+    private double getAngle(double a, double b, double e, double trueAnomaly) {
+    	double overPi = 0;
+    	if (trueAnomaly > Math.PI) {
+    		overPi = Math.PI;
+    		trueAnomaly = trueAnomaly % Math.PI;
+    	}
+    	
+    	double d = Math.pow(a, 2)*Math.pow(Math.sin(trueAnomaly), 2) + 
+    			Math.pow(b, 2)*Math.pow(Math.cos(trueAnomaly), 2) -
+    			Math.pow(a, 2)*Math.pow(Math.sin(trueAnomaly), 2)*Math.pow(e, 2);
+    			
+    	double y = -Math.pow(b,2)*Math.sin(trueAnomaly)*Math.cos(trueAnomaly)*e +
+    			b*Math.sin(trueAnomaly)*Math.sqrt(d);
+    	
+    	double x = Math.pow(a, 2)*Math.pow(Math.sin(trueAnomaly), 2)*e +
+    			b*Math.cos(trueAnomaly)*Math.sqrt(d);
+    	
+    	
+    	if ((trueAnomaly > 0 && trueAnomaly < Math.PI/2) ||
+    		 (trueAnomaly > Math.PI/2 && trueAnomaly < (Math.PI-Math.atan(b/(a*e)))))
+    		return Math.atan(y/x) + overPi;
+    	
+    	if ((trueAnomaly > Math.PI - Math.atan(b/(a*e)) && trueAnomaly <= Math.PI))
+    		return Math.PI - Math.atan(y/-x) + overPi;
+    	
+    	if (trueAnomaly == Math.PI/2)
+    		return Math.atan((b*Math.sqrt(1-Math.pow(e,2)))/(a*e)) + overPi;
+    	
+    	if (trueAnomaly == (Math.PI - Math.atan(b/(a*e))))
+    		return Math.PI/2 + overPi;
+    	
+    	return 0;
+    	
+    }
     /**
      * @return date
      */
