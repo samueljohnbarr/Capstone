@@ -24,11 +24,8 @@ public class Body {
     private double y;
     private double yOffset;
     private boolean negY;
-    private double initOrbitalAngle; //Used to manipulate planet start positions
-    private double orbitalAngle; //Angle at which the ellipse is rotated
-    private double inclination;
+    private double orbitalAngle;
     private double angle;
-    private double lastMeanAnom;
     private boolean visible;
     private boolean showLine;
 
@@ -99,10 +96,6 @@ public class Body {
     public double getOrbitalAngle() { return orbitalAngle; }
 
     public double getAngle() { return angle; }
-    
-    public double getInclination() { return inclination; };
-    
-    public double getLastMeanAnomaly() { return lastMeanAnom; }
 
     public boolean isVisible() { return visible; }
 
@@ -134,17 +127,7 @@ public class Body {
 
     public void setAngle(double angle) { this.angle = (angle % (2 * Math.PI)); }
 
-    public void setInitOrbitalAngle(double angle) { this.initOrbitalAngle = (angle % (2* Math.PI)); }
-    
-    public void setInclination(double angle) { 
-    	this.inclination = Math.toRadians(angle); 
-        
-        //Calculate inclination adjustment 
-        if (inclination != 0)
-        	semiMajorAxis = semiMajorAxis*(Math.cos(inclination));
-    } 
-    
-    public void setLastMeanAnomaly(double meanAnomaly) { this.lastMeanAnom = meanAnomaly % (2*Math.PI); }
+    public void setOrbitalAngle(double angle) { this.orbitalAngle = (angle % (2* Math.PI)); }
 
     /**
      * @param size to set
@@ -159,14 +142,13 @@ public class Body {
     }
 
     /**
-     * Sets semiMajorAxis and semiMinorAxis
-     * Adjusts semiMajor for orbital inclination
+     * Sets semiMajorAxis, semiMinorAxis, and x & y offsets
      * Eccentricity must be set to calculate correctly
      * @param semiMajorAxis to set
      */
     public void setSemiMajorAxis(double semiMajorAxis) {
-        semiMinorAxis = semiMajorAxis * Math.sqrt(1 - Math.pow(eccentricity, 2));
         this.semiMajorAxis = semiMajorAxis;
+        semiMinorAxis = semiMajorAxis * Math.sqrt(1 - Math.pow(eccentricity, 2));
     }
 
     /**
@@ -188,7 +170,7 @@ public class Body {
         if (negY) yOffset = -yOffset;
 
         //Set angle
-        orbitalAngle = Math.atan((yOffset/xOffset)) + initOrbitalAngle;
+        orbitalAngle = Math.atan((yOffset/xOffset));
     }
 
     /**

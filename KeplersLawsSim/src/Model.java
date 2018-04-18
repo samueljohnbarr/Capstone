@@ -27,8 +27,7 @@ public class Model {
     public static final int URANUS = 7;
     public static final int NEPTUNE = 8;
     public static final int PLUTO = 9;
-    public static final int HALLEY = 10;
-    public static final double EARTH_DAYS = 365.25;
+    private static final double EARTH_YEAR = 365.25;
     private static final int CIRCLE_DEGREES = 360;
     ArrayList<Body> bodies;
     private GregorianCalendar date;
@@ -113,36 +112,15 @@ public class Model {
      * @param radius of orbit in pixels
      */
     public void step(int days) {
-    	double meanAnomaly;
-    	double eccentricAnomaly;
-    	double trueAnomaly;
         double angle;
         Body planet;
         for (int i = 0; i < bodies.size(); i++) {
             planet = bodies.get(i);
-            //Calculate Kepler's Equation
-            //TODO: change this
-            meanAnomaly = getMeanAnomaly(planet.getLastMeanAnomaly(), planet.getOrbitalPeriod(), days);
-            planet.setLastMeanAnomaly(meanAnomaly);
-            eccentricAnomaly = getEccentricAnomaly(meanAnomaly, planet.getEccentricity());
-            trueAnomaly = getTrueAnomaly(planet.getEccentricity(), eccentricAnomaly);
-            
-            //Find the angle
-            angle = getAngle(planet.getSemiMajorAxis(), planet.getSemiMinorAxis(), 
-            		planet.getEccentricity(), trueAnomaly);
+            //Get angular distance
+            angle = getAngularDistance(planet.getOrbitalPeriod(), days);
 
-            //Debug
-            if (i == MERCURY) {
-            	System.out.println("Mean: " + meanAnomaly);
-            	System.out.println("Eccentric: " + eccentricAnomaly);
-            	System.out.println("True: " + trueAnomaly);
-            	System.out.println("Angle: " + angle);
-            	System.out.println();
-            }
-
-            //Update planet angle
-            //planet.setAngle(planet.getAngle() + angle);
-            planet.setAngle(angle);
+            //Update planet angle and date
+            planet.setAngle(planet.getAngle() + angle);
 
             //Set position
             planet.setX(getXPosition(planet));
@@ -160,143 +138,9 @@ public class Model {
      */
     public double getAngularDistance(double period, int days) {
         return -(Math.toRadians(
-                    CIRCLE_DEGREES / (period * EARTH_DAYS))) * days;
+                    CIRCLE_DEGREES / (period * EARTH_YEAR))) * days;
     }
 
-    /**
-     * Calculates the mean anomaly
-     * @param perihelionTime time at which planet is at perihelion
-     * @param period of the planet in Earth years
-     * @param days to step 
-     * @return mean anomaly
-     */
-    private double getMeanAnomaly(double lastMeanAnomaly, double period, int days) {
-		double n = (2 * Math.PI) / (period * Model.EARTH_DAYS);
-    	return lastMeanAnomaly + n * (days - 0); // days - perihelion time
-    }
-    
-    /**
-     * Finds eccentric anomaly using iterative calculation
-     * @param meanAnomaly
-     * @param eccentricity
-     * @return eccentric anomaly
-     */
-    private double getEccentricAnomaly(double meanAnomaly, double eccentricity) {
-    	//Two eccentric anomaly accumulators
-    	double eA0 = meanAnomaly;
-    	double eA1 = meanAnomaly + eccentricity * Math.sin(eA0);
-    	
-    	//Loop until the error is negligible
-    	while ((Math.abs(eA0-eA1)/eA1 > 0.00001)) {
-    		eA0 = eA1;
-    		eA1 = meanAnomaly + eccentricity * Math.sin(eA0);
-    	}
-    	
-    	return eA1;
-    }
-    
-    /**
-     * Calculates the true anomaly
-     * @param eccentricity
-     * @param eccentricAnomaly
-     * @return true anomaly
-     */
-    private double getTrueAnomaly(double eccentricity, double eccentricAnomaly) {
-    	double x = Math.sqrt(1 - eccentricity) * Math.cos(eccentricAnomaly/2);
-    	double y = Math.sqrt(1 + eccentricity) * Math.sin(eccentricAnomaly/2);
-    	
-    	//atan2 is a polar argument vector
-    	return Math.abs(2*Math.atan2(y, x) % (2*Math.PI));
-    }
-    
-    /**
-     * Calculates the angle from the center of the ellipse that the planet should move.
-     * @param a semiMajorAxis
-     * @param e eccentricity
-     * @param trueAnomaly
-     * @return angle of movement
-     *
-    private double getAngle(double a, double e, double trueAnomaly) {
-    	//Find radius from focus to point
-    	double trueRadius = a * ((1-Math.pow(e, 2))/
-    						(1 + e * Math.cos(trueAnomaly)));
-    	//Get angle from other side of focus
-    	double inverseAnomaly;
-    	if (trueAnomaly < 1)
-    	    inverseAnomaly = Math.PI - trueAnomaly;
-    	else
-    	    inverseAnomaly = trueAnomaly - Math.PI;
-    
-    	
-    	//Use Law of Cosines to find length from center to point
-    	double r = Math.sqrt(Math.pow((e*a), 2) + Math.pow(trueRadius, 2) - (2*(e*a)*
-    			trueRadius * Math.cos(inverseAnomaly)));
-    	
-    	//Use Law of Sines to find angle from center to point
-    	double result = Math.asin((Math.sin(inverseAnomaly)/r)*trueRadius) - 1;
-    	
-    	if (e == 0.206)
-    	    System.out.println("**Result: " + result);
-    	
-    	//Use Law of Sines to find angle from center to point
-    	if (Math.abs(trueAnomaly) >= Math.PI/2) {
-    		if (e == 0.206)
-    		    System.out.println("**Alt Result**");
-    		if (result > 0)
-    		    return -(1+result)-1;//(-result);
-    		else 
-    			return -((1+result)+1);
-    	}
-    	return result;
-    }
-    */
-    
-    /**
-     * Derives the angle from the center of the ellipse that the planet should move.
-     * Uses a lot of math I do not understand :)
-     * Math Source: 
-     * https://math.stackexchange.com/questions/2539604/relation-between-ellipse-true-anomaly-and-center-angle
-     * 
-     * @param a semiMajorAxis
-     * @param b semiMinorAxis
-     * @param e eccentricity
-     * @param trueAnomaly
-     * @return angle of movement
-     */
-    private double getAngle(double a, double b, double e, double trueAnomaly) {
-    	double overPi = 0;
-    	if (trueAnomaly > Math.PI) {
-    		overPi = Math.PI;
-    		trueAnomaly = trueAnomaly % Math.PI;
-    	}
-    	
-    	double d = Math.pow(a, 2)*Math.pow(Math.sin(trueAnomaly), 2) + 
-    			Math.pow(b, 2)*Math.pow(Math.cos(trueAnomaly), 2) -
-    			Math.pow(a, 2)*Math.pow(Math.sin(trueAnomaly), 2)*Math.pow(e, 2);
-    			
-    	double y = -Math.pow(b,2)*Math.sin(trueAnomaly)*Math.cos(trueAnomaly)*e +
-    			b*Math.sin(trueAnomaly)*Math.sqrt(d);
-    	
-    	double x = Math.pow(a, 2)*Math.pow(Math.sin(trueAnomaly), 2)*e +
-    			b*Math.cos(trueAnomaly)*Math.sqrt(d);
-    	
-    	
-    	if ((trueAnomaly > 0 && trueAnomaly < Math.PI/2) ||
-    		 (trueAnomaly > Math.PI/2 && trueAnomaly < (Math.PI-Math.atan(b/(a*e)))))
-    		return Math.atan(y/x) + overPi;
-    	
-    	if ((trueAnomaly > Math.PI - Math.atan(b/(a*e)) && trueAnomaly <= Math.PI))
-    		return Math.PI - Math.atan(y/-x) + overPi;
-    	
-    	if (trueAnomaly == Math.PI/2)
-    		return Math.atan((b*Math.sqrt(1-Math.pow(e,2)))/(a*e)) + overPi;
-    	
-    	if (trueAnomaly == (Math.PI - Math.atan(b/(a*e))))
-    		return Math.PI/2 + overPi;
-    	
-    	return 0;
-    	
-    }
     /**
      * @return date
      */
@@ -342,7 +186,10 @@ public class Model {
     	int month = date.get(GregorianCalendar.MONTH)+1;
     	int year = date.get(GregorianCalendar.YEAR);
     	double julian = (1461 * (year + 4800 + (month - 14)/12))/4 + (367 * (month - 2 - 12 * ((month - 14)/12)))/12 - (3 * ((year + 4900 + (month - 14)/12)/100))/4 + day - 32075;
-    	julian -= 0.5;
+    	Math.floor(julian);
+    	System.out.println(month + "/" + day + "/" + year);
+    	System.out.println(julian + "\n");
+
 
     	return julian;
     }
@@ -400,14 +247,12 @@ public class Model {
     	mercury.setSize((int)(mercury.getScaleFactor() * scale));
     	mercury.setOrbitalPeriod(0.241);
     	mercury.setEccentricity(0.206);
-    	mercury.setInclination(7);
     	mercury.setSemiMajorAxis(5.79 * scale);
-    	mercury.setInclination(7);
     	mercury.offsetNegation(true, false);
     	mercury.setOffsets();
     	mercury.setColor(Color.BLACK);
     	mercury.setPattern(new ImagePattern(new Image("mercury.png")));
-    	//mercury.setAngle(getAngularDistance(mercury.getOrbitalPeriod(), 40) + 0.785); //44
+    	mercury.setAngle(getAngularDistance(mercury.getOrbitalPeriod(), 40) + 0.785); //44
     	mercury.setX(getXPosition(mercury));
     	mercury.setY(getYPosition(mercury));
     	mercury.setShowLine(false);
@@ -420,11 +265,10 @@ public class Model {
     	venus.setOrbitalPeriod(0.615);
     	venus.setEccentricity(0.0068);
     	venus.setSemiMajorAxis(10.8 * scale);
-    	venus.setInclination(3);
     	venus.setOffsets();
     	venus.setColor(Color.ORANGE);
     	venus.setPattern(new ImagePattern(new Image("venus.png")));
-    	//venus.setAngle(getAngularDistance(venus.getOrbitalPeriod(), 216));
+    	venus.setAngle(getAngularDistance(venus.getOrbitalPeriod(), 216));
     	venus.setX(getXPosition(venus));
         venus.setY(getYPosition(venus));
         venus.setShowLine(false);
@@ -437,7 +281,6 @@ public class Model {
     	earth.setOrbitalPeriod(1);
     	earth.setEccentricity(0.0167);
     	earth.setSemiMajorAxis(15 * scale);
-    	earth.setInclination(0);
     	earth.setOffsets();
     	earth.setX(earth.getSemiMajorAxis());
     	earth.setColor(Color.BLUE);
@@ -453,12 +296,11 @@ public class Model {
     	mars.setOrbitalPeriod(1.88);
     	mars.setEccentricity(0.0934);
     	mars.setSemiMajorAxis(22.8 * scale);
-    	mars.setInclination(1.85);
     	mars.offsetNegation(false, true);
     	mars.setOffsets();
     	mars.setColor(Color.RED);
     	mars.setPattern(new ImagePattern(new Image("mars.png")));
-    	//mars.setAngle(getAngularDistance(mars.getOrbitalPeriod(), 170) + 0.785);
+    	mars.setAngle(getAngularDistance(mars.getOrbitalPeriod(), 170) + 0.785);
     	mars.setX(getXPosition(mars));
     	mars.setY(getYPosition(mars));
     	mars.setShowLine(false);
@@ -471,11 +313,10 @@ public class Model {
     	jupiter.setOrbitalPeriod(11.9);
     	jupiter.setEccentricity(0.0485);
     	jupiter.setSemiMajorAxis(77.8 * scale);
-    	jupiter.setInclination(1.3);
     	jupiter.setOffsets();
     	jupiter.setColor(Color.DARKORANGE);
     	jupiter.setPattern(new ImagePattern(new Image("jupiter.png")));
-    	//jupiter.setAngle(getAngularDistance(jupiter.getOrbitalPeriod(), 4035));
+    	jupiter.setAngle(getAngularDistance(jupiter.getOrbitalPeriod(), 4035));
     	jupiter.setX(getXPosition(jupiter));
     	jupiter.setY(getYPosition(jupiter));
     	jupiter.setShowLine(false);
@@ -488,11 +329,10 @@ public class Model {
     	saturn.setOrbitalPeriod(29.5);
     	saturn.setEccentricity(0.0556);
     	saturn.setSemiMajorAxis(143 * scale);
-    	saturn.setInclination(2.49);
     	saturn.setOffsets();
     	saturn.setColor(Color.ORANGE);
     	saturn.setPattern(new ImagePattern(new Image("saturn.png")));
-    	//saturn.setAngle(getAngularDistance(saturn.getOrbitalPeriod(), 9885));
+    	saturn.setAngle(getAngularDistance(saturn.getOrbitalPeriod(), 9885));
     	saturn.setX(getXPosition(saturn));
     	saturn.setY(getYPosition(saturn));
     	saturn.setShowLine(false);
@@ -505,7 +345,6 @@ public class Model {
     	uranus.setOrbitalPeriod(84);
     	uranus.setEccentricity(0.0472);
     	uranus.setSemiMajorAxis(287 * scale);
-    	uranus.setInclination(0.77);
     	uranus.setOffsets();
     	uranus.setColor(Color.AQUA);
     	uranus.setPattern(new ImagePattern(new Image("uranus.png")));
@@ -522,12 +361,11 @@ public class Model {
     	neptune.setOrbitalPeriod(165);
     	neptune.setEccentricity(0.0086);
     	neptune.setSemiMajorAxis(450 * scale);
-    	neptune.setInclination(1.77);
     	neptune.offsetNegation(true, true);
     	neptune.setOffsets();
     	neptune.setColor(Color.DARKBLUE);
     	neptune.setPattern(new ImagePattern(new Image("neptune.png")));
-    	//neptune.setAngle(getAngularDistance(neptune.getOrbitalPeriod(), 36150));
+    	neptune.setAngle(getAngularDistance(neptune.getOrbitalPeriod(), 36150));
     	neptune.setX(getXPosition(neptune));
     	neptune.setY(getYPosition(neptune));
     	neptune.setShowLine(false);
@@ -540,11 +378,10 @@ public class Model {
     	pluto.setOrbitalPeriod(248);
     	pluto.setEccentricity(0.25);
     	pluto.setSemiMajorAxis(590 * scale);
-    	pluto.setInclination(17.2);
     	pluto.setOffsets();
     	pluto.setColor(Color.BROWN);
     	pluto.setPattern(new ImagePattern(new Image("pluto.png")));
-    	//pluto.setAngle(getAngularDistance(pluto.getOrbitalPeriod(), 39000));
+    	pluto.setAngle(getAngularDistance(pluto.getOrbitalPeriod(), 39000));
     	pluto.setX(getXPosition(pluto));
     	pluto.setY(getYPosition(pluto));
     	pluto.setShowLine(false);
@@ -557,35 +394,19 @@ public class Model {
     	halley.setOrbitalPeriod(76);
     	halley.setEccentricity(0.967);
     	halley.setSemiMajorAxis(266 * scale);
-    	halley.setInclination(17.76);
     	halley.offsetNegation(false, true);
+    	//halley.setOrbitalAngle(1);  //2.35619
     	halley.setOffsets();
-    	halley.setInitOrbitalAngle(Math.PI);
     	halley.setColor(Color.DARKGRAY);
     	halley.setPattern(new ImagePattern(new Image("mercury.png")));
-        halley.setAngle(Math.PI);  //TODO: fix this
+        halley.setAngle(getAngularDistance(halley.getOrbitalPeriod(), 0));  //TODO: fix this
         halley.setX(getXPosition(halley));
         halley.setY(getYPosition(halley));
         halley.setShowLine(false);
         bodies.add(halley);
-        
-        //Toutatis
-        Body toutatis = new Body();
-        toutatis.setScaleFactor(0);
-        toutatis.setSize((int)(toutatis.getScaleFactor() * scale));
-        toutatis.setOrbitalPeriod(3.98);
-        toutatis.setEccentricity(0.6294);
-        toutatis.setSemiMajorAxis(16.9387 * scale);
-        toutatis.setInclination(0.45);
-        toutatis.offsetNegation(false, false);
-        toutatis.setOffsets();
-        toutatis.setInitOrbitalAngle(Math.PI);
-        toutatis.setColor(Color.DARKGRAY);
-        toutatis.setPattern(new ImagePattern(new Image("mercury.png")));
-        toutatis.setX(getXPosition(toutatis));
-        toutatis.setY(getYPosition(toutatis));
-        toutatis.setShowLine(false);
-        bodies.add(toutatis);
+
+
+
     }
 
 }

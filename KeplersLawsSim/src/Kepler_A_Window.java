@@ -145,7 +145,7 @@ public class Kepler_A_Window extends Application {
         root.setBottom(contPan);
         contPan.setAlignment(Pos.BASELINE_CENTER);
         contPan.setPrefColumns(3);
-        contPan.setHgap(290);
+       contPan.setHgap(screen.getWidth()/12);
         contPan.setStyle("-fx-background-color: black");
 
         HBox scalePan = initScaler();
@@ -377,7 +377,7 @@ public class Kepler_A_Window extends Application {
 
         Menu viewMenu = new Menu("View");
 
-        	CheckMenuItem setBackgroundOnOff = new CheckMenuItem("Background On");
+        	CheckMenuItem setBackgroundOnOff = new CheckMenuItem("Background");
         	setBackgroundOnOff.setSelected(true);
         	setBackgroundOnOff.setOnAction(e -> {if(!setBackgroundOnOff.isSelected()){root.setBackground(blankField);}else root.setBackground(starField);});
         	CheckMenuItem setPlanetTexturesOnOff = new CheckMenuItem("Planet Textures");
@@ -386,11 +386,13 @@ public class Kepler_A_Window extends Application {
         	CheckMenuItem setHighlightsOnOff = new CheckMenuItem("Planet Highlights");
         	setHighlightsOnOff.setSelected(false);
         	setHighlightsOnOff.setOnAction(e -> {showHighlights =! showHighlights;refresh();update();});
+			CheckMenuItem showPlanetConnectionsCMI = new CheckMenuItem("Show Planet Connections");
+			showPlanetConnectionsCMI.setOnAction(e -> {showConnectingLines =! showConnectingLines;refresh();update();});
 
 
-        	viewMenu.getItems().addAll(setBackgroundOnOff,setPlanetTexturesOnOff,setHighlightsOnOff);
+        	viewMenu.getItems().addAll(setBackgroundOnOff,setPlanetTexturesOnOff,setHighlightsOnOff,showPlanetConnectionsCMI);
 
-        Menu zoomTo = new Menu("Focous");
+        Menu zoomTo = new Menu("Focus");
 
         	MenuItem focousOnMercury = new MenuItem("Mercury");
         	focousOnMercury.setOnAction(e -> {Controller.setScale((screen.getHeight()*screen.getWidth())/38000);});
@@ -437,11 +439,9 @@ public class Kepler_A_Window extends Application {
 			lineOnPluto.setOnAction(e -> {controller.getBodies().get(9).setShowLine(!controller.getBodies().get(9).getShowLine());refresh();update();});
 			CheckMenuItem lineOnHC = new CheckMenuItem("Halley's Comet");
 			CheckMenuItem lineOnComit = new CheckMenuItem("Tautous");
-			CheckMenuItem showPlanetConnectionsCMI = new CheckMenuItem("Show Planet Connections");
-			showPlanetConnectionsCMI.setOnAction(e -> {showConnectingLines =! showConnectingLines;refresh();update();});
 
 			lineOn.getItems().addAll(lineOnMercury, lineOnVenus, lineOnEarth, lineOnMars, lineOnJupiter,
-			         lineOnSatern, lineOnUrnis, lineOnNeptune, lineOnPluto, lineOnHC, lineOnComit,showPlanetConnectionsCMI);
+			         lineOnSatern, lineOnUrnis, lineOnNeptune, lineOnPluto, lineOnHC, lineOnComit);
 
         Menu helpMenu = new Menu("Help");
 
@@ -694,8 +694,32 @@ public class Kepler_A_Window extends Application {
     public void helpPage() {
 
         Stage dialog = new Stage();
-        VBox placeHolder = new VBox();
-        Scene dialogScene = new Scene(placeHolder, 640, 840);
+        TextArea helpDialog = new TextArea(
+        		  "File" + "\n"+ "\n"
+        		+ "-Reset: This will reset the simulator to its initial start up state." + "\n"
+        		+ "-Exit: This is the safest way to close the program, but selecting the ‘X’ in the window is also a"+ "\n"
+        		+ "safe way to exit."+ "\n"+ "\n"
+        		+ "View"+ "\n"+ "\n"
+        		+ "-Background: This can be used to toggle the background image of stars on and off for ease of"+ "\n"
+        		+ "viewing."+ "\n"
+        		+ "-Planet Textures: This can be used to toggle the textures on planets and bodies on and off for"+ "\n"
+        		+ "ease of viewing."+ "\n"
+        		+ "-Highlight Planets: This can be used to toggle a highlight on and off around planets and bodies"+ "\n"
+        		+ "to assist in viewing."+ "\n"
+        		+ "-Show Planet Connections: This can be used to toggle on and off a line that will connect bodies "+ "\n"
+        		+ "which have lines connecting them to the sun turned on."+ "\n"+ "\n"
+        		+ "Focus"+ "\n"+ "\n"
+        		+ "By selecting a body, the view will zoom in or out to maximize its screen presence."+ "\n"+ "\n"
+        		+ "Line"+ "\n"+ "\n"
+        		+ "By selecting a body, a line between that body and the sun will be created. If two or more lines"+ "\n"
+        		+ "are turned on, a line connecting bodies can be toggled on with the Show Planet Connections "+ "\n"
+        		+ "option under the View tab."+ "\n"+ "\n"
+        		+ "Help"+ "\n"+ "\n"
+        		+ "-About: This contains information about the version of the program, its creators, and its "+ "\n"
+        		+ "copyright information."+ "\n"
+        		+ "-Help: This current menu. "+ "\n"
+);
+        Scene dialogScene = new Scene(helpDialog, 640, 840);
         dialog.setTitle("Help");
         dialog.getIcons().add(new Image(Kepler_A_Window.class.getResourceAsStream("icon.png")));
         dialog.initModality(Modality.APPLICATION_MODAL);

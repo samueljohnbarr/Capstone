@@ -1,8 +1,6 @@
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.concurrent.TimeUnit;
-
 
 public class Controller {
     private static Model model;
@@ -42,6 +40,7 @@ public class Controller {
     	while (model == null);
     	if (stepDays < 1)
     		stepDays = 1;
+    	System.out.println(stepDays);
     	model.step(stepDays);
     	window.update();
     }
