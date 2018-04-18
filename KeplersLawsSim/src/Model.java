@@ -1,22 +1,16 @@
+/**
+ * Models each planet
+ * @author barrsj, shieldsjpt
+ * @version 1.0.0
+ */
+
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
-/**
- * Models each planet
- * (Just Inner planets for now)
- * Start Date: 12/21/2000
- * (JD = 2400000 + 5190)?
- *
- * TODO: Redo planet size scaling
- *
- * @author barrsj
- * @version 2/2/18
- */
 public class Model {
 	public static final int MERCURY = 1;
     public static final int VENUS = 2;
@@ -34,13 +28,15 @@ public class Model {
     private double scale = 15;
 
     public Model() {
-        //Create initial date for simulation
+
+    	//Create initial date for simulation
         date = new GregorianCalendar(2000, 11, 21);
 
         bodies = new ArrayList<Body>();
 
         //Initialize planet objects
-        JFXPanel jfxPanel = new JFXPanel();
+        JFXPanel jfxPanel = new JFXPanel();// <- needed to initiate part of the JavaFX library
+        jfxPanel.setVisible(false);
         initPlanets();
 
         //Set positions using their angle
@@ -174,7 +170,6 @@ public class Model {
 
     //Step the difference
     step(days);
-
     }
 
     /**
@@ -405,8 +400,5 @@ public class Model {
         halley.setShowLine(false);
         bodies.add(halley);
 
-
-
     }
-
 }

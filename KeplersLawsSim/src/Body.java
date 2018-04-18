@@ -1,12 +1,11 @@
-import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-
 /**
  * Class that defines a body that orbits
  *
- * @author barrsj
- * @version 1/31/2018
+ * @author barrsj, shieldsjpt
+ * @version 1.0.0
  */
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 
 public class Body {
     private String name;
