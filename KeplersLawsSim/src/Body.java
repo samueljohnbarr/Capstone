@@ -24,10 +24,11 @@ public class Body {
     private double y;
     private double yOffset;
     private boolean negY;
-    private double initOrbitalAngle; //Used to manipulate planet start positions
+    private double initOrbitalAngle; //Used to manipulate planet perihelion
     private double orbitalAngle; //Angle at which the ellipse is rotated
-    private double inclination;
+    private double inclination; //Angle at which the orbit is tilted
     private double angle;
+    private double switchAngle; //Anchor for reverse direction
     private double lastMeanAnom;
     private boolean visible;
     private boolean showLine;
@@ -100,7 +101,9 @@ public class Body {
 
     public double getAngle() { return angle; }
     
-    public double getInclination() { return inclination; };
+    public double getInclination() { return inclination; }
+    
+    public double getSwitchAngle() { return switchAngle; }
     
     public double getLastMeanAnomaly() { return lastMeanAnom; }
 
@@ -125,6 +128,8 @@ public class Body {
     public void setX(double x) { this.x = x; }
 
     public void setY(double y) { this.y = y; }
+    
+    public void setSwitchAngle(double angle) { this.switchAngle = angle; }
 
     public void setVisible(boolean d) { visible = d; }
 
@@ -132,7 +137,13 @@ public class Body {
 
 	public void setPattern(ImagePattern pattern) { this.pattern = pattern; }
 
-    public void setAngle(double angle) { this.angle = (angle % (2 * Math.PI)); }
+    public void setAngle(double angle) { 
+    	angle %= (2*Math.PI);
+    	if (angle < 0)
+    		this.angle = ((2*Math.PI)-angle);
+    	else
+    	    this.angle = angle; 
+    }
 
     public void setInitOrbitalAngle(double angle) { this.initOrbitalAngle = (angle % (2* Math.PI)); }
     
@@ -144,7 +155,7 @@ public class Body {
         	semiMajorAxis = semiMajorAxis*(Math.cos(inclination));
     } 
     
-    public void setLastMeanAnomaly(double meanAnomaly) { this.lastMeanAnom = meanAnomaly % (2*Math.PI); }
+    public void setLastMeanAnomaly(double meanAnomaly) { this.lastMeanAnom = meanAnomaly; }
 
     /**
      * @param size to set
