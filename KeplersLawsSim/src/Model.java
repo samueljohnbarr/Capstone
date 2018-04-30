@@ -373,6 +373,7 @@ public class Model {
     	mercury.setOrbitalPeriod(0.241);
     	mercury.setEccentricity(0.206);
     	mercury.setSemiMajorAxis(5.79 * scale);
+    	mercury.setInclination(7);
     	mercury.offsetNegation(true, false);
     	mercury.setOffsets();
     	mercury.setColor(Color.BLACK);
@@ -389,6 +390,7 @@ public class Model {
     	venus.setOrbitalPeriod(0.615);
     	venus.setEccentricity(0.0068);
     	venus.setSemiMajorAxis(10.8 * scale);
+    	venus.setInclination(3);
     	venus.setOffsets();
     	venus.setColor(Color.ORANGE);
     	venus.setPattern(new ImagePattern(new Image("venus.png")));
@@ -401,6 +403,7 @@ public class Model {
     	Body earth = new Body();
     	earth.setScaleFactor(1.66);
     	earth.setSize((int)(earth.getScaleFactor() * scale));
+    	earth.setInclination(0);
     	earth.setOrbitalPeriod(1);
     	earth.setEccentricity(0.0167);
     	earth.setSemiMajorAxis(15 * scale);
@@ -418,6 +421,7 @@ public class Model {
     	mars.setOrbitalPeriod(1.88);
     	mars.setEccentricity(0.0934);
     	mars.setSemiMajorAxis(22.8 * scale);
+    	mars.setInclination(1.85);
     	mars.offsetNegation(false, true);
     	mars.setOffsets();
     	mars.setColor(Color.RED);
@@ -434,6 +438,7 @@ public class Model {
     	jupiter.setOrbitalPeriod(11.9);
     	jupiter.setEccentricity(0.0485);
     	jupiter.setSemiMajorAxis(77.8 * scale);
+    	jupiter.setInclination(1.3);
     	jupiter.setOffsets();
     	jupiter.setColor(Color.DARKORANGE);
     	jupiter.setPattern(new ImagePattern(new Image("jupiter.png")));
@@ -449,6 +454,7 @@ public class Model {
     	saturn.setOrbitalPeriod(29.5);
     	saturn.setEccentricity(0.0556);
     	saturn.setSemiMajorAxis(143 * scale);
+    	saturn.setInclination(2.49);
     	saturn.setOffsets();
     	saturn.setColor(Color.ORANGE);
     	saturn.setPattern(new ImagePattern(new Image("saturn.png")));
@@ -464,6 +470,7 @@ public class Model {
     	uranus.setOrbitalPeriod(84);
     	uranus.setEccentricity(0.0472);
     	uranus.setSemiMajorAxis(287 * scale);
+    	uranus.setInclination(0.77);
     	uranus.setOffsets();
     	uranus.setColor(Color.AQUA);
     	uranus.setPattern(new ImagePattern(new Image("uranus.png")));
@@ -479,6 +486,7 @@ public class Model {
     	neptune.setOrbitalPeriod(165);
     	neptune.setEccentricity(0.0086);
     	neptune.setSemiMajorAxis(450 * scale);
+    	neptune.setInclination(1.77);
     	neptune.offsetNegation(true, true);
     	neptune.setOffsets();
     	neptune.setColor(Color.DARKBLUE);
@@ -495,6 +503,7 @@ public class Model {
     	pluto.setOrbitalPeriod(248);
     	pluto.setEccentricity(0.25);
     	pluto.setSemiMajorAxis(590 * scale);
+    	pluto.setInclination(17.2);
     	pluto.setOffsets();
     	pluto.setColor(Color.BROWN);
     	pluto.setPattern(new ImagePattern(new Image("pluto.png")));
@@ -510,9 +519,10 @@ public class Model {
     	halley.setOrbitalPeriod(75);
     	halley.setEccentricity(0.967);
     	halley.setSemiMajorAxis(266 * scale);
+    	halley.setInclination(17.76);
     	halley.offsetNegation(false, true);
-    	//halley.setOrbitalAngle(1);  //2.35619
     	halley.setOffsets();
+    	halley.setInitOrbitalAngle(Math.PI);
     	halley.setColor(Color.DARKGRAY);
     	halley.setPattern(new ImagePattern(new Image("mercury.png")));
         halley.setAngle(getAngularDistance(halley.getOrbitalPeriod(), 0));  //TODO: fix this
@@ -520,6 +530,23 @@ public class Model {
         halley.setY(getYPosition(halley));
         halley.setShowLine(false);
         bodies.add(halley);
+        
+        //Toutatis
+        Body toutatis = new Body();
+        toutatis.setScaleFactor(0);
+        toutatis.setSize((int)(toutatis.getScaleFactor() * scale));
+        toutatis.setOrbitalPeriod(3.98);
+        toutatis.setEccentricity(0.6294);
+        toutatis.setSemiMajorAxis(16.9387 * scale);
+        toutatis.setInclination(0.45);
+        toutatis.offsetNegation(false, false);
+        toutatis.setOffsets();
+        toutatis.setInitOrbitalAngle(Math.PI);
+        toutatis.setColor(Color.DARKGRAY);
+        toutatis.setPattern(new ImagePattern(new Image("mercury.png")));
+        toutatis.setX(getXPosition(toutatis));
+        toutatis.setY(getYPosition(toutatis));
+        toutatis.setShowLine(false);
 
     }
 }

@@ -142,6 +142,11 @@ public class Body {
 
     public void setInitOrbitalAngle(double angle) { this.initOrbitalAngle = (angle % (2* Math.PI)); }
     
+    /**
+     * Sets the inclination of the orbit
+     * Semimajor axis must be set before calling this method
+     * @param angle
+     */
     public void setInclination(double angle) { 
     	this.inclination = Math.toRadians(angle); 
         
