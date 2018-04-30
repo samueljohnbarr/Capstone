@@ -28,7 +28,6 @@ public class Body {
     private double orbitalAngle; //Angle at which the ellipse is rotated
     private double inclination; //Angle at which the orbit is tilted
     private double angle;
-    private double switchAngle; //Anchor for reverse direction
     private double lastMeanAnom;
     private boolean visible;
     private boolean showLine;
@@ -103,8 +102,6 @@ public class Body {
     
     public double getInclination() { return inclination; }
     
-    public double getSwitchAngle() { return switchAngle; }
-    
     public double getLastMeanAnomaly() { return lastMeanAnom; }
 
     public boolean isVisible() { return visible; }
@@ -128,8 +125,6 @@ public class Body {
     public void setX(double x) { this.x = x; }
 
     public void setY(double y) { this.y = y; }
-    
-    public void setSwitchAngle(double angle) { this.switchAngle = angle; }
 
     public void setVisible(boolean d) { visible = d; }
 

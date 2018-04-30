@@ -22,7 +22,6 @@ public class Controller {
         
         window = Kepler_A_Window.waitForWindow();
         setScale(14);
-        //autoRun();
     }
     
     /**

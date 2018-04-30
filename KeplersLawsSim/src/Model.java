@@ -34,7 +34,6 @@ public class Model {
     ArrayList<Body> bodies;
     private GregorianCalendar date;
     private double scale = 15;
-    private boolean forward = true;
 
     public Model() {
         //Create initial date for simulation
@@ -43,7 +42,6 @@ public class Model {
         bodies = new ArrayList<Body>();
 
         //Initialize planet objects
-        JFXPanel jfxPanel = new JFXPanel();
         initPlanets();
 
         //Set positions using their angle
@@ -112,7 +110,6 @@ public class Model {
     /**
      * Steps all planet coordinates by days
      * @param days to step (Can be negative)
-     * @param radius of orbit in pixels
      */
     public void step(int days) {
     	double mean;
@@ -145,6 +142,14 @@ public class Model {
             //Find the angle
             angle = getAngle(planet.getSemiMajorAxis(), planet.getSemiMinorAxis(), 
             		planet.getEccentricity(), trueAnomaly, reverse);
+            
+            if (i == HALLEY) {
+            	System.out.println("Mean Step: " + mean);
+            	System.out.println("Mean: " + meanAnomaly);
+            	System.out.println("True: " + trueAnomaly);
+            	System.out.println("Angle: " + angle);
+            	System.out.println();
+            }
 
             planet.setAngle(angle);
 
@@ -228,18 +233,11 @@ public class Model {
      */
     private double getAngle(double a, double b, double e, double trueAnomaly, boolean reverse) {
     	double result = 0;
-    	//Calculate for other half of circle
+    	//Calculate for other half of orbit
     	if (trueAnomaly > Math.PI) {
     		result = Math.PI;
     		trueAnomaly = trueAnomaly % Math.PI;
     	}
-    	//Manage rounding issue 
-    	/*
-    	if ((result > 0) && (Math.PI - trueAnomaly) < 0.05) {
-    		trueAnomaly = 0;
-    		result = 0;
-    	}
-    	*/
     	
     	double d = Math.pow(a, 2)*Math.pow(Math.sin(trueAnomaly), 2) + 
     			Math.pow(b, 2)*Math.pow(Math.cos(trueAnomaly), 2) -
@@ -282,7 +280,8 @@ public class Model {
     }
 
     /**
-     * Sets the coordinates to a specified date
+     * Sets the coordinates to a specified date by calculating the difference
+     * in days from the current date to the new date
      * @param year to set
      * @param month to set
      * @param day to set
@@ -523,7 +522,7 @@ public class Model {
     	Body halley = new Body();
     	halley.setScaleFactor(0);
     	halley.setSize((int)(halley.getScaleFactor() * scale));
-    	halley.setOrbitalPeriod(76);
+    	halley.setOrbitalPeriod(75);
     	halley.setEccentricity(0.967);
     	halley.setSemiMajorAxis(266 * scale);
     	halley.setInclination(17.76);
