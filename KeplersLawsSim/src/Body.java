@@ -1,12 +1,11 @@
-import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-
 /**
  * Class that defines a body that orbits
  *
- * @author barrsj
- * @version 1/31/2018
+ * @author barrsj, shieldsjpt
+ * @version 1.0.0
  */
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 
 public class Body {
     private String name;
@@ -27,8 +26,8 @@ public class Body {
     private double initOrbitalAngle; //Used to manipulate planet perihelion
     private double orbitalAngle; //Angle at which the ellipse is rotated
     private double inclination; //Angle at which the orbit is tilted
-    private double angle;
     private double lastMeanAnom;
+    private double angle;
     private boolean visible;
     private boolean showLine;
 
@@ -140,6 +139,7 @@ public class Body {
     	    this.angle = angle; 
     }
 
+
     public void setInitOrbitalAngle(double angle) { this.initOrbitalAngle = (angle % (2* Math.PI)); }
     
     public void setInclination(double angle) { 
@@ -151,6 +151,9 @@ public class Body {
     } 
     
     public void setLastMeanAnomaly(double meanAnomaly) { this.lastMeanAnom = meanAnomaly; }
+
+    public void setOrbitalAngle(double angle) { this.orbitalAngle = (angle % (2* Math.PI)); }
+
 
     /**
      * @param size to set
@@ -165,14 +168,13 @@ public class Body {
     }
 
     /**
-     * Sets semiMajorAxis and semiMinorAxis
-     * Adjusts semiMajor for orbital inclination
+     * Sets semiMajorAxis, semiMinorAxis, and x & y offsets
      * Eccentricity must be set to calculate correctly
      * @param semiMajorAxis to set
      */
     public void setSemiMajorAxis(double semiMajorAxis) {
-        semiMinorAxis = semiMajorAxis * Math.sqrt(1 - Math.pow(eccentricity, 2));
         this.semiMajorAxis = semiMajorAxis;
+        semiMinorAxis = semiMajorAxis * Math.sqrt(1 - Math.pow(eccentricity, 2));
     }
 
     /**
@@ -194,7 +196,7 @@ public class Body {
         if (negY) yOffset = -yOffset;
 
         //Set angle
-        orbitalAngle = Math.atan((yOffset/xOffset)) + initOrbitalAngle;
+        orbitalAngle = Math.atan((yOffset/xOffset));
     }
 
     /**

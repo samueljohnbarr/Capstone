@@ -1,22 +1,16 @@
+/**
+ * Models each planet
+ * @author barrsj, shieldsjpt
+ * @version 1.0.0
+ */
+
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
-/**
- * Models each planet
- * (Just Inner planets for now)
- * Start Date: 12/21/2000
- * (JD = 2400000 + 5190)?
- *
- * TODO: Redo planet size scaling
- *
- * @author barrsj
- * @version 2/2/18
- */
 public class Model {
 	public static final int MERCURY = 1;
     public static final int VENUS = 2;
@@ -36,12 +30,16 @@ public class Model {
     private double scale = 15;
 
     public Model() {
+
         //Create initial date for simulation
         date = new GregorianCalendar(2000, 11, 21);
 
+        //Initialize planet objects
         bodies = new ArrayList<Body>();
 
-        //Initialize planet objects
+        //Needed to initiate part of the JavaFX library
+        JFXPanel jfxPanel = new JFXPanel();
+        jfxPanel.setVisible(false);
         initPlanets();
 
         //Set positions using their angle
@@ -122,6 +120,7 @@ public class Model {
         
         for (int i = 0; i < bodies.size(); i++) {
             planet = bodies.get(i);
+
             //Get mean step
             mean = getMeanAnomaly(planet.getLastMeanAnomaly(), 
             		planet.getOrbitalPeriod(), days);
@@ -263,12 +262,6 @@ public class Model {
     	else if (trueAnomaly == (Math.PI - Math.atan(b/(a*e))))
     		result +=  Math.PI/2;
     	
-    	
-    	//Manage Direction
-    	if (reverse) {
-    		//result = ((2*Math.PI) - result);
-    		//return -result;
-    	}
     	return result;
     	
     }
@@ -306,7 +299,6 @@ public class Model {
 
     //Step the difference
     step(days);
-
     }
 
     /**
@@ -318,7 +310,10 @@ public class Model {
     	int month = date.get(GregorianCalendar.MONTH)+1;
     	int year = date.get(GregorianCalendar.YEAR);
     	double julian = (1461 * (year + 4800 + (month - 14)/12))/4 + (367 * (month - 2 - 12 * ((month - 14)/12)))/12 - (3 * ((year + 4900 + (month - 14)/12)/100))/4 + day - 32075;
-    	julian -= 0.5;
+    	Math.floor(julian);
+    	System.out.println(month + "/" + day + "/" + year);
+    	System.out.println(julian + "\n");
+
 
     	return julian;
     }
@@ -377,9 +372,7 @@ public class Model {
     	mercury.setSize((int)(mercury.getScaleFactor() * scale));
     	mercury.setOrbitalPeriod(0.241);
     	mercury.setEccentricity(0.206);
-    	mercury.setInclination(7);
     	mercury.setSemiMajorAxis(5.79 * scale);
-    	mercury.setInclination(7);
     	mercury.offsetNegation(true, false);
     	mercury.setOffsets();
     	mercury.setColor(Color.BLACK);
@@ -396,7 +389,6 @@ public class Model {
     	venus.setOrbitalPeriod(0.615);
     	venus.setEccentricity(0.0068);
     	venus.setSemiMajorAxis(10.8 * scale);
-    	venus.setInclination(3);
     	venus.setOffsets();
     	venus.setColor(Color.ORANGE);
     	venus.setPattern(new ImagePattern(new Image("venus.png")));
@@ -412,7 +404,6 @@ public class Model {
     	earth.setOrbitalPeriod(1);
     	earth.setEccentricity(0.0167);
     	earth.setSemiMajorAxis(15 * scale);
-    	earth.setInclination(0);
     	earth.setOffsets();
     	earth.setX(earth.getSemiMajorAxis());
     	earth.setColor(Color.BLUE);
@@ -427,7 +418,6 @@ public class Model {
     	mars.setOrbitalPeriod(1.88);
     	mars.setEccentricity(0.0934);
     	mars.setSemiMajorAxis(22.8 * scale);
-    	mars.setInclination(1.85);
     	mars.offsetNegation(false, true);
     	mars.setOffsets();
     	mars.setColor(Color.RED);
@@ -444,7 +434,6 @@ public class Model {
     	jupiter.setOrbitalPeriod(11.9);
     	jupiter.setEccentricity(0.0485);
     	jupiter.setSemiMajorAxis(77.8 * scale);
-    	jupiter.setInclination(1.3);
     	jupiter.setOffsets();
     	jupiter.setColor(Color.DARKORANGE);
     	jupiter.setPattern(new ImagePattern(new Image("jupiter.png")));
@@ -460,7 +449,6 @@ public class Model {
     	saturn.setOrbitalPeriod(29.5);
     	saturn.setEccentricity(0.0556);
     	saturn.setSemiMajorAxis(143 * scale);
-    	saturn.setInclination(2.49);
     	saturn.setOffsets();
     	saturn.setColor(Color.ORANGE);
     	saturn.setPattern(new ImagePattern(new Image("saturn.png")));
@@ -476,7 +464,6 @@ public class Model {
     	uranus.setOrbitalPeriod(84);
     	uranus.setEccentricity(0.0472);
     	uranus.setSemiMajorAxis(287 * scale);
-    	uranus.setInclination(0.77);
     	uranus.setOffsets();
     	uranus.setColor(Color.AQUA);
     	uranus.setPattern(new ImagePattern(new Image("uranus.png")));
@@ -492,7 +479,6 @@ public class Model {
     	neptune.setOrbitalPeriod(165);
     	neptune.setEccentricity(0.0086);
     	neptune.setSemiMajorAxis(450 * scale);
-    	neptune.setInclination(1.77);
     	neptune.offsetNegation(true, true);
     	neptune.setOffsets();
     	neptune.setColor(Color.DARKBLUE);
@@ -509,7 +495,6 @@ public class Model {
     	pluto.setOrbitalPeriod(248);
     	pluto.setEccentricity(0.25);
     	pluto.setSemiMajorAxis(590 * scale);
-    	pluto.setInclination(17.2);
     	pluto.setOffsets();
     	pluto.setColor(Color.BROWN);
     	pluto.setPattern(new ImagePattern(new Image("pluto.png")));
@@ -525,35 +510,16 @@ public class Model {
     	halley.setOrbitalPeriod(75);
     	halley.setEccentricity(0.967);
     	halley.setSemiMajorAxis(266 * scale);
-    	halley.setInclination(17.76);
     	halley.offsetNegation(false, true);
+    	//halley.setOrbitalAngle(1);  //2.35619
     	halley.setOffsets();
-    	halley.setInitOrbitalAngle(Math.PI);
     	halley.setColor(Color.DARKGRAY);
     	halley.setPattern(new ImagePattern(new Image("mercury.png")));
-        halley.setAngle(Math.PI);  //TODO: fix this
+        halley.setAngle(getAngularDistance(halley.getOrbitalPeriod(), 0));  //TODO: fix this
         halley.setX(getXPosition(halley));
         halley.setY(getYPosition(halley));
         halley.setShowLine(false);
         bodies.add(halley);
-        
-        //Toutatis
-        Body toutatis = new Body();
-        toutatis.setScaleFactor(0);
-        toutatis.setSize((int)(toutatis.getScaleFactor() * scale));
-        toutatis.setOrbitalPeriod(3.98);
-        toutatis.setEccentricity(0.6294);
-        toutatis.setSemiMajorAxis(16.9387 * scale);
-        toutatis.setInclination(0.45);
-        toutatis.offsetNegation(false, false);
-        toutatis.setOffsets();
-        toutatis.setInitOrbitalAngle(Math.PI);
-        toutatis.setColor(Color.DARKGRAY);
-        toutatis.setPattern(new ImagePattern(new Image("mercury.png")));
-        toutatis.setX(getXPosition(toutatis));
-        toutatis.setY(getYPosition(toutatis));
-        toutatis.setShowLine(false);
-        bodies.add(toutatis);
-    }
 
+    }
 }

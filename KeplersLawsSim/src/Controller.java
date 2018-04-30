@@ -1,29 +1,30 @@
-
+/**
+ * Controls the simulation
+ * @author barrsj, shieldsjpt
+ * @version 1.0.0
+ */
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.concurrent.TimeUnit;
-
 
 public class Controller {
     private static Model model;
     private static Model initialModel = new Model();
-    private static Kepler_A_Window window;
+    private static Window window;
     private static int stepDays;
-    private static boolean run;
 
-    public static void main(String[] args) throws InterruptedException {     
+    public static void main(String[] args) throws InterruptedException {
     	model = new Model();
     	//Start the GUI
         new Thread() {
             public void run() {
-                javafx.application.Application.launch(Kepler_A_Window.class);
+                javafx.application.Application.launch(Window.class);
             }
         }.start();
-        
-        window = Kepler_A_Window.waitForWindow();
+
+        window = Window.waitForWindow();
         setScale(14);
     }
-    
+
     /**
      * Waits for model object to be created
      * @return bodies
@@ -32,7 +33,7 @@ public class Controller {
     	while(model == null);
         return model.getBodies();
     }
-    
+
     /**
      * Waits for model object to be created
      * Steps the model to step forward stepDays
@@ -41,10 +42,11 @@ public class Controller {
     	while (model == null);
     	if (stepDays < 1)
     		stepDays = 1;
+    	System.out.println(stepDays);
     	model.step(stepDays);
     	window.update();
     }
-    
+
     /**
      * Waits for model object to be created
      * Steps the model to step forward stepDays
@@ -56,8 +58,7 @@ public class Controller {
     	model.step(-stepDays);
     	window.update();
     }
-    
-    
+
     /**
      * Sets the amount of days to step
      * If parameter is incorrectly formatted, stepDays
@@ -70,13 +71,13 @@ public class Controller {
     	try { d = Integer.parseInt(days); } catch(NumberFormatException e) {
     		d = 1;
     	}
-    	
+
     	if (d < 1)
     		stepDays = 1;
     	else
     		stepDays = d;
     }
-    
+
     /**
      * Sets the model's date for the simulation
      * If any part of the date is incorrectly formatted,
@@ -92,7 +93,7 @@ public class Controller {
     	int d = date.get(GregorianCalendar.DAY_OF_MONTH);
     	int m = date.get(GregorianCalendar.MONTH) + 1;
     	int y = date.get(GregorianCalendar.YEAR);
-    	
+
     	//Attempt to set variables to new values
     	try { y = Integer.parseInt(year); } catch(NumberFormatException e) {
     		y = date.get(GregorianCalendar.YEAR); }
@@ -100,12 +101,11 @@ public class Controller {
     		m = date.get(GregorianCalendar.MONTH) + 1;}
     	try { d = Integer.parseInt(day); } catch(NumberFormatException e) {
     		d = date.get(GregorianCalendar.DAY_OF_MONTH);
-    	}   	
-    	
+    	}
+
     	model.setDate(y, m, d);
     }
-    
-    
+
     /**
      * @return julian date in string
      */
@@ -114,7 +114,7 @@ public class Controller {
     	double julian = model.getJulian();
     	return Double.toString(julian);
     }
-    
+
     /**
      * @return gregorian date in string
      */
@@ -125,28 +125,28 @@ public class Controller {
     	int day = date.get(GregorianCalendar.DAY_OF_MONTH);
     	int month = date.get(GregorianCalendar.MONTH) + 1;
     	int year = date.get(GregorianCalendar.YEAR);
-    	
+
     	//Convert to String
-    	String dateStr = month + "/" + day + "/" + year; 	
-    	
+    	String dateStr = month + "/" + day + "/" + year;
+
     	return dateStr;
     }
-    
+
     public String getMonth() {
     	GregorianCalendar date = model.getDate();
     	return (date.get(GregorianCalendar.MONTH) + 1) + "";
     }
-    
+
     public String getDay() {
     	GregorianCalendar date = model.getDate();
     	return (date.get(GregorianCalendar.DAY_OF_MONTH)) + "";
     }
-    
+
     public String getYear() {
     	GregorianCalendar date = model.getDate();
     	return (date.get(GregorianCalendar.YEAR)) + "";
     }
-    
+
     public static void setScale(double scale) {
     	model.setScale(scale);
     	window.refresh();
@@ -160,6 +160,4 @@ public class Controller {
 	public static void setInitialModel(Model initialModel) {
 		Controller.initialModel = initialModel;
 	}
-    
-    
 }
