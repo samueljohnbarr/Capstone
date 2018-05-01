@@ -23,9 +23,9 @@ public class Body {
     private double y;
     private double yOffset;
     private boolean negY;
-    private double initOrbitalAngle; //Used to manipulate planet perihelion
     private double orbitalAngle; //Angle at which the ellipse is rotated
     private double inclination; //Angle at which the orbit is tilted
+    private boolean flipOrbit; //Used to change a body's perihelion
     private double lastMeanAnom;
     private double angle;
     private boolean visible;
@@ -140,7 +140,7 @@ public class Body {
     }
 
 
-    public void setInitOrbitalAngle(double angle) { this.initOrbitalAngle = (angle % (2* Math.PI)); }
+    public void flipOrbit() { this.flipOrbit = true; }
     
     /**
      * Sets the inclination of the orbit
@@ -199,9 +199,14 @@ public class Body {
     	yOffset = xOffset;
         if (negX) xOffset = -xOffset;
         if (negY) yOffset = -yOffset;
+        
+        //Add flipAngle
+        double flip = 0;
+        if (flipOrbit)
+        	flip = Math.PI;
 
         //Set angle
-        orbitalAngle = Math.atan((yOffset/xOffset));
+        orbitalAngle = Math.atan((yOffset/xOffset)) + flip;
     }
 
     /**

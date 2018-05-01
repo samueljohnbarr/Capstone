@@ -22,7 +22,8 @@ public class Controller {
         }.start();
 
         window = Window.waitForWindow();
-        setScale(14);
+
+        //setScale(14);
     }
 
     /**
