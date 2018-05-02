@@ -95,7 +95,7 @@ public class Window extends Application {
     }
 
     public void start(Stage primary) throws Exception {
-
+    try {
     	//Creates BorderPane to store all of the elements
     	root = new BorderPane();
 
@@ -168,6 +168,7 @@ public class Window extends Application {
         primary.getIcons().add(new Image(Window.class.getResourceAsStream("icon.png")));
         primary.setMaximized(true);
         primary.show();
+    } catch (Exception e) { e.printStackTrace();}
     }
 
     /**
@@ -731,7 +732,7 @@ public class Window extends Application {
         TextArea helpDialog = new TextArea(
         		  "File" + "\n"+ "\n"
         		+ "-Reset: This will reset the simulator to its initial start up state." + "\n"
-        		+ "-Exit: This is the safest way to close the program, but selecting the ‘X’ in the window is also a"+ "\n"
+        		+ "-Exit: This is the safest way to close the program, but selecting the ï¿½Xï¿½ in the window is also a"+ "\n"
         		+ "safe way to exit."+ "\n"+ "\n"
         		+ "View"+ "\n"+ "\n"
         		+ "-Background: This can be used to toggle the background image of stars on and off for ease of"+ "\n"
