@@ -94,12 +94,12 @@ The software design pattern this simulator implements is a simple Model-View-Con
 <hr>
 <h3 id="d&b">Development and Breakdown</h3>
 To accomplish all the goals we had for this project, we decided to divide and conquer.  Josh started with the front-end design, and Sam started at the back, both working on separate ends to eventually tie together with a Controller.  Below is a break down of what each class does starting from back-end to front.
-
-<b><u>Body</u></b>
+<br>
+<b><u>Body</u></b><br>
 This class defines a general planetary body that orbits.  The bare minimum for a Body to work in the simulation is data for the orbital period (in Earth years), the eccentricity (how elliptic the orbit is), and the semi-major axis (the elliptic "radius") in terms of 10^10 meters multiplied by the scale.  Other fields within this class are calculated with those initial data points, such as the semi-minor axis, the offsets for which the center of the orbit is positioned in the simulator, and the angle at which the orbit is rotated with respect to the Sun.
 Some fields, such as the 'visible' and 'showLine' fields, are used by the View class to manipulate display features on specific bodies. The body class also contains information on the color and/or texture which the body should display in the view.
 <br>
-<b><u>Model</u></b>
+<b><u>Model</u></b><br>
 This class contains an ArrayList that holds all of the Bodies in the simulator, and contains all the equations that makes this simulator run.  Planets are instantiated at end of the class, and are instantiated by using null Body constructors and individual mutator setting for readability.  The heart of this class is the 'step' method, which steps all planets forward or backward by the 'days' parameter.  To accomplish this, it utilizes Kepler's equation, which is broken up into three helper methods.  
 Referring to the figure below, the first step is calculating the *Mean Anomaly (M)*, which is the average distance a planet moves in one day.  It then adds that value to the 'lastMeanAnom' accumulator in the respective Body to track overall position.  The next step is calculating the *Eccentric Anomaly (E)*, which determines the angle from the center if the planet had a completely circular orbit.  The equation for the eccentric anomaly cannot be solved algebraically, and thus is solved by an iterative process.  The last step is the calculating the *True Anomaly (theta)*, which calculates the angle from the Sun (S) to the Body (or planet, P).
 
@@ -110,14 +110,13 @@ Once the True Anomaly is found, the 'getAngle' method derives the relation betwe
 Once the angle from the center is found, that angle is then used to find the x and y positions of that particular Body on it's orbit using the 'getXPosition' and 'getYPosition' methods.
 <br>
 
-<b><u>Controller</u></b>
+<b><u>Controller</u></b><br>
 This class acts as a traffic controller for both Model and View much the same way any Controller would function, and it also contains the simulations main method.  It error-checks any request made to the Model from the View class, and has a series of accessors from the Model that View uses to update the display.  It also handles the calendar functions needed for calculating the Julian and Gregorian dates. 
 <br>
 
-<b><u>View</u></b>
+<b><u>View</u></b><br>
 This class manages all the display functionality of the simulation using *JavaFX*.  JavaFx utilizes its own thread separate from the Controller to run, therefore, the first two methods in View are in place to allow the Controller thread to wait for this thread to fully initialize before starting main functions. 
 It contains all of the functions and methods that set up and display the window the simulator is displayed in. It initiates and displays the menus, and controls, as well as all of the actual objects, such as the bodies, their associated orbital rings, and the lines which can be toggled on or off that connect bodies together. It also holds methods to update the display coordinates of the bodies, and refresh the display as the simulator runs. It lastly contains a kill method that can be used to close the program safely. 
-...
 <hr>
 
 <h3 id="testing">Testing</h3>
@@ -150,11 +149,11 @@ The problem of properly implementing the physics into the simulation came up man
 -   Provide references in standard ACM format (numbers in text correspond to numbered references here).  
 -   List all references to code used as part of your system (libraries, etc.)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzNTYwNDc3MTMsNTkyOTYyODc4LC01Mj
-k3MzY5MzcsMTYzMjMzNzM5MCwtNzQ2MzUwMzkwLC0xMzQxNjU2
-NTIxLC0xMjYyNzI3MDMxLDIxMzg2OTQ0NzIsMzEwNzk4Nzg3LD
-c0NjU0MTcwNCwtNzMyNzU1NDY5LC05ODg3MDA0ODcsLTEwMzY2
-MjMzLC0xNTI1NTg3NSwtMTA4MDExNzIzNiw0NTQ1Njg2NzcsLT
-E3OTY0MDI4OTgsLTc4MTU0MzYwLDE1MDYzMTYyNDIsLTM0NjI3
-MDA5XX0=
+eyJoaXN0b3J5IjpbNTU4MTg1OTkxLC0xMzU2MDQ3NzEzLDU5Mj
+k2Mjg3OCwtNTI5NzM2OTM3LDE2MzIzMzczOTAsLTc0NjM1MDM5
+MCwtMTM0MTY1NjUyMSwtMTI2MjcyNzAzMSwyMTM4Njk0NDcyLD
+MxMDc5ODc4Nyw3NDY1NDE3MDQsLTczMjc1NTQ2OSwtOTg4NzAw
+NDg3LC0xMDM2NjIzMywtMTUyNTU4NzUsLTEwODAxMTcyMzYsND
+U0NTY4Njc3LC0xNzk2NDAyODk4LC03ODE1NDM2MCwxNTA2MzE2
+MjQyXX0=
 -->
