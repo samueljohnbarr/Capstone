@@ -39,6 +39,12 @@ May 2nd, 2018
        <li><a href="#performance">Performance</a></li>
    </ul>
 <li><b><a href="#conclusions">Conclusions</a></b></li>
+<ul>
+      <li><a href="#summary">Summary</a></li>
+      <li><a href="#lessonslearned">Lessons Learned</a></li>
+      <li><a href="#utility">Utility of Results</a></li>
+      <li><a href="#futuredevelopment">Future Development</a></li>
+</ul>
 <li><b><a href="#references">References</a></b></li>
 </ol>
 <h2 id="intro"> Introduction and Project Overview </h2>
@@ -70,26 +76,27 @@ To create a new simulator for the Astronomy Lab Department, the simulator must b
 <h3 id="features">Features</h3>
 Our simulator comes with all the same features of the old simulator, which includes:
 <ul>
-     <li> The ability to track accurate planetary positions of eleven planetary objects in our solar system, including all eight planets, Pluto, Halley's comet, and Toutatis. </li> 
-    <li> A display of planetary positions relative to each other relative to a certain date along with the orbital rings they travel on. </li>
-    <li> The ability to run the simulation automatically, along with the ability to pause and reverse the simulation. </li>
-    <li> The ability to step the simulation forward and backward in one day intervals. </li>
-    <li> A control that allows users to set the date of the simulation. </li>
+     <li> The ability to track accurate planetary positions of eleven planetary objects in our solar system, including all eight planets, Pluto, Halley's comet, and Toutatis </li> 
+    <li> A display of planetary positions relative to each other dependent on the date </li>
+    <li> The ability to run the simulation automatically, along with the ability to pause and reverse the simulation </li>
+    <li> The ability to step the simulation forward and backward in one day intervals </li>
+    <li> A control that allows users to set the date of the simulation</li>
 
 </ul>
 
 
 Along with features contained in the old simulator, our simulator contains other features focused on ease-of-use: 
 <ul>
-    <li> A control that allows for the manipulation of how many days to interval step.  This allows the user to manipulate simulation speeds without having to deal with presets. </li>
-        <li> The ability to toggle on and off the background and textures to simplify the view. </li>
-        <li>A function which creates a highlight around the bodies in the simulation in order to help visibility.</li>
-        <li>A preset library of zoom levels to best focus on bodies making it easier to navigate.</li>
-        <li> A help file that displays control information , and contains simple instructions to the user if needed. </li>
-    <li> A control that allows users to have the simulation display lines between planets, and lines that connect planets to the sun.  This makes it easier to answer various lab questions that deal with exact planetary positioning.   </li>
-    <li> A slider control that allows the user to scale the simulation up and down free hand, eliminating the need to manually change views from the inner and outer planets. </li>
-    <li> An all-in-one user interface that has all user controls on one screen.  This eliminates the need to leave the simulation in order to change settings or views like the old simulator. </li> 
-    <li>A built in reset function that allows the simulation to be placed back into its initial start up state with out the need to exit out and start it up again. </li>
+    <li> A control that allows for the manipulation of how many days to interval step.  This allows the user to manipulate simulation speeds without having to deal with speed presets</li>
+        <li> The ability to toggle on and off the background and textures to simplify the view </li>
+        <li>A function which creates a highlight around the bodies in the simulation in order to help visibility</li>
+        <li>A preset library of zoom levels to best focus on bodies making it easier to navigate</li>
+        <li> A help file that displays control information , and contains simple instructions to the user if needed </li>
+    <li> A control that allows users to have the simulation display lines between planets, and lines that connect planets to the sun. 
+    <ul><li> This makes it easier to answer various lab questions that deal with exact planetary positioning  </li></ul>
+    <li> A slider control that allows the user to scale the simulation up and down free hand, eliminating the need to manually change views from the inner and outer planets</li>
+    <li> An all-in-one user interface that has all user controls on one screen.  This eliminates the need to leave the simulation in order to change settings or views like the old simulator </li> 
+    <li>A built in reset function that allows the simulation to be placed back into its initial start up state with out the need to exit out and start it up again </li>
 </ul>
 
 
@@ -98,7 +105,7 @@ Along with features contained in the old simulator, our simulator contains other
 <h2 id="dd&t">Design, Development and Testing</h2>
 
 <h3 id="design">Design</h3><br>
-The software design pattern this simulator implements is a simple Model-View-Controller pattern.  The classes used in this simulator are also named as such, along with a Body class.  The benefits of this are two fold, the design is tried and true, and by keeping with convention, any future changes made by later individuals should be more straightforward to impliment. 
+The software design pattern this simulator implements is a simple Model-View-Controller pattern.  The classes used in this simulator are also named as such, along with a Body class.  The benefits of this are two fold: the design is tried and true, and by keeping with convention, any future changes made by later individuals should be more straightforward to impliment. 
 <hr>
 <h3 id="d&b">Development and Breakdown</h3><br>
 To accomplish all the goals we had for this project, we decided to divide and conquer.  Josh started with the front-end design, and Sam started at the back, both working on separate ends to eventually tie together with a Controller.  Below is a break down of what each class does starting from back-end to front.
@@ -109,7 +116,7 @@ This class defines a general planetary body that orbits.  The bare minimum for a
 Some fields, such as the 'visible' and 'showLine' fields, are used by the View class to manipulate display features on specific bodies. The body class also contains information on the color and/or texture which the body should display in the view.
 <br>
 <h3 id="model"><b><u>Model</u></b></h3><br>
-This class contains an ArrayList that holds all of the Bodies in the simulator, and contains all the equations that makes this simulator run.  Planets are instantiated at end of the class, and are instantiated by using null Body constructors and individual mutator setting with reliable data [1] for readability.  The heart of this class is the 'step' method, which steps all planets forward or backward by the 'days' parameter.  To accomplish this, it utilizes Kepler's equation, which is broken up into three helper methods below:
+This class contains an ArrayList that holds all of the Bodies in the simulator, and contains all the equations that makes this simulator run.  Planets are instantiated at end of the class with reliable data [1], and are instantiated by using null Body constructors and individual mutator setting for readability.  The heart of this class is the 'step' method, which steps all planets forward or backward by the 'days' parameter.  To accomplish this, it utilizes Kepler's equation, which is broken up into three helper methods below:
 
     /**
      * Calculates the mean anomaly
@@ -177,11 +184,11 @@ This class manages all the display functionality of the simulation using *JavaFX
 It contains all of the functions and methods that set up and display the window the simulator is displayed in. It initiates and displays the menus, and controls, as well as all of the actual objects, such as the bodies, their associated orbital rings, and the lines which can be toggled on or off that connect bodies together. It also holds methods to update the display coordinates of the bodies, and refresh the display as the simulator runs. It lastly contains a kill method that can be used to close the program safely. 
 <hr>
 
-<h3 id="testing">Testing</h3><br>
+<h3 id="testing">Testing</h3>
 To test this simulator, we referenced the old simulator by comparing planetary position by the same date and judging positions by the two simulators.  We also used the old one to compare speeds of planets as they traveled their orbit.   In-program testing involved moving each planet by their orbital period and judging if they resulted in the same position. This ensured every planet would move one full orbit within their respective period. 
 <h2 id="results">Results</h2>
 
-This is a screen shot of the replacement simulator below the old simulator to show just how drastically different they are in terms of   visuals and the controls.
+This is a screen shot of the replacement simulator below the old simulator to show just how drastically different they are in terms of visuals and the controls.
 
 ![The old simulator](https://lh3.googleusercontent.com/hP6vf6aYd-_ecpK4JSBoZ9DJqRxssQ3VdJqCSef6Qx9MvonkJWynthOy6e3Q2ImU4i-BCUqgOfg)<center> The old simulator. </center>
 
@@ -193,14 +200,14 @@ This is a screen shot of the replacement simulator below the old simulator to sh
 This clearly shows the mouse inputs which were not implemented in the original version. The fields where date information can be entered is also visible, along with the slider which allows the user to freely zoom the display in and out instead of going in and out of menus. It also shows the drop down menus along the top of the window which give the user more options.
 
 
-<h3 id="goalsmet"> Goals Met </h3><br>
+<h3 id="goalsmet"> Goals Met </h3>
 The final product meets nearly all of the main goals that were initially set out. The new simulator retained nearly all of the functionality of the previous, which includes implementing Kepler's Laws into a simulator to display accurate planetary positions relative to each other.  We also implemented our other goals for this project, including modernizing the interface, and improving the graphics to make the user experience simple and straight forward. The user should never need to restart the simulator while doing the lab project, unlike the previous version, unless there is some external system crash. The simulator fully utilizes mouse support, and window interactivity. There are also additional features which allow the user to simplify the display back to about the same level as the original if so desired. 
 
 <h3 id="problems">Problems</h3>
 The team started out with no experience using the JavaFX package, but felt strongly that the most up to data package should be used. This resulted in many fits and starts as the new methods and styles were learned. This was overcome through reading the API, watching instructional videos, and trial and error. While it was difficult to start, the final products look and feel speak to the fact that it was the right decision to make. 
 The problem of properly implementing the physics into the simulation came up many times, and in many ways.  We realized that, halfway through the project when most of the groundwork was already completed, we had missed a major portion of the simulator, which was Kepler's equation itself.  Solving this computationally was not easy, and it required lots of research and many meetings with professors to get it right.  When it was finally implemented, a lot of the work that was already done to the back-end had to be redone to fit with the new equation. While our implementation of this equation works with all planets (which aren't that elliptical), the incredibly elliptical comets are not working as well with it.  This is a goal we haven't fully completed yet, though it is the last goal we have.
 
-<h3 id="performance"> Performance </h3><br>
+<h3 id="performance"> Performance </h3>
 The simulation takes around five seconds to boot up, and this is due to all the initialization that takes place and the resources for the textures that must be loaded in.  Once the simulation is up, there is a one to two second lag to performance as things are still getting settled.  Once that is done, however, the simulation runs smooth under any conditions.  The exception to this are the comets, as they do not work well with our implementation of Kepler's equation, which why they aren't optimized yet.
 
 <h2 id="conclusions">Conclusions and Future Work</h2>
@@ -228,11 +235,11 @@ The comets in our simulator are acting odd with their motions, and it's believed
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTI4NjAyOTAxNCwyMTIzMDc4ODA4LDU5Mz
-IxOTQ5NywtMTgyNDEzNDcxMywxNDI4ODk1MTgzLC0yMDg2NTE2
-NDM2LC0xMTkwMjg4ODEyLC03MzUzNzA5ODQsMTY3MjQ5OTA2NS
-wxNDIzMjExODEsLTQ3MjkxOTIzMywxNjE1NzA3NjkzLDEwMDY0
-MTc1OTUsLTIwOTU2NjI3NSwxNjU4ODc2NzExLC0xODA4MTc2MD
-AzLC02OTg5MjgzNiwtMTgwODE3NjAwMywtNjk4OTI4MzYsMTU4
-MjkzMjM3M119
+eyJoaXN0b3J5IjpbMTMwODAwODY1NSwtMzkzMjM5NzUwLC03OT
+Q1NDM4NjQsLTExODQxNzEzMjAsMTI4NjAyOTAxNCwyMTIzMDc4
+ODA4LDU5MzIxOTQ5NywtMTgyNDEzNDcxMywxNDI4ODk1MTgzLC
+0yMDg2NTE2NDM2LC0xMTkwMjg4ODEyLC03MzUzNzA5ODQsMTY3
+MjQ5OTA2NSwxNDIzMjExODEsLTQ3MjkxOTIzMywxNjE1NzA3Nj
+kzLDEwMDY0MTc1OTUsLTIwOTU2NjI3NSwxNjU4ODc2NzExLC0x
+ODA4MTc2MDAzXX0=
 -->
