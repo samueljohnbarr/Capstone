@@ -125,6 +125,7 @@ public class Model {
             //Add to current mean anomaly
             meanAnomaly = (planet.getLastMeanAnomaly() + mean);
             
+            //Account for directional changes
             if (meanAnomaly < 0)
             	meanAnomaly = 2*Math.PI + (meanAnomaly);
             if (meanAnomaly > 2*Math.PI)
@@ -135,18 +136,9 @@ public class Model {
             eccentricAnomaly = getEccentricAnomaly(meanAnomaly, planet.getEccentricity());
             trueAnomaly = getTrueAnomaly(planet.getEccentricity(), eccentricAnomaly);
             
-            //Find the angle
+            //Find and set the angle
             angle = getAngle(planet.getSemiMajorAxis(), planet.getSemiMinorAxis(), 
             		planet.getEccentricity(), trueAnomaly);
-            
-            if (i == TOUTATIS) {
-            	System.out.println("Mean Step: " + Math.toDegrees(mean));
-            	System.out.println("Mean: " + Math.toDegrees(meanAnomaly));
-            	System.out.println("Eccentric: " + Math.toDegrees(eccentricAnomaly));
-            	System.out.println("True: " + Math.toDegrees(trueAnomaly));
-            	System.out.println("Angle: " + Math.toDegrees(angle));
-            	System.out.println();
-            }
 
             planet.setAngle(angle);
 
@@ -187,37 +179,6 @@ public class Model {
     	}
     	
     	return eA1;
-    	/*
-
-    	double pi=Math.PI, K=pi/180.0;
-
-    	double maxIter=30, i=0, dp = 8;
-
-    	double delta=Math.pow(10,-dp);
-
-    	double E, F;
-
-    	meanAnomaly=meanAnomaly/360.0;
-
-    	meanAnomaly=2.0*pi*(meanAnomaly-Math.floor(meanAnomaly));
-
-    	if (eccentricity<0.8) E=meanAnomaly; else E=pi;
-
-    	F = E - eccentricity*Math.sin(meanAnomaly) - meanAnomaly;
-
-    	while ((Math.abs(F)>delta) && (i<maxIter)) {
-
-    	    E = E - F/(1.0-eccentricity*Math.cos(E));
-    	    F = E - eccentricity*Math.sin(E) - meanAnomaly;
-
-    	    i++;
-
-    	}
-
-    	E=E/K;
-
-    	return (Math.round(E*Math.pow(10,dp))/Math.pow(10,dp)) % (2*Math.PI);
-    	*/
     }
     
     /**
