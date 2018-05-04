@@ -1,8 +1,19 @@
-************************************
-* Kepler's Laws Simulator Controls *
-************************************
+*******************************************************
+*              Kepler's Laws Simulator                *
+*******************************************************
+This simulator is meant for a learning tool for the
+Astronomy Lab Department.  If there are any issues with
+the simulator, please create an issue on github, or email
+samueljohnbarr@gmail.com so it can be resolved.
+Enjoy!
 
-***Bottom Control Bar***
+*******************************************************
+*                     Controls                        *
+*******************************************************
+
+************************
+*  Bottom Control Bar  *
+************************
 (From left to right)
 Scale Slider: 
 -Moving the slider left will zoom out of the simulation
@@ -49,10 +60,12 @@ Set Date:
  (the other fields, if valid, will set the other
   parts of the date)
 
-***Top Toolbar***
+******************
+*  Top Toolbar   *
+******************
 File:
->Reset-Sets the simulator to the start date (12/21/2000)
->Exit-Exits the simulator (Can also be done by clicking 'X' on the page)
+-Reset> Sets the simulator to the start date (12/21/2000)
+-Exit> Exits the simulator (Can also be done by clicking 'X' on the page)
 
 View:
 -Background> Toggles background from image to plain black for readability
@@ -76,6 +89,3 @@ Help:
 -About> Shows a window about the simulator
 -Help> Displays information about the toolbar, exactly like this is doing :)
 
-
-** Please report any issues to github.com/samueljohnbarr/Capstone or email at
-   samueljohnbarr@gmail.com. enjoy!
