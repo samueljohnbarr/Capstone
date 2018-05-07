@@ -28,6 +28,8 @@ May 2nd, 2018
 <li><a href="#model">Model </a></li>
 <li><a href="#controller">Controller </a></li>
 <li><a href="#view">View </a></li>
+<li><a href="#graphics">Graphics </a></li>
+<li><a href="#installer">Installer </a></li>
 </ul>
          <li><a href="#d&b">Development and Breakdown</a></li>   
          <li><a href="#testing">Testing</a></li>
@@ -50,6 +52,7 @@ May 2nd, 2018
 <h2 id="intro"> Introduction and Project Overview </h2>
 
 <h3 id="users">Users</h3><br>
+
 The users of this simulator will be Appalachian State Astronomy I Lab students learning about planetary motion and the use of Kepler's Laws.  The Lab involves running the simulation and lining planets to up to study conjunction, opposition, and elongation of different planetary objects at various times.  Below is an image taken from the astronomy lab manual showing these astronomical positions. There is a full lab work sheet that accompanies the lab activity which the simulator is meant to 
 
 ![enter image description here](https://lh3.googleusercontent.com/nwJxIkU5wHxPuQ_WPihQbc8fZIwGq6hFqQE9Oy-mgmnklf-kqW_vAsBPFwS4OuThFBrXq2V_c7qD "Planetary Positions")
@@ -88,7 +91,9 @@ Our simulator comes with all the same features of the old simulator, which inclu
 Along with features contained in the old simulator, our simulator contains other features focused on ease-of-use: 
 <ul>
     <li> A control that allows for the manipulation of how many days to interval step.  This allows the user to manipulate simulation speeds without having to deal with speed presets</li>
-        <li> The ability to toggle on and off the background and textures to simplify the view </li>
+	<li>Custom tailored graphical elements</li>
+	<li>User friendly installation wizard</li>
+<li> The ability to toggle on and off the background and textures to simplify the view </li>
         <li>A function which creates a highlight around the bodies in the simulation in order to help visibility</li>
         <li>A preset library of zoom levels to best focus on bodies making it easier to navigate</li>
         <li> A help file that displays control information , and contains simple instructions to the user if needed </li>
@@ -182,6 +187,17 @@ This class acts as a traffic controller for both Model and View much the same wa
 This class manages all the display functionality of the simulation using *JavaFX*.  JavaFx utilizes its own thread separate from the Controller to run, therefore, the first two methods in View are in place to allow the Controller thread to wait for this thread to fully initialize before starting main functions. 
 
 It contains all of the functions and methods that set up and display the window the simulator is displayed in. It initiates and displays the menus, and controls, as well as all of the actual objects, such as the bodies, their associated orbital rings, and the lines which can be toggled on or off that connect bodies together. It also holds methods to update the display coordinates of the bodies, and refresh the display as the simulator runs. It lastly contains a kill method that can be used to close the program safely. 
+
+<h3 id="graphics"><b><u>Graphics</u></b></h3><br>
+
+The simulation contains several custom graphics used to improve its visual quality. We had to be careful not to use any copy protected material, while still maintaining a professional look. To this end, a lot of graphical editing was done. The background image used in the simulation is a public domain image taken by the Hubble space telescope. The images used to create the textures for the special bodies came from the NASA archive. They were edited with the open source program Paint.net. They were cropped down to include only the body desired to be seen, then their levels were adjusted to improve visibility. The primary icon used for the simulator came from a fair use collection of icons, while the variation used for the installer had to be created. It was also edited in Paint.net, then turned into a .ico file with the Icon Maker program. 
+
+<h3 id="installer"><b><u>Installer</u></b></h3><br>
+
+From the outset of the project, one of the main goals was to ensure that the program would be user friendly, not only for the end user, but also for the faculty in the department who would be instructing the students. In the event that a lab computer needs to be replaced, or upgraded, we wanted the simulator to be easy to reinstall. To this end, an early objective was to incorporate an installation wizard to simplify and streamline the process. 
+
+This was accomplished through the use of third party open source software, Inno Setup Compiler, in conjunction with Launch4j. The first step was to create an executable .jar file. This file was then used in Launch4j to create an executable .exe file. Launch4j also enabled the use of a custom icon, and splash page. The .exe file was then used with the Inno Setup Compiler to generate the installation wizard. This was also when a custom icon for the installer was able to be implemented. 
+
 <hr>
 
 <h3 id="testing">Testing</h3>
