@@ -3,14 +3,13 @@ Samuel Barr & Joshua Shields
 May 2nd, 2018
 
 ## Abstract
-*Kepler's Laws* define how planets in our solar system orbit our sun.  The Appalachian State University Astronomy Lab Department currently uses a simulator developed in the 1990's that aims to teach students about planetary motions.  Due to its age, the simulator is difficult to use, and forces students to take much more time to complete their lab due to how slow it is.  Our project aims to display accurate planetary positions with respect to time in a straight-forward, easy-to-use simulator.  To achieve this, our simulator must implement Kepler's equation, which defines planetary movement depending on planetary position relative to the sun.  Controls must include the ability to step back and forth by one day at a time, including the ability to run the simulation automatically forward and backward in time.  Controls must also include a way to set a date for the simulation, and a way to scale the simulation without having to go through a tree of menus.  To implement these goals, we generalized the back-end to take on any planetary object and instantiated our own solar system's planets with real world data.  On the front-end, we created an all-in-one user interface that doesn't involve leaving the simulation to change settings, creating an intuitive simulator without complicated menu trees.
+*Kepler's Laws* define how planets in our solar system orbit our sun.  The Appalachian State University Astronomy Lab Department currently uses a simulator developed in the 1990's that aims to teach students about planetary motions.  Due to its age, the simulator is difficult to use, and forces students to take much more time to complete their lab due to how slow it is.  Our project aims to display accurate planetary positions with respect to time in a straight-forward, easy-to-use simulator.  To achieve this, our simulator must implement Kepler's equation, which defines planetary movement depending on planetary position relative to the sun.  Controls must include the ability to step back and forth by one day at a time, including the ability to run the simulation automatically forward and backward in time.  Controls must also include a way to set a date for the simulation, and a way to scale the simulation without having to go through a tree of menus.  To implement these goals, we generalized the back-end to take on any planetary object and instantiated our own solar system's data.  On the front-end, we created an all-in-one user interface that doesn't involve leaving the simulation to change settings, creating an intuitive simulator without complicated menu trees.
 <hr>
 <h3>Keywords</h3><br>
 
  - Kepler
  - Planetary Orbit
  - Anomalies
-
 <h2 id="contents">Table of Contents</h2>
 <ol>
     <li><b><a href="#intro">Introduction and Project Overview</a></b></li>
@@ -28,8 +27,6 @@ May 2nd, 2018
 <li><a href="#model">Model </a></li>
 <li><a href="#controller">Controller </a></li>
 <li><a href="#view">View </a></li>
-<li><a href="#graphics">Graphics </a></li>
-<li><a href="#installer">Installer </a></li>
 </ul>
          <li><a href="#d&b">Development and Breakdown</a></li>   
          <li><a href="#testing">Testing</a></li>
@@ -52,8 +49,7 @@ May 2nd, 2018
 <h2 id="intro"> Introduction and Project Overview </h2>
 
 <h3 id="users">Users</h3><br>
-
-The users of this simulator will be Appalachian State Astronomy I Lab students learning about planetary motion and the use of Kepler's Laws.  The Lab involves running the simulation and lining planets to up to study conjunction, opposition, and elongation of different planetary objects at various times.  Below is an image taken from the astronomy lab manual showing these astronomical positions. There is a full lab work sheet that accompanies the lab activity which the simulator is meant to 
+The users of this simulator will be Appalachian State Astronomy I Lab students learning about planetary motion and the use of Kepler's Laws.  The Lab involves running the simulation and lining planets to up to study conjunction, opposition, and elongation of different planetary objects at various times.  The lab worksheet involves taking note of these various positions to derive astronomical data about the planets in our solar system.  Below is an image taken from the astronomy lab manual showing these astronomical positions. 
 
 ![enter image description here](https://lh3.googleusercontent.com/nwJxIkU5wHxPuQ_WPihQbc8fZIwGq6hFqQE9Oy-mgmnklf-kqW_vAsBPFwS4OuThFBrXq2V_c7qD "Planetary Positions")
 <hr>
@@ -69,11 +65,11 @@ The user would pick from one of the choices listed by using the keyboard, as mou
 The controls on the left manipulate the forward and backward time direction of the simulation, the speed (ranging from low speed to high speed), and an interval step, which allows the user to step the simulation forward or backward in time by one day.  The 'Arc' and 'Retrograde' controls have no use in the lab setting, and therefore, is not a required feature for the new simulator.  
 The third option from the menu works exactly the same, but for the outer four planets.  The fifth option allows the user to enter a date for the simulation to start on.  Options two and four are not used in teaching the labs, and therefore, is not a required feature in the development of the new simulator.
 <br>
-It's obvious from looking at this simulator that it's in desperate need for an update.  The controls and user-interface are clunky, and are not user-friendly.  Another challenge that students have with the simulator is the time it takes to use it.  For example, one of the lab questions involves moving Pluto to certain spot on the simulator.  Pluto's orbit takes 248 Earth years to complete a full rotation.  In the simulator, setting the controls to high speed and letting it run still takes a considerable amount of time for Pluto to move to where the user needs it to go.  Another issue involves finding exact planet positions relative to each other.  In the lab, there are various points where the user must find conjuncture, elongation, and opposition for various planets, but due to the simulator's small size and dated display, it's difficult for users to find the exact dates for which these planets line up.
+It's obvious from looking at this simulator that it's in desperate need for an update.  The controls and user-interface are clunky, and are not user-friendly.  Another challenge students have with the simulator is the time it takes to use it.  For example, one of the lab questions involves moving Pluto to certain spot on the simulator.  Pluto's orbit takes 248 Earth years to complete a full rotation [3].  In the simulator, setting the controls to high speed and letting it run still takes a considerable amount of time for Pluto to move to where the user needs it to go.  Another issue involves finding exact planet positions relative to each other.  In the lab, there are various points where the user must find conjuncture, elongation, and opposition for various planets, but due to the simulator's small size and dated display, it's difficult for users to find the exact dates for which these planets line up.
 <hr>
 
 <h3 id="objectives">Objectives</h3>
-To create a new simulator for the Astronomy Lab Department, the simulator must be able to accomplish all of what the old simulator did;  this includes implementing Kepler's equation, and making the planetary objects accurate to real-world positions. The focus, however, rests on ease-of-use.  The objective is to eliminate having to go through a menu tree to change settings or views.  This means eliminating the menu system entirely, and having a single interface that does what it took four to do in the old simulator.  Another objective is to add controls that allow for users to have greater control over the simulation including the simulation speed to eliminate the wait for outer planets reach points in their orbit, the ability to jump directly to dates, and control over how much data is displayed at a given time.  All this allows for an intuitive user experience that aims for simplicity and ease-of-use.
+To create a new simulator for the Astronomy Lab Department, the simulator must be able to accomplish all of what the old simulator did;  this includes implementing Kepler's equation, and making the planetary objects accurate to real-world positions. The focus, however, rests on ease-of-use.  The objective is to eliminate having to go through a menu tree to change settings or views.  This means eliminating the menu system entirely, and having a single interface that does what it took four to do in the old simulator.  Another objective is to add a wider range of control compared to the last simulator.  These added controls will allow the user to fine-tune the simulation speed to eliminate the wait for outer planets reach points in their orbit.  We also plan to make date-setting controls simple and easily adjustable.  All this allows for an intuitive user experience that aims for simplicity and ease-of-use.
 <hr>
 
 <h3 id="features">Features</h3>
@@ -91,9 +87,7 @@ Our simulator comes with all the same features of the old simulator, which inclu
 Along with features contained in the old simulator, our simulator contains other features focused on ease-of-use: 
 <ul>
     <li> A control that allows for the manipulation of how many days to interval step.  This allows the user to manipulate simulation speeds without having to deal with speed presets</li>
-	<li>Custom tailored graphical elements</li>
-	<li>User friendly installation wizard</li>
-<li> The ability to toggle on and off the background and textures to simplify the view </li>
+        <li> The ability to toggle on and off the background and textures to simplify the view </li>
         <li>A function which creates a highlight around the bodies in the simulation in order to help visibility</li>
         <li>A preset library of zoom levels to best focus on bodies making it easier to navigate</li>
         <li> A help file that displays control information , and contains simple instructions to the user if needed </li>
@@ -110,10 +104,11 @@ Along with features contained in the old simulator, our simulator contains other
 <h2 id="dd&t">Design, Development and Testing</h2>
 
 <h3 id="design">Design</h3><br>
-The software design pattern this simulator implements is a simple Model-View-Controller pattern.  The classes used in this simulator are also named as such, along with a Body class.  The benefits of this are two fold: the design is tried and true, and by keeping with convention, any future changes made by later individuals should be more straightforward to impliment. 
+The software design pattern this simulator implements is a simple Model-View-Controller pattern.  The classes used in this simulator are also named as such, along with a Body class.  The benefits of this are two fold: the design is tried and true, and by keeping with convention, any future changes made by later individuals should be more straightforward to approach. 
 <hr>
 <h3 id="d&b">Development and Breakdown</h3><br>
-To accomplish all the goals we had for this project, we decided to divide and conquer.  Josh started with the front-end design, and Sam started at the back, both working on separate ends to eventually tie together with a Controller.  Below is a break down of what each class does starting from back-end to front.
+To accomplish all the goals we had for this project, we decided to divide and conquer.  Josh started with the front-end design, and Sam started at the back, both working on separate ends to eventually tie together with a Controller.  When we came together, we started with a single planet, Earth,  going around a circular orbit within its orbital period (365.25 days).  Calculating how much to step for one day in terms of an angle was derived by dividing the days in a year by the degrees in a circle.  We then started making circular orbits elliptical using math from [3].  Calculating offset orbits and mapping x and y positioning given an angle was found from [1]. 
+Once all the groundwork math was in place, all we had to do was instantiate the other planets and the math takes over the rest.  Below is a break down of what each class does starting from back-end to front.
 <br>
 
 <h3 id="body"><b><u>Body</u></b></h3><br>
@@ -121,7 +116,7 @@ This class defines a general planetary body that orbits.  The bare minimum for a
 Some fields, such as the 'visible' and 'showLine' fields, are used by the View class to manipulate display features on specific bodies. The body class also contains information on the color and/or texture which the body should display in the view.
 <br>
 <h3 id="model"><b><u>Model</u></b></h3><br>
-This class contains an ArrayList that holds all of the Bodies in the simulator, and contains all the equations that makes this simulator run.  Planets are instantiated at end of the class with reliable data [1], and are instantiated by using null Body constructors and individual mutator setting for readability.  The heart of this class is the 'step' method, which steps all planets forward or backward by the 'days' parameter.  To accomplish this, it utilizes Kepler's equation, which is broken up into three helper methods below:
+This class contains an ArrayList that holds all of the Bodies in the simulator, and contains all the equations that makes this simulator run.  Planets are instantiated at end of the class with reliable data [3], and are instantiated by using null Body constructors and individual mutator setting for readability.  The heart of this class is the 'step' method, which steps all planets forward or backward by the 'days' parameter.  To accomplish this, it utilizes Kepler's equation, which is broken up into three helper methods below:
 
     /**
      * Calculates the mean anomaly
@@ -174,7 +169,7 @@ It then adds that value to the 'lastMeanAnom' accumulator in the respective Body
 <a title="By Brews ohare [CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0) or GFDL (http://www.gnu.org/copyleft/fdl.html)], from Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Anomalies.PNG"><img width="512" alt="Anomalies" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Anomalies.PNG/512px-Anomalies.PNG"></a><br>
 
 
-Once the True Anomaly is found, the 'getAngle' method derives the relation between the true anomaly and the angle from the center of the elliptic orbit.  The math here is complicated and mystical, thus none of us knows exactly how it works, but here is a link to the only forum on the internet with the math for this problem: <a> https://math.stackexchange.com/questions/2539604/relation-between-ellipse-true-anomaly-and-center-angle</a> [2]
+Once the True Anomaly is found, the 'getAngle' method derives the relation between the true anomaly and the angle from the center of the elliptic orbit.  The math for this was taken from [5]. This is an area of uncertainty, as we were unable to find corroborating sources for those operations.
 
 Once the angle from the center is found, that angle is then used to find the x and y positions of that particular Body on it's orbit using the 'getXPosition' and 'getYPosition' methods [3].
 <br>
@@ -183,25 +178,14 @@ Once the angle from the center is found, that angle is then used to find the x a
 This class acts as a traffic controller for both Model and View much the same way any Controller would function, and it also contains the simulations main method.  It error-checks any request made to the Model from the View class, and has a series of accessors from the Model that View uses to update the display.  It also handles the calendar functions needed for calculating the Julian and Gregorian dates. 
 <br>
 
-<h3 id="view"><b><u>View</u></b></h3><br>
-This class manages all the display functionality of the simulation using *JavaFX*.  JavaFx utilizes its own thread separate from the Controller to run, therefore, the first two methods in View are in place to allow the Controller thread to wait for this thread to fully initialize before starting main functions. 
+<h3 id="view"><b><u>Window</u></b></h3><br>
+This class manages all the display functionality of the simulation using <i>JavaFX</i>.  JavaFx utilizes its own thread separate from the Controller to run, therefore, the first two methods in View are in place to allow the Controller thread to wait for this thread to fully initialize before starting main functions. 
 
-It contains all of the functions and methods that set up and display the window the simulator is displayed in. It initiates and displays the menus, and controls, as well as all of the actual objects, such as the bodies, their associated orbital rings, and the lines which can be toggled on or off that connect bodies together. It also holds methods to update the display coordinates of the bodies, and refresh the display as the simulator runs. It lastly contains a kill method that can be used to close the program safely. 
-
-<h3 id="graphics"><b><u>Graphics</u></b></h3><br>
-
-The simulation contains several custom graphics used to improve its visual quality. We had to be careful not to use any copy protected material, while still maintaining a professional look. To this end, a lot of graphical editing was done. The background image used in the simulation is a public domain image taken by the Hubble space telescope. The images used to create the textures for the special bodies came from the NASA archive. They were edited with the open source program Paint.net. They were cropped down to include only the body desired to be seen, then their levels were adjusted to improve visibility. The primary icon used for the simulator came from a fair use collection of icons, while the variation used for the installer had to be created. It was also edited in Paint.net, then turned into a .ico file with the Icon Maker program. 
-
-<h3 id="installer"><b><u>Installer</u></b></h3><br>
-
-From the outset of the project, one of the main goals was to ensure that the program would be user friendly, not only for the end user, but also for the faculty in the department who would be instructing the students. In the event that a lab computer needs to be replaced, or upgraded, we wanted the simulator to be easy to reinstall. To this end, an early objective was to incorporate an installation wizard to simplify and streamline the process. 
-
-This was accomplished through the use of third party open source software, Inno Setup Compiler, in conjunction with Launch4j. The first step was to create an executable .jar file. This file was then used in Launch4j to create an executable .exe file. Launch4j also enabled the use of a custom icon, and splash page. The .exe file was then used with the Inno Setup Compiler to generate the installation wizard. This was also when a custom icon for the installer was able to be implemented. 
-
+It contains all of the functions and methods that set up and display the window the simulator is displayed in. It initiates and displays the menus, controls, and all of the visual objects, such as the bodies, their associated orbital rings, and the lines which can be toggled on or off that connect bodies together. It also holds methods to update the display coordinates of the bodies, and refresh the display as the simulator runs. It lastly contains a kill method that can be used to close the program safely. 
 <hr>
 
 <h3 id="testing">Testing</h3>
-To test this simulator, we referenced the old simulator by comparing planetary position by the same date and judging positions by the two simulators.  We also used the old one to compare speeds of planets as they traveled their orbit.   In-program testing involved moving each planet by their orbital period and judging if they resulted in the same position. This ensured every planet would move one full orbit within their respective period. 
+To test this simulator, we referenced the old simulator by comparing planetary position by the same date and judging positions by the two simulators. This only got us within a ballpark of where the planets should be.  Fine-tuning positioning involves measuring the time it takes for planets to be in 'inferior conjunction' with Earth, this means judging the time it takes from when that planet was closest to Earth to when that planet is closest to Earth again.  To check this, we used the answer key for the astronomy lab where students have to judge this themselves.  We also used the old simulator to compare speeds of planets as they traveled their orbit.   In-program testing involved moving each planet by their orbital period and judging if they resulted in the same position. This ensured every planet would move one full orbit within their respective period. 
 <h2 id="results">Results</h2>
 
 This is a screen shot of the replacement simulator below the old simulator to show just how drastically different they are in terms of visuals and the controls.
@@ -213,7 +197,7 @@ This is a screen shot of the replacement simulator below the old simulator to sh
 ![enter image description here](https://lh3.googleusercontent.com/MhnG6bIvyxnWsq2Xexz-GrUs_bWGKASAo2CQILyBgGMHJ42roLWjsbVtJKxHFhosYEGc0h2OTWhQ "New Simulator")
 <center>The new simulator. </center>
 
-This clearly shows the mouse inputs which were not implemented in the original version. The fields where date information can be entered is also visible, along with the slider which allows the user to freely zoom the display in and out instead of going in and out of menus. It also shows the drop down menus along the top of the window which give the user more options.
+This clearly shows the mouse inputs which were not implemented in the original version. The fields where date information can be entered is also visible, along with the slider which allows the user to freely zoom the display in and out instead of going in and out of menus. It also shows the drop down menus along the top of the window which give the user more options.  As well as a functional simulator, we also created a simple installer  using open source software [2] that grants the user the ability to download to a custom file location.  The installer also allows us to create a custom .exe icon and a splash screen that displays while the simulator is booting up.
 
 
 <h3 id="goalsmet"> Goals Met </h3>
@@ -221,10 +205,10 @@ The final product meets nearly all of the main goals that were initially set out
 
 <h3 id="problems">Problems</h3>
 The team started out with no experience using the JavaFX package, but felt strongly that the most up to data package should be used. This resulted in many fits and starts as the new methods and styles were learned. This was overcome through reading the API, watching instructional videos, and trial and error. While it was difficult to start, the final products look and feel speak to the fact that it was the right decision to make. 
-The problem of properly implementing the physics into the simulation came up many times, and in many ways.  We realized that, halfway through the project when most of the groundwork was already completed, we had missed a major portion of the simulator, which was Kepler's equation itself.  Solving this computationally was not easy, and it required lots of research and many meetings with professors to get it right.  When it was finally implemented, a lot of the work that was already done to the back-end had to be redone to fit with the new equation. While our implementation of this equation works with all planets (which aren't that elliptical), the incredibly elliptical comets are not working as well with it.  This is a goal we haven't fully completed yet, though it is the last goal we have.
+The problem of properly implementing the physics into the simulation came up many times, and in many ways.  We realized that, halfway through the project when most of the groundwork was already completed, we had missed a major portion of the simulator, which was Kepler's equation itself.  We had gotten carried away with other aspects of Kepler's Laws and fine-tuning other aspects that this equation wasn't even realized till halfway through the project.  Solving this equation computationally was not easy, and it required lots of research and many meetings with professors to get it right.  When it was finally implemented, the back-end had to be redesigned to work with this equation as well. While our implementation of this equation works with all planets (which aren't that elliptical), the incredibly elliptical comets are not working as well with it.  This is a goal we haven't fully completed yet, though it is the last goal we have.
 
 <h3 id="performance"> Performance </h3>
-The simulation takes around five seconds to boot up, and this is due to all the initialization that takes place and the resources for the textures that must be loaded in.  Once the simulation is up, there is a one to two second lag to performance as things are still getting settled.  Once that is done, however, the simulation runs smooth under any conditions.  The exception to this are the comets, as they do not work well with our implementation of Kepler's equation, which why they aren't optimized yet.
+The simulation takes around five seconds to boot up, and this is due to all the initialization that takes place and the resources for the textures that must be loaded in.  Once the simulation is up, there is a one to two second lag to performance as things are still getting settled.  Once that is done, however, the simulation runs smooth under any conditions.  The exception to this are the comets, as they do not work well with our implementation of Kepler's equation yet.
 
 <h2 id="conclusions">Conclusions and Future Work</h2>
 
@@ -239,23 +223,35 @@ When we first started on the project, it would've helped tremendously to researc
 This simulator will go on to be the simulator used in the Astronomy Lab Department instead of the simulator they're using now.  The lab that currently goes with the old simulator will be updated with the new one, and Astronomy students will no longer have to deal with a program from the 1990s anymore.  We hope that this simulator will make the lab easier for students to learn about planetary positioning, and we hope that it'll take less time to complete that particular lab using this simulator. Hundreds of students every year take Astronomy I, and so hundreds of students will be using our simulator to learn about Kepler's Laws of planetary motion.
 
 <h3 id="futuredevelopment">Future Development</h3><br>
-The comets in our simulator are acting odd with their motions, and it's believed to be because of how elliptic they are.  More research must be done to determine if more calculation must take place to calculate correct motion.  For ease-of-use from the professor stand-point, it would be helpful to have a user control to save current settings, like date, view settings, etc, and have the ability to reload those settings with a click of a button.  After lab is over, the lab assistants are usually tasked with going to each computer and resetting values and programs to their initial lab state.  That feature would make it easier on them, as they would save initial state information and reload later.  This idea was not a part of our original feature list, but since we'll be polishing this project over the summer, it's definitely a feature we might pursue in that time.
+The comets in our simulator are acting odd with their motions, and it's believed to be because of how elliptic they are.  More research must be done to determine if more calculation must take place to calculate correct motion.  For ease-of-use from the professor stand-point, it would be helpful to have a user control to save current settings, like date, view settings, etc, and have the ability to reload those settings with a click of a button.  After lab is over, the lab assistants are usually tasked with going to each computer and resetting values and programs to their initial state.  That feature would make it easier on them, as they would save initial state information and reload later.  This idea was not a part of our original feature list, but since we'll be polishing this project over the summer, it's definitely a feature we might pursue in that time.
 
 <h2 id="references">References</h2>
 
-[1] R. Nave. Kepler's Laws. Retrieved May 3, 2018 from http://hyperphysics.phy-astr.gsu.edu/hbase/kepler.html
+[1] Mark C. Hendricks. 2012. Rotated Ellipses And Their Intersections With &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lines. (March 2012). Retrieved May 2, 2018 from &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;http://quickcalcbasic.com/ellipse%20line%20intersection.pdf
 
- [2] Anon. 2017. Relation between ellipse true anomaly and center angle.  (December 2017). Retrieved May 3, 2018 from https://math.stackexchange.com/questions/2539604/relation-between-ellipse-true-anomaly-and-center-angle
+[2] Grzegorz Kowal. 2005. Launch4j - Cross-platform Java executable 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wrapper. (2005). Retrieved May 3, 2018 from &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;http://launch4j.sourceforge.net/
 
-[3] Mark C. Hendricks. 2012. Rotated Ellipses And Their Intersections With Lines. (March 2012). Retrieved May 2, 2018 from http://quickcalcbasic.com/ellipse%20line%20intersection.pdf
+[3] R. Nave. Kepler's Laws. Retrieved May 3, 2018 from &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;http://hyperphysics.phy-astr.gsu.edu/hbase/kepler.html
+
+[4] Anon. JavaFX - The Rich Client Platform. Retrieved May 6, 2018 from &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;http://www.oracle.com/technetwork/java/javase/overview/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[javafx-overview-2158620.html](http://www.oracle.com/technetwork/java/javase/overview/javafx-overview-2158620.html)
+
+ [5] Anon. 2017. Relation between ellipse true anomaly and center angle.  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(December 2017). Retrieved May 3, 2018 from &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;https://math.stackexchange.com/questions/2539604/relation-
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[between-ellipse-true-anomaly-and-center-angle](https://math.stackexchange.com/questions/2539604/relation-between-ellipse-true-anomaly-and-center-angle)
+
+
+
+
+
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTMwODAwODY1NSwtMzkzMjM5NzUwLC03OT
-Q1NDM4NjQsLTExODQxNzEzMjAsMTI4NjAyOTAxNCwyMTIzMDc4
-ODA4LDU5MzIxOTQ5NywtMTgyNDEzNDcxMywxNDI4ODk1MTgzLC
-0yMDg2NTE2NDM2LC0xMTkwMjg4ODEyLC03MzUzNzA5ODQsMTY3
-MjQ5OTA2NSwxNDIzMjExODEsLTQ3MjkxOTIzMywxNjE1NzA3Nj
-kzLDEwMDY0MTc1OTUsLTIwOTU2NjI3NSwxNjU4ODc2NzExLC0x
-ODA4MTc2MDAzXX0=
+eyJoaXN0b3J5IjpbLTI1NDExMDc3MywtOTM3NzE1ODY2LDIwMz
+g3NjU1ODUsLTkyNTE3NTQyMiwyNDk1NDUzMzMsLTEwNzc0NTcx
+NDQsLTEwMTU5ODYzNjYsMjE1ODIyMjM0LDEwMDQzNjM4MDMsLT
+c4NDczNzEyNiwyMDMzOTU2MzY4LDk0MTg0NTc3MSw2MDg2Njg0
+NjcsLTExMjY1Mzk1MjUsLTM2NzQ4Nzk0LDE1NjM0MjMzOTAsLT
+E3OTMxMTU0NzUsMTE0MTc4NTE2MCwxNjU4OTQ4MDU1LDIwOTYw
+MzQ5NDFdfQ==
 -->
